@@ -1,0 +1,53 @@
+.panel {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: white;
+    align-items: center;
+}
+
+.ava_cont {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    border: 2px solid #EAEDF1;
+    margin-right: 10px;
+    overflow: hidden;
+}
+
+.ava {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.ava_blank {
+    width: 60px;
+    height: 60px;
+    align-self: center;
+    display: flex;
+    margin-top: 10px;
+    justify-self: center;
+    object-fit: cover;
+}
+
+
+.name_cont {
+    display: flex;
+    flex-direction: column;
+}
+
+.name {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.desc {
+    font-size: 12px;
+    margin-top: 2px;
+    font-weight: bold;
+    color: #8E8E93;
+}

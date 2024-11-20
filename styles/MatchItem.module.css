@@ -1,0 +1,345 @@
+.match_item {
+    width: 100%;
+    background-color: white;
+    border-radius: 12px;
+    min-height: 64px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Roboto';
+    /* font-weight: bold; */
+    /* font-family: 'Roboto' */
+}
+
+.match_item:active {
+    opacity: .8;
+}
+
+.team_icon {
+    width: 36px;
+    margin-left: 8px;
+    margin-right: 8px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.team_item_left {
+    font-size: 13px;
+    font-weight: bold;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-family: 'Open Sans';
+}
+
+.team_item_right {
+    font-size: 13px;
+    font-weight: bold;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    font-family: 'Open Sans';
+
+    justify-content: flex-start;
+}
+
+.score {
+    color: black;
+    font-weight: bold;
+    margin-right: 2px;
+    margin-left: 2px;
+    font-family: 'Roboto';
+    font-size: 18px;
+}
+
+.score_dots {
+    color: black;
+    font-weight: bold;
+    margin-right: 2px;
+    margin-left: 2px;
+    margin-bottom: 2px;
+    font-family: 'Roboto';
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.score_dots_white {
+    color: white;
+    font-weight: bold;
+    margin-right: 2px;
+    margin-left: 2px;
+    font-family: 'Roboto';
+    margin-bottom: 2px;
+}
+
+.score_white {
+    color: white;
+    font-weight: bold;
+    margin-right: 2px;
+    margin-left: 2px;
+    font-family: 'Roboto';
+}
+
+.match_pst {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FF474719;
+    /* border: 1px solid #34C759; */
+    padding-left: 8px;
+    padding-right: 8px;
+    height: 24px;
+    border-radius: 12px;
+    color: #FF4747;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.match_date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #34C75918;
+    /* border: 1px solid #34C759; */
+    padding-left: 8px;
+    padding-right: 8px;
+    height: 24px;
+    border-radius: 12px;
+    color: #00C566;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: "Open Sans";
+}
+
+.content {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.league_icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    margin-right: 4px;
+}
+
+.league_panel {
+    position: relative;
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    font-family: 'Roboto';
+}
+
+.league_panel_top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    /* background-color: red; */
+    /* margin-bottom: 5px; */
+}
+
+.week {
+    /* background-color: red; */
+    /* height: 10px; */
+    /* line-height: 10px; */
+    font-weight: bold;
+    font-size: 12px;
+    margin-left: 4px;
+    color: #AEAEB2;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.white {
+    color: white;
+}
+
+.predict_panel {
+    position: relative;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 10px;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    font-family: 'Roboto';
+}
+
+.banner {
+    position: absolute;
+    top: 0;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.black {
+    color: black;
+}
+
+.gold {
+    color: gold;
+}
+
+.scorep {
+    color: #ff7539;
+}
+
+.winner {
+    color: #00C566;
+}
+
+.failed {
+    color: #FF4747;
+}
+
+.gray {
+    background-color: #F7F7F7;
+}
+
+.winner_bg {
+    background-color: #00C56619;
+}
+
+.fail_bg {
+    background-color: #FF474719;
+}
+
+.score_bg {
+    background-color: #FACC1519;
+}
+
+.points_panel {
+    z-index: 1;
+    position: absolute;
+    right: 5px;
+    top: 6px;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 2px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 4px;
+}
+
+.space {
+    height: 20px;
+}
+
+.sm_title {
+    color: white;
+    position: relative;
+    font-size: 13px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.points_cont {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 8px;
+    margin-top: 2px;
+}
+
+.score_p {
+    width: 20px;
+    height: 20px;
+    background-color: gold;
+    color: black;
+    font-size: 11px;
+    font-family: 'Roboto';
+    font-weight: bold;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.win_p {
+    width: 20px;
+    height: 20px;
+    color: #00C566;
+    font-size: 11px;
+    font-family: 'Roboto';
+    font-weight: bold;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #00C566;
+    background-color: #00C56619;
+}
+
+.fail_p {
+    width: 20px;
+    height: 20px;
+    background-color: #FF474719;
+    color: #FF4747;
+    border: 1.5px solid #FF4747;
+    font-size: 11px;
+    font-family: 'Roboto';
+    font-weight: bold;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.elapsed {
+    font-size: 9px;
+    height: 13px;
+    line-height: 9px;
+    padding-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto';
+    color: #00C566;
+    background-color: #34C75918;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-bottom: 2px;
+}

@@ -1,0 +1,122 @@
+.cont {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* padding-left: 20px; */
+    /* padding-right: 20px; */
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 30px;
+}
+
+.padding {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 20px; 
+    padding-right: 20px;
+}
+
+.team_row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+}
+
+.team_header {
+    background-color: white;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 52px;
+}
+
+.pos {
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.name_header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 12px;
+    /* justify-content: center; */
+    flex: 1;
+}
+
+.name_row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; */
+    flex: 1;
+}
+
+.team_icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    margin-right: 10px;
+}
+
+.points {
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.group {
+    margin-left: 20px;
+    margin-top: 20px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.mini_cont {
+    display: flex;
+    flex-direction: row;
+    overflow-x: scroll;
+    /* margin-top: 10px; */
+    margin-bottom: 10px;
+    width: 100%;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+    padding-left: 20px;
+    padding-right: 10px;
+}
+
+.mini_item {
+    height: 34px;
+    min-width: 100px;
+    border-radius: 17px;
+    background-color: white;
+    border: 1px solid #EAEDF1;
+    margin-right: 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8E8E93;
+}
+
+.mini_item_sel {
+    height: 34px;
+    min-width: 100px;
+    border-radius: 17px;
+    background-color: #ff2882;
+    margin-right: 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}

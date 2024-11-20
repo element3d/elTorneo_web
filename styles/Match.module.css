@@ -1,0 +1,169 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 6rem; */
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    padding-bottom: 80px;
+}
+
+
+.app_bar {
+    width: 100%;
+    height: 70px;
+    position: relative;
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-weight: bold;
+}
+
+.back {
+    width: 45px;
+    height: 45px;
+    background-color: #ffffff22;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.league_banner {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 200px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    overflow: hidden;
+    background-color: #37003C;
+}
+
+.banner_img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.view_row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.padding_top {
+    padding-top: 10px;
+    width: 100%;
+}
+
+.chip_sel {
+    height: 40px;
+    background-color: #FF2882;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 5px;
+    padding-left: 20px;
+    border-radius: 20px;
+    padding-right: 20px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+    user-select: none;
+    color: white;
+}
+
+.chip {
+    height: 40px;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    margin: 5px;
+    padding-left: 20px;
+    border-radius: 20px;
+    padding-right: 20px;
+    text-align: center;
+    border: 1px solid #EAEDF1;
+    font-weight: bold;
+    font-size: 12px;
+    user-select: none;
+    color: #8E8E93;
+}
+
+.chip:active {
+    opacity: .6;
+}
+
+.padding {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.table_row {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.table_number {
+    width: 30px;
+    text-align: center;
+}
+
+.table_img {
+    width: 30px;
+    height: 30px;
+}
+
+.table_team_cont {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+}
+
+.date_cont {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.cal_icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.date {
+    font-size: 13px;
+    font-family: 'Roboto';
+}
+
+.mt_0 {
+    margin-top: 0px;
+}
+
+.no_predicts {
+    font-size: 14px;
+    color: #8E8E93;
+    font-family: 'Roboto';
+    font-weight: bold;
+    margin-top: 20px;
+}

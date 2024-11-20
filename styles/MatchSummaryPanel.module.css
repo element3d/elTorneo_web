@@ -1,0 +1,111 @@
+.panel {
+    width: 100%;
+    /* height: 100px; */
+    background-color: white;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    /* padding: 10px; */
+}
+
+.title {
+    font-weight: bold;
+    font-size: 13px;
+    color: #8E8E93;
+    font-family: 'Roboto';
+}
+
+.subtitle {
+    font-weight: bold;
+    font-size: 13px;
+    color: #8E8E93;
+    font-family: 'Roboto';
+    /* margin-bottom: 4px; */
+}
+
+.team_kit {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+.team_flag {
+    width: 40px;
+    height: 40px;
+    margin: 8px;
+    object-fit: contain;
+}
+
+.content {
+    /* flex: 1; */
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress_bg {
+    margin-top: 5px;
+    width: 100%;
+    /* background-color: red; */
+    border-radius: 5px;
+    height: 10px;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+}
+
+.stats {
+    margin-top: 5px;
+    width: 100%;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.summary_p1 {
+    display: flex;
+    flex: 1;
+    justify-content: start;
+}
+
+.summary_draw {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+}
+
+.summary_p2 {
+    display: flex;
+    flex: 1;
+    justify-content: end;
+}
+
+.progress_p1 {
+    height: 100%;
+    min-width: 10px;
+    background-color: #37003C;
+}
+
+.progress_draw {
+    height: 100%;
+    min-width: 10px;
+    margin-left: 4px;
+    margin-right: 4px;
+    background-color: #8E8E93;
+}
+
+.progress_p2 {
+    height: 100%;
+    min-width: 10px;
+    background-color: #FF2882;
+}

@@ -1,0 +1,147 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 6rem; */
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    padding-bottom: 100px;
+}
+
+.award_panel_cont {
+    width: 100%;
+    padding: 20px;
+}
+
+.table_cont {
+    width: 100%;
+    padding: 20px;
+    padding-bottom: 0px;
+    user-select: none;
+}
+
+.table_item {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+}
+
+.table_number {
+    width: 50px;
+    text-align: center;
+    font-size: 14px;
+    font-family: 'Roboto';
+    font-weight: bold;
+}
+
+.table_player_name {
+    display: flex;
+    flex: 1;
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'Roboto';
+
+}
+
+.table_header {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    /* font-size: 14px !important; */
+}
+
+.prev_next_cont {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    user-select: none;
+    /* background-color: red; */
+}
+
+.prev {
+    width: 50%;
+    margin: 10px;
+    font-weight: bold;
+    color: #FF2882;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.prev:active {
+    opacity: .6;
+}
+
+.next {
+    width: 50%;
+    margin: 10px;
+    font-weight: bold;
+    color: #FF2882;
+}
+
+.text_center {
+    text-align: center;
+    justify-content: center;
+}
+
+.next:active {
+    opacity: .6;
+}
+
+.leagues_cont {
+    user-select: none;
+    width: 100%;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.league_chip {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 10px;
+    border: 1px solid #EAEDF1;
+}
+
+.league_chip_sel {
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #FF2882;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    margin-right: 10px;
+    color: white;
+}
+
+.league_chip:active {
+    opacity: .6;
+}
+
+.trophy {
+    width: 50px;
+    height: 20px;
+    object-fit: contain;
+}

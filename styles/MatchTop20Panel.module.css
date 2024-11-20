@@ -1,0 +1,88 @@
+.panel {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 13px;
+    color: #8E8E93;
+    font-family: 'Roboto';
+}
+
+.cont {
+    margin-top: 20px;
+}
+
+.player_item {
+    width: 100%;
+    height: 64px;
+    position: relative;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 5px;
+    border-radius: 12px;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.ava {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.ava_blank {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin-top: 5px;   
+}
+
+.ava_cont {
+    border-radius: 25px;
+    width: 50px;
+    height: 50px;
+    margin-left: 10px;
+    margin-right: 10px;
+    overflow: hidden;
+    border: 2px solid #EAEDF1;
+}
+
+.name {
+    font-size: 14px;
+    color: black;
+    font-weight: bold;
+}
+
+.subtitle {
+    font-size: 11px;
+    margin-top: 2px;
+    color: #8E8E93;
+    font-weight: bold;
+}
+
+.predict {
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    font-weight: bold;
+    font-size: 12px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 8px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto';
+
+}

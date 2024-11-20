@@ -1,0 +1,175 @@
+.panel {
+    width: 90%;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    /* height: 150px; */
+    background-color: white;
+    border-radius: 20px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: 'Roboto';
+}
+
+.team_item {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   justify-content: center;
+   width: 50%;
+   font-weight: bold;
+   font-size: 14px;
+}
+
+.teams_row {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.team_img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.homeaway {
+    font-size: 11px;
+    color: #AEAEB2;
+}
+
+.week {
+    font-size: 10px;
+    color: #AEAEB2;
+    margin-bottom: 10px;
+}
+
+.score_panel {
+    position: absolute;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+
+.live_score_panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dots {
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+    font-size: 40px;
+    width: 10px;
+    /* background-color: red; */
+    display: flex;
+    flex-direction: row;
+    font-weight: 400;
+}
+
+.live_panel {
+    position: absolute;
+    font-size: 26px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.score_label {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 24px;
+}
+
+.status {
+    padding-left: 14px;
+    padding-right: 14px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: #00C566;
+    margin-top: 4px;
+    background-color: #00C56619;
+    border: 1px solid #00C566;
+    font-size: 14px;
+}
+
+.predict_item {
+    font-size: 13px;
+    /* background-color: red; */
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top: 10px;
+}
+
+.score_input {
+    width: 45px;
+    height: 50px;
+    border: none;
+    outline: none;
+    background-color: #00000011;
+    border-radius: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.sign_in_btn {
+    margin-top: 10px;
+    margin-bottom: -8px;
+    border: none;
+    outline: none;
+    background-color: #FF2882;
+    height: 26px;
+    color: white;
+    font-weight: bold;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* font-family: 'Roboto'; */
+
+    /* font-size: 15px; */
+}
+
+.sign_in_btn:active {
+    opacity: .8;
+}
+
+.gcont {
+    width: 20px;
+    height: 20px;
+    border-radius: 12px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+.gicon {
+    width: 16px;
+    height: 16px;
+}

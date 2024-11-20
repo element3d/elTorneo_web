@@ -1,0 +1,41 @@
+.panel {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0px;
+}
+
+.date_cont {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: center; */
+}
+
+.date {
+    font-size: 13px;
+    font-family: 'Roboto';
+}
+
+.mt_0 {
+    margin-top: 0px;
+}
+
+.no_matches {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 20px;
+    color: #8E8E93;
+    font-weight: bold;
+}
+
+.cal_icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}

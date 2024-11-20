@@ -1,0 +1,86 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 6rem; */
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    padding-bottom: 50px;
+}
+
+.appbar {
+    width: 100%;
+    height: 70px;
+    padding-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    min-width: 320px;
+    text-align: center;
+}   
+
+.desc {
+    color: #8E8E93;
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+
+.back_button {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    border: 1px solid #EAEDF1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back_icon {
+    width: 30px;
+    height: 30px;
+}
+
+.button {
+    width: 100%;
+    height: 46px;
+    background-color: #FF2882;
+    border: none;
+    outline: none;
+    border-radius: 30px;
+    margin-top: 10px;
+    color: white;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.button:active {
+    opacity: .8;
+}
+
+.gcont {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    right: 4px;
+    border-radius: 20px;
+    background-color: white;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.gicon {
+    width: 33px;
+    height: 33px;
+}

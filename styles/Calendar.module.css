@@ -1,0 +1,139 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding: 6rem; */
+    min-height: 100vh;
+    background-color: #f7f7f7;
+    padding-bottom: 50px;
+}
+
+.calendar_panel {
+    width: 100%;
+    background-color: white;
+    padding-bottom: 10px;
+    /* height: 220px; */
+}
+
+.calendar_cont {
+    width: 100%;
+    display: flex;
+    margin-top: 5px;
+    /* background-color: red; */
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar_item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 62px;
+    border-radius: 16px;
+}
+
+.calendar_item_sel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 62px;
+    border-radius: 16px;
+    background-color: #FF2882;
+    color: white;
+}
+
+.date_cont {
+    display: flex;
+    margin-top: 5px;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    padding-left: 10px;
+    font-family: 'Roboto';
+}
+
+.calendar_item_day {
+    font-size: 12px;
+    /* font-weight: bold; */
+    color: #AEAEB2;
+}
+
+.calendar_item_day_sel {
+    font-size: 12px;
+    /* font-weight: bold; */
+    color: #F9F7F7;
+    font-family: 'Open Sans';
+}
+
+.calendar_item_date {
+    font-size: 14px;
+    font-weight: bold;
+    font-family: 'Open Sans';
+}
+
+.league_cont {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+}
+
+.matches_cont {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px;
+}
+
+.league_icon {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+
+.league_name_cont {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.league_name {
+    font-weight: bold;
+    font-size: 14px;
+    font-family: 'Open Sans';
+}
+
+.league_week {
+    font-weight: bold;
+    font-size: 10px;
+    color: #AEAEB2;
+    font-family: 'Open Sans';
+}
+
+.no_matches {
+    font-size: 14px;
+    text-align: center;
+    /* margin-top: 20px; */
+    color: #8E8E93;
+    font-weight: bold;
+}
+
+.cal_icon {
+    width: 24px;
+    margin-right: 5px;
+    height: 24px;
+    margin-left: 10px;
+}
+
+.live_title {
+    width: 100%;
+    text-align: start;
+    margin-top: 20px;
+    padding-left: 20px;
+}
