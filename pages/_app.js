@@ -14,7 +14,10 @@ function App({ Component, pageProps }) {
         // Retrieve user data
         const user = tg.initDataUnsafe.user;
         console.log('User:', user);
+        alert('uraaaaaaaa telegram')
+
       } else {
+        alert('no telegram')
         console.log('No telegram =============')
       }
       // Adjust theme based on Telegram settings
