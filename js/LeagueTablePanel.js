@@ -39,7 +39,7 @@ export default function LeagueTablePanel({ router, table, league, miniLeague, gr
         { league.num_leagues > 1 ? <div className={styles.mini_cont}>
             {
                 getMiniLeagues().map((league, i) => {
-                    return <div onClick={ () => onMiniLeagueClick(i)} className={ miniLeague == i ? styles.mini_item_sel : styles.mini_item} >
+                    return <div key={`league${league.name}`} onClick={ () => onMiniLeagueClick(i)} className={ miniLeague == i ? styles.mini_item_sel : styles.mini_item} >
                         {t('league')} {league.name}
                     </div>
                 })
@@ -77,7 +77,7 @@ export default function LeagueTablePanel({ router, table, league, miniLeague, gr
                     }
                 }
 
-                return <div>
+                return <div key={`${team.team.name}`}>
                     {renderGroupName ? <div className={styles.group}>Group {getGroupName(team.league_index, team.group_index)}</div> : null}
                     <div className={styles.team_row}>
                         <span className={styles.pos}>{currentPos++}</span>

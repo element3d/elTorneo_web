@@ -23,7 +23,7 @@ export default function MatchTop20Panel({ router, match, predicts }) {
         <span className={styles.title}>{t('top_20_predicts')}</span>
         {
             predicts.map((p) => {
-                return <div className={styles.player_item} onClick={ () => router.push(`/profile/${p.user.id}`) }>
+                return <div key={`predict_${p.user.id}`} className={styles.player_item} onClick={ () => router.push(`/profile/${p.user.id}`) }>
                     <div className={styles.ava_cont}>
                         {p.user.avatar?.length ? 
                             <img className={styles.ava} src={`${SERVER_BASE_URL}/${p.user.avatar}`} /> :

@@ -222,7 +222,7 @@ export default function Home({ me, match, predict, view, top20Predicts, summary,
                     }
                     m.week_type = m.weekType
 
-                    return <div>
+                    return <div key={`match_${m.id}`}>
                         {renderTime ? <div className={`${styles.date_cont} ${i === 0 ? styles.mt_0 : ''}`} >
                             <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />
                             <span className={styles.date}>{moment(currMatchDate).format('DD')} {t(moment(currMatchDate).format('MMM').toLowerCase())} {moment(currMatchDate).format('YYYY')}</span>
@@ -239,20 +239,7 @@ export default function Home({ me, match, predict, view, top20Predicts, summary,
         return <div className={styles.padding_top}>
             <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} />
         </div>
-        return <div className={styles.padding}>
-            {table.map((t, i) => {
-                return <div className={styles.table_row}>
-                    <span className={styles.table_number}>{i + 1}</span>
-                    <div className={styles.table_team_cont}>
-                        <img className={styles.table_img} src={`${SERVER_BASE_URL}/data/teams/150x150/${t.team.name}.png`} />
-                        <span>{t.team.short_name}</span>
-                    </div>
-                    <span className={styles.table_number}>{t.matches_played}</span>
-                    <span className={styles.table_number}>{t.goal_difference}</span>
-                    <span className={styles.table_number}>{t.points}</span>
-                </div>
-            })}
-        </div>
+       
     }
 
     function onBack() {

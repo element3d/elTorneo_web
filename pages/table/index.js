@@ -127,7 +127,7 @@ export default function Home({table, page, league}) {
                     </div>
 
                     {table.map((u, i) => {
-                        return <TableItem pos={ (page - 1) * 20 + i + 1} player={u} onClick={() => onNavProfile(u.id)} />
+                        return <TableItem key={`${u.id}_${u.name}`} pos={ (page - 1) * 20 + i + 1} player={u} onClick={() => onNavProfile(u.id)} />
                     })}
                 </div>
 

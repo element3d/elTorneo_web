@@ -78,7 +78,7 @@ export default function Home({ matches, isLive }) {
         <div className={styles.matches_cont}>
 
           {matches.map((m, i) => {
-            return <MatchLiveItem router={router} match={m} leagueName={m.league_name}/>
+            return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name}/>
            
           })}
 
