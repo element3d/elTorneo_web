@@ -14,29 +14,23 @@ function App({ Component, pageProps }) {
         // Retrieve user data
         const user = tg.initDataUnsafe.user;
         console.log('User:', user);
-        alert('uraaaaaaaa telegram')
-
+        alert('Has telegram')
+        alert(user)
       } else {
         alert('no telegram')
         console.log('No telegram =============')
       }
-      // Adjust theme based on Telegram settings
-      // document.body.style.backgroundColor = tg.themeParams.bg_color || '#FFFFFF';
-      // document.body.style.color = tg.themeParams.text_color || '#000000';
-
-      // Handle events
-      // tg.onEvent('themeChanged', () => {
-      //   // Update theme when the user changes it in Telegram
-      //   // document.body.style.backgroundColor = tg.themeParams.bg_color || '#FFFFFF';
-      //   // document.body.style.color = tg.themeParams.text_color || '#000000';
-      // });
-
+    
       return () => {
-        // tg.offEvent('themeChanged', () => { });
+        
       };
     }, []);
 
     return <>
+     <Script
+        src="https://telegram.org/js/telegram-web-app.js"
+        strategy="beforeInteractive"
+      />
       <Script
         id="adsbygoogle-init"
         strategy="afterInteractive"
