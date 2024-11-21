@@ -38,6 +38,7 @@
 .name_cont {
     display: flex;
     flex-direction: column;
+    flex: 1;
 }
 
 .name {
@@ -50,4 +51,19 @@
     margin-top: 2px;
     font-weight: bold;
     color: #8E8E93;
+}
+
+.settings {
+    width: 50px;
+    /* background-color: red; */
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-right: 20px;
+    align-items: center;
+}
+
+.settings:active {
+    opacity: .8;
 }

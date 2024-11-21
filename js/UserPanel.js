@@ -2,8 +2,12 @@ import styles from '@/styles/UserPanel.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-export default function UserPanel({user, pos, isMe}) {
+export default function UserPanel({router, user, pos, isMe}) {
     const {t} = useTranslation()
+
+    function onNavSettings() {
+        router.push('/settings')
+    }
 
     return (<div className={styles.panel}>
         <div className={styles.ava_cont}>
@@ -16,8 +20,8 @@ export default function UserPanel({user, pos, isMe}) {
             <span className={styles.desc}>{t('points')}:  {user.points}</span>
         </div>
 
-        { isMe ? <div>
-
+        { isMe ? <div className={styles.settings} onClick={onNavSettings}>
+            <span>{'>'}</span>
         </div> : null }
     </div>)
 }

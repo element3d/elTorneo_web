@@ -74,7 +74,7 @@ export default function Home({ user, stats, globalPage, initialPredicts }) {
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
                 <AppBar title="el Torneo" />
-                <UserPanel user={user} />
+                <UserPanel user={user} isMe={true} router={router} />
                 <div className={styles.padding}>
                     <ProfileStatsPanel stats={initialPredicts} />
                     <ProfileMatchesPanel isMe={true} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts}/>
