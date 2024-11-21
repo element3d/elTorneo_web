@@ -12,7 +12,11 @@ function App({ Component, pageProps }) {
 
   useEffect(() => {
     const token = Cookies.get('token')
-    if (token) return
+    console.log('Coockies token = ' + token)
+    if (token) { 
+      localStorage.setItem('is_tg', true)
+      return
+    }
 
     if (window.Telegram) {
       const tg = window.Telegram.WebApp;
@@ -22,6 +26,7 @@ function App({ Component, pageProps }) {
         console.log('User:', user);
 
         if (user) {
+         
           const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
@@ -40,7 +45,9 @@ function App({ Component, pageProps }) {
             })
             .then((token) => {
               Cookies.set('token', token)
-              router.reload()
+              localStorage.setItem('is_tg', true)
+              // localStorage.setItem('tg_token', token)
+              // router.reload()
             })
         } else {
           

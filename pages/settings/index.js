@@ -33,7 +33,7 @@ export async function getServerSideProps(context) {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authentication': token 
+            'Authentication': token
         },
     };
 
@@ -55,7 +55,8 @@ export async function getServerSideProps(context) {
 export default function Home({ me, locale }) {
     const router = useRouter()
     const [name, setName] = useState(me.name)
-    const {t} = useTranslation()
+    const { t } = useTranslation()
+    const isTg = localStorage.getItem('is_tg')
 
     function onNameChange(e) {
         setName(e.target.value)
@@ -75,25 +76,26 @@ export default function Home({ me, locale }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
-                <AppBar title={'el Torneo'} router={router}/>
+                <AppBar title={'el Torneo'} router={router} />
                 <div className={styles.ava_panel}>
                     <div className={styles.ava_cont}>
-                       { me.avatar.length ? <img src={`${SERVER_BASE_URL}/${me.avatar}`}/> 
-                       : <img className={styles.ava_blank} src={`${SERVER_BASE_URL}/data/icons/profile_blank.svg`}/> }
+                        {me.avatar.length ? <img src={`${SERVER_BASE_URL}/${me.avatar}`} />
+                            : <img className={styles.ava_blank} src={`${SERVER_BASE_URL}/data/icons/profile_blank.svg`} />}
                     </div>
-                    <button className={styles.mini_button} style={{left: '-8px'}}>
+                    <button className={styles.mini_button} style={{ left: '-8px' }}>
                     </button>
-                    <button className={styles.mini_button} style={{right: '-8px'}}>
+                    <button className={styles.mini_button} style={{ right: '-8px' }}>
                     </button>
                 </div>
 
                 <div className={styles.padding}>
-                    <input className={styles.input} type='text' value={name} onChange={onNameChange}/>
+                    <input className={styles.input} type='text' value={name} onChange={onNameChange} />
                     <span className={styles.email}>{me.email}</span>
 
-                    <button className={styles.text_button} onClick={onLogout}>{t('signout')}</button>
-                    <button className={styles.text_button}>{t('delete_acc')}</button>
-
+                    {!isTg ? <>
+                        <button className={styles.text_button} onClick={onLogout}>{t('signout')}</button>
+                        <button className={styles.text_button}>{t('delete_acc')}</button>
+                    </> : null}
                 </div>
 
                 <BottomNavBar router={router} page={EPAGE_CAL} />
