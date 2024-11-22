@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 export default function WeekBrowseDialog({league, onPick}) {
     const [weeks, setWeeks] = useState([])
 
-    console.log(league)
     useEffect(() => {
        const ww = []
        for (let i = 1; i <= league.num_weeks; ++i) {

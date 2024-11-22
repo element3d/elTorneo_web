@@ -20,6 +20,7 @@ import LeagueTablePanel from '@/js/LeagueTablePanel';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -30,6 +31,17 @@ export async function getServerSideProps(context) {
 
     const { query } = context;
     const { view } = query;
+
+    let isAndroid = false;
+    let isIOS = false
+    {
+        const userAgent = context.req.headers['user-agent'];
+        const parser = new UAParser(userAgent);
+        const uaResult = parser.getResult();
+        const osName = uaResult.os.name || 'Unknown';
+        isAndroid = osName == 'Android'
+        isIOS = osName == 'iOS'
+    }
 
     const requestOptions = {
         method: 'GET',
@@ -132,6 +144,8 @@ export async function getServerSideProps(context) {
             table: table,
             predict,
             me,
+            isAndroid,
+            isIOS,
             ...(await serverSideTranslations(locale)),
         },
     };
@@ -144,7 +158,7 @@ function Chip({ title, selected, onClick }) {
 }
 
 
-export default function Home({ me, match, predict, view, top20Predicts, summary, h2hMatches, table }) {
+export default function Home({ isAndroid, isIOS, me, match, predict, view, top20Predicts, summary, h2hMatches, table }) {
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
     const today = moment();
@@ -204,7 +218,6 @@ export default function Home({ me, match, predict, view, top20Predicts, summary,
     };
 
     function onTeamSelect(i) {
-        console.log(i)
         setTeamIndex(i - 1)
     }
 
@@ -235,11 +248,9 @@ export default function Home({ me, match, predict, view, top20Predicts, summary,
     }
 
     function renderTableView() {
-        console.log(match)
         return <div className={styles.padding_top}>
             <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} />
         </div>
-       
     }
 
     function onBack() {
@@ -279,7 +290,7 @@ export default function Home({ me, match, predict, view, top20Predicts, summary,
                 {view == 'h2h' ? renderH2HView() : null}
                 {view == 'table' ? renderTableView() : null}
 
-                <BottomNavBar router={router} />
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>
     );

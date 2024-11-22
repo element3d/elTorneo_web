@@ -15,15 +15,27 @@ import AwardsPanel from '@/js/AwardsPanel';
 import { useTranslation } from 'next-i18next';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
     const { query } = context;
     const { locale } = context;
 
+    let isAndroid = false;
+    let isIOS = false
+    {
+        const userAgent = context.req.headers['user-agent'];
+        const parser = new UAParser(userAgent);
+        const uaResult = parser.getResult();
+        const osName = uaResult.os.name || 'Unknown';
+        isAndroid = osName == 'Android'
+        isIOS = osName == 'iOS'
+    }
+
     // Check if the 'date' query parameter exists, otherwise use today's date
     const page = query.page ? Number(query.page) : 1;
     const league = query.league ? Number(query.league) : 1;
-  
+
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -38,39 +50,41 @@ export async function getServerSideProps(context) {
 
             return null
         })
-  
+
     return {
-      props: {
-        table,
-        league: Number.parseInt(league),
-        page: Number.parseInt(page),
-        ...(await serverSideTranslations(locale)),
-      },
+        props: {
+            table,
+            isAndroid,
+            isIOS,
+            league: Number.parseInt(league),
+            page: Number.parseInt(page),
+            ...(await serverSideTranslations(locale)),
+        },
     };
-  }
-  
+}
+
 
 function TableItem({ pos, player, onClick }) {
     return <div className={styles.table_item} onClick={onClick}>
-        { pos == 1 ? <img className={styles.trophy} src={`${SERVER_BASE_URL}/data/icons/trophy.svg`}/> : <span className={styles.table_number}>{pos}</span>  }
+        {pos == 1 ? <img className={styles.trophy} src={`${SERVER_BASE_URL}/data/icons/trophy.svg`} /> : <span className={styles.table_number}>{pos}</span>}
         <span className={styles.table_player_name}>{player.name}</span>
         <span className={styles.table_number}>{player.totalPredictions}</span>
         <span className={styles.table_number}>{player.predictions}</span>
     </div>
 }
 
-function LeagueChip({league, selected, isMy, onClick}) {
-    const {t} = useTranslation()
+function LeagueChip({ league, selected, isMy, onClick }) {
+    const { t } = useTranslation()
 
-    return <div onClick={onClick} className={ selected ? styles.league_chip_sel : styles.league_chip}>
+    return <div onClick={onClick} className={selected ? styles.league_chip_sel : styles.league_chip}>
         <span>{t('league')} {league}</span>
-        { isMy ? <span>{t('your_league')}</span> : null }
+        {isMy ? <span>{t('your_league')}</span> : null}
     </div>
 }
 
-export default function Home({table, page, league}) {
+export default function Home({ isAndroid, isIOS, table, page, league }) {
     const router = useRouter()
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
     const showPrev = page > 1
     const showNext = table.length >= 20
@@ -110,7 +124,7 @@ export default function Home({table, page, league}) {
             <main className={`${styles.main} ${inter.className}`}>
                 <AppBar title={'el Torneo'} />
                 <div className={styles.award_panel_cont}>
-                    <AwardsPanel league={league} showLeague={true}/>
+                    <AwardsPanel league={league} showLeague={true} />
                 </div>
 
                 <div className={styles.leagues_cont}>
@@ -127,16 +141,16 @@ export default function Home({table, page, league}) {
                     </div>
 
                     {table.map((u, i) => {
-                        return <TableItem key={`${u.id}_${u.name}`} pos={ (page - 1) * 20 + i + 1} player={u} onClick={() => onNavProfile(u.id)} />
+                        return <TableItem key={`${u.id}_${u.name}`} pos={(page - 1) * 20 + i + 1} player={u} onClick={() => onNavProfile(u.id)} />
                     })}
                 </div>
 
                 <div className={styles.prev_next_cont}>
-                    { showPrev ? <span onClick={onPrev} className={`${styles.prev} ${showNext ? null : styles.text_center}`}>{'< Previous'}</span> : null }
-                    { showNext ? <span onClick={onNext} className={`${styles.next} ${showPrev ? null : styles.text_center}`}>{'Next >'}</span> : null }
+                    {showPrev ? <span onClick={onPrev} className={`${styles.prev} ${showNext ? null : styles.text_center}`}>{'< Previous'}</span> : null}
+                    {showNext ? <span onClick={onNext} className={`${styles.next} ${showPrev ? null : styles.text_center}`}>{'Next >'}</span> : null}
                 </div>
 
-                <BottomNavBar router={router} page={EPAGE_TAB}/>
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_TAB} />
             </main>
         </>
     );

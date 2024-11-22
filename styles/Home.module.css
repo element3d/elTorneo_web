@@ -424,17 +424,18 @@
   align-items: center;
   justify-content: center;
   font-family: 'Open Sans';
+  font-size: 14px;
 }
 
 .gplay_icon {
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
 }
 
 .install_button {
   padding-left: 20px;
   padding-right: 20px;
-  height: 30px;
+  height: 24px;
   background-color: #ff2882;
   color: white;
   font-weight: bold;

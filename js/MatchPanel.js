@@ -113,7 +113,6 @@ export default function MatchPanel({ router, me, match, predict }) {
             });
 
             const userInfo = await response.json();
-            console.log('User Info:', userInfo);
 
             // You can access user's email and name like this:
             const email = userInfo.email;
@@ -132,18 +131,18 @@ export default function MatchPanel({ router, me, match, predict }) {
         }
     }
 
-    function login() {
-        signinGoogle('narekhovhannisyanim4@gmail.com', 'narek im4')
-                .then((token) => {
-                    Cookies.set('token', token);
-                    router.reload()
-                })
-                .catch((err) => {
-                    console.error(err)
-                })
-    }
+    // function login() {
+    //     signinGoogle('narekhovhannisyanim4@gmail.com', 'narek im4')
+    //             .then((token) => {
+    //                 Cookies.set('token', token);
+    //                 router.reload()
+    //             })
+    //             .catch((err) => {
+    //                 console.error(err)
+    //             })
+    // }
 
-    const login1 = useGoogleLogin({
+    const login = useGoogleLogin({
         onSuccess,
         clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
         isSignedIn: true,

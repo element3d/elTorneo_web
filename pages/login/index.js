@@ -15,20 +15,33 @@ import Cookies from 'js-cookie';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 
-import { LoginButton } from '@telegram-auth/react';
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
     const { query } = context;
     const { locale } = context;
 
+    let isAndroid = false;
+    let isIOS = false
+    {
+        const userAgent = context.req.headers['user-agent'];
+        const parser = new UAParser(userAgent);
+        const uaResult = parser.getResult();
+        const osName = uaResult.os.name || 'Unknown';
+        isAndroid = osName == 'Android'
+        isIOS = osName == 'iOS'
+    }
+
     return {
         props: {
+            isAndroid,
+            isIOS,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
-export default function Home({ matches, date }) {
+export default function Home({ isAndroid, isIOS }) {
     const { t } = useTranslation()
     const router = useRouter()
 
@@ -63,7 +76,6 @@ export default function Home({ matches, date }) {
             });
 
             const userInfo = await response.json();
-            console.log('User Info:', userInfo);
 
             // You can access user's email and name like this:
             const email = userInfo.email;
@@ -91,11 +103,6 @@ export default function Home({ matches, date }) {
         scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
 
     });
-
-    const handleTelegramResponse = (user) => {
-        console.log('Telegram user:', user);
-        // You can send this data to your backend for further processing.
-      };
 
     return (
         <>
@@ -126,20 +133,12 @@ export default function Home({ matches, date }) {
                             <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`} />
                         </div>
                     </button>
+                    {/* curl -X POST "https://api.telegram.org/bot7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30/sendMessage" -H "Content-Type: application/json" -d "{\"chat_id\":\"660322879\",\"text\":\"Click the button below to start el Torneo:\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Start el Torneo\",\"web_app\":{\"url\":\"https://eltorneo.am\"}}]]}}" */}
+
 {/* 7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30 */}
-                    <LoginButton
-                        botUsername="elTorneoBot" // Replace with your bot's username
-                        buttonSize="large" // "large" | "medium" | "small"
-                        cornerRadius={5} // 0 - 20
-                        showAvatar={true} // true | false
-                        lang="en"
-                        onAuthCallback={(data) => {
-                            console.log(data);
-                            // call your backend here to validate the data and sign in the user
-                        }}
-                    />
+                   
                 </div>
-                <BottomNavBar router={router} />
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>
     );

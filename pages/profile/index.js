@@ -12,12 +12,24 @@ import ProfileStatsPanel from '@/js/ProfileStatsPanel';
 import ProfileMatchesPanel from '@/js/ProfileMatchesPanel';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
     const {req} = context
     const { query } = context;
     const globalPage = query.page ? Number(query.page) : 1;
     const { locale } = context;
+
+    let isAndroid = false;
+    let isIOS = false
+    {
+        const userAgent = context.req.headers['user-agent'];
+        const parser = new UAParser(userAgent);
+        const uaResult = parser.getResult();
+        const osName = uaResult.os.name || 'Unknown';
+        isAndroid = osName == 'Android'
+        isIOS = osName == 'iOS'
+    }
 
     const token = req.cookies.token;
     if (!token) {
@@ -53,13 +65,15 @@ export async function getServerSideProps(context) {
             user,
             globalPage,
             initialPredicts,
+            isAndroid,
+            isIOS,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
 
-export default function Home({ user, stats, globalPage, initialPredicts }) {
+export default function Home({ isAndroid, isIOS, user, stats, globalPage, initialPredicts }) {
     const router = useRouter();
     const totalPredicts = initialPredicts.totalPredicts
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
@@ -79,7 +93,7 @@ export default function Home({ user, stats, globalPage, initialPredicts }) {
                     <ProfileStatsPanel stats={initialPredicts} />
                     <ProfileMatchesPanel isMe={true} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts}/>
                 </div>
-                <BottomNavBar router={router} page={EPAGE_PROF}/>
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_PROF}/>
             </main>
         </>
     );

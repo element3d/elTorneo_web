@@ -14,7 +14,7 @@ function NavBarButton({onClick, icon}) {
     </div>)
 }
 
-export default function BottomNavBar({router, page}) {
+export default function BottomNavBar({router, isIOS, isAndroid, page}) {
     function onNavHome() {
         router.push('/')
     }
@@ -43,10 +43,19 @@ export default function BottomNavBar({router, page}) {
        <NavBarButton onClick={onNavHome} icon={page == EPAGE_HOME ? 'home_black' : 'home'}/>
        <div></div>
        <NavBarButton onClick={onNavCalendar} icon={page == EPAGE_CAL ? 'cal_active' : 'cal'}/>
-       <div className={styles.live} onClick={onNavLive}>
-            <span className={styles.live_text}>LIVE</span>
-            <span className={styles.time}>12:30</span>
-       </div>
+       { isIOS ? <div className={styles.live} onClick={onNavLive}>
+            <div className={styles.live_text}>LIVE</div>
+            <div className={styles.time}>12:30</div>
+       </div> : null }
+       { isAndroid ? <div className={styles.live_and} onClick={onNavLive}>
+            <div className={styles.live_text_and}>LIVE</div>
+            <div className={styles.time_and}>12:30</div>
+       </div> : null }
+
+       {!isIOS && !isAndroid ? <div className={styles.live_and} onClick={onNavLive}>
+            <div className={styles.live_text_and}>LIVE</div>
+            <div className={styles.time_and}>12:30</div>
+       </div> : null }
        <NavBarButton onClick={onNavTable} icon={page == EPAGE_TAB ? 'stats_active' : 'stats'}/>
        <div></div>
        <NavBarButton onClick={onNavLogin} icon={page == EPAGE_PROF ? 'profile_active' : 'profile'}/>

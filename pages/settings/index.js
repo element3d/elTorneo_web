@@ -12,12 +12,24 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import Cookies from 'js-cookie';
 const inter = Inter({ subsets: ['latin'] });
+import { UAParser } from 'ua-parser-js';
+
 
 export async function getServerSideProps(context) {
     const { query } = context;
     const { locale } = context;
-
     const { req } = context
+
+    let isAndroid = false;
+    let isIOS = false
+    {
+        const userAgent = context.req.headers['user-agent'];
+        const parser = new UAParser(userAgent);
+        const uaResult = parser.getResult();
+        const osName = uaResult.os.name || 'Unknown';
+        isAndroid = osName == 'Android'
+        isIOS = osName == 'iOS'
+    }
 
     const token = req.cookies.token;
     if (!token) {
@@ -47,16 +59,20 @@ export async function getServerSideProps(context) {
         props: {
             locale,
             me: user,
+            token,
+            isAndroid,
+            isIOS,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
-export default function Home({ me, locale }) {
+export default function Home({ isAndroid, isIOS, me, token, locale }) {
     const router = useRouter()
     const [name, setName] = useState(me.name)
     const { t } = useTranslation()
-    const isTg = localStorage.getItem('is_tg')
+    const [newAva, setNewAva] = useState(null)
+
 
     function onNameChange(e) {
         setName(e.target.value)
@@ -65,6 +81,93 @@ export default function Home({ me, locale }) {
     function onLogout() {
         Cookies.remove('token')
         router.push('/')
+    }
+
+    function load(callback) {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = "image/*"
+        input.multiple = false
+        input.style.display = 'none';
+        // Define a function to handle the onchange event
+        function handleChange(e) {
+            // Remove the input element from the DOM
+            document.body.removeChild(input);
+            callback([e.target.files[0]]);
+        }
+
+        input.addEventListener('change', handleChange);
+        document.body.appendChild(input);
+        input.click();
+    }
+
+
+    function onUploadAva() {
+        load((img) => {
+            const url = URL.createObjectURL(img[0])
+            setNewAva(url)
+
+            const data = new FormData();
+            data.append('image_file', img[0]);
+
+            const requestOptions = {
+                method: 'PUT',
+                headers: {  /*accept: 'application/json',*/
+                    'Authentication': token
+                },
+                //  'Content-Type': 'multipart/form-data' },
+                body: data
+            };
+            fetch(`${SERVER_BASE_URL}/api/v1/me/avatar`, requestOptions)
+                .then()
+                .catch()
+        })
+    }
+
+    function onDeleteAva() {
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Authentication': token
+            },
+          };
+          
+            fetch(`${SERVER_BASE_URL}/api/v1/me/avatar`, requestOptions)
+            .then((u)=>{
+                setNewAva(null)
+                router.reload()
+            })
+            .catch()
+    }
+
+    function onSaveName() {
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authentication': token
+            },
+            body: JSON.stringify({ 
+              name: name
+             })
+          };
+    
+          fetch(`${SERVER_BASE_URL}/api/v1/me/name`, requestOptions)
+            .then(response => {
+                if (response.status == 200) {
+                    return response.text()
+                }             
+                return null
+            })
+            .then(data => {
+                // if (!data) return    
+                // unsub()       
+            });
+    }
+
+    function getAva() {
+        if (newAva) return newAva
+        return `${SERVER_BASE_URL}/${me.avatar}`
     }
 
     return (
@@ -79,26 +182,33 @@ export default function Home({ me, locale }) {
                 <AppBar title={'el Torneo'} router={router} />
                 <div className={styles.ava_panel}>
                     <div className={styles.ava_cont}>
-                        {me.avatar.length ? <img src={`${SERVER_BASE_URL}/${me.avatar}`} />
+                        {me.avatar.length || newAva ? <img className={styles.ava} src={getAva()} />
                             : <img className={styles.ava_blank} src={`${SERVER_BASE_URL}/data/icons/profile_blank.svg`} />}
                     </div>
                     <button className={styles.mini_button} style={{ left: '-8px' }}>
+                        <img src={`${SERVER_BASE_URL}/data/icons/trash.svg`} className={styles.edit_icon} onClick={onDeleteAva} />
+
                     </button>
                     <button className={styles.mini_button} style={{ right: '-8px' }}>
+                        <img src={`${SERVER_BASE_URL}/data/icons/pen.svg`} className={styles.edit_icon} onClick={onUploadAva} />
+
                     </button>
                 </div>
 
                 <div className={styles.padding}>
-                    <input className={styles.input} type='text' value={name} onChange={onNameChange} />
+                    <div className={styles.input_cont}>
+                        <input maxLength={40} className={styles.input} type='text' value={name} onChange={onNameChange} />
+                        <button className={styles.save} onClick={onSaveName}>{t('save')}</button>
+                    </div>
                     <span className={styles.email}>{me.email}</span>
 
-                    {!isTg ? <>
+                    {me.authType != 'telegram' ? <>
                         <button className={styles.text_button} onClick={onLogout}>{t('signout')}</button>
                         <button className={styles.text_button}>{t('delete_acc')}</button>
                     </> : null}
                 </div>
 
-                <BottomNavBar router={router} page={EPAGE_CAL} />
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
             </main>
         </>
     );

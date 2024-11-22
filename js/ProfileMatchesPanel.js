@@ -16,7 +16,6 @@ export default function ProfileMatchesPanel({ isMe, router, globalPage, user, pr
     useEffect(() => {
         const handleScroll = () => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 && !loading) {
-                // console.log(totalPredicts)
                 const limit = Math.min(totalPredicts, 100);
                 if ((page - 1) * 20 < limit)
                     loadMorePredicts();
@@ -41,13 +40,8 @@ export default function ProfileMatchesPanel({ isMe, router, globalPage, user, pr
 
         setPredicts(prev => [...prev, ...newPredicts.predicts]);
         setPage(prev => prev + 1);
-        console.log(page)
         setLoading(false);
     };
-
-    useEffect(() => {
-        console.log(predicts.length)
-    }, [predicts])
 
     function onPrev() {
 

@@ -5,7 +5,6 @@ import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
 export default function HomeMatchesPanel({ league, matches, router }) {
-    console.log(league)
     const {t} = useTranslation()
     let currMatchDate = null
 

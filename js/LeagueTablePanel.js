@@ -3,7 +3,6 @@ import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
 export default function LeagueTablePanel({ router, table, league, miniLeague, group }) {
-    console.log(league)
     const {t} = useTranslation()
     let currentGroup = 0
     let currentPos = 1

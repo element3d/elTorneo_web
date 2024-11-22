@@ -12,6 +12,7 @@ import ProfileStatsPanel from '@/js/ProfileStatsPanel';
 import ProfileMatchesPanel from '@/js/ProfileMatchesPanel';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -19,6 +20,17 @@ export async function getServerSideProps(context) {
     const { query } = context;
     const globalPage = query.page ? Number(query.page) : 1;
     const { locale } = context;
+
+    let isAndroid = false;
+    let isIOS = false
+    {
+        const userAgent = context.req.headers['user-agent'];
+        const parser = new UAParser(userAgent);
+        const uaResult = parser.getResult();
+        const osName = uaResult.os.name || 'Unknown';
+        isAndroid = osName == 'Android'
+        isIOS = osName == 'iOS'
+    }
 
     const requestOptions = {
         method: 'GET',
@@ -43,13 +55,15 @@ export async function getServerSideProps(context) {
             user,
             globalPage,
             initialPredicts,
+            isAndroid,
+            isIOS,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
 
-export default function Home({ user, stats, globalPage, initialPredicts }) {
+export default function Home({ isAndroid, isIOS, user, stats, globalPage, initialPredicts }) {
     const router = useRouter();
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
   
@@ -68,7 +82,7 @@ export default function Home({ user, stats, globalPage, initialPredicts }) {
                     <ProfileStatsPanel stats={initialPredicts} />
                     <ProfileMatchesPanel isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                 </div>
-                <BottomNavBar router={router} />
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>
     );

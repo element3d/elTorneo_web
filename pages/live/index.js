@@ -16,12 +16,24 @@ import MatchLiveItem from '@/js/MatchLiveItem';
 import { useTranslation } from 'next-i18next';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
   const { query } = context;
   const { req } = context;
   const token = req.cookies.token;
   const { locale } = context;
+
+  let isAndroid = false;
+  let isIOS = false
+  {
+      const userAgent = context.req.headers['user-agent'];
+      const parser = new UAParser(userAgent);
+      const uaResult = parser.getResult();
+      const osName = uaResult.os.name || 'Unknown';
+      isAndroid = osName == 'Android'
+      isIOS = osName == 'iOS'
+  }
 
   let isLive = true
   const url = `${SERVER_BASE_URL}/api/v1/matches/live`
@@ -51,12 +63,14 @@ export async function getServerSideProps(context) {
     props: {
       matches: matches,
       isLive,
+      isAndroid,
+      isIOS,
       ...(await serverSideTranslations(locale)),
     },
   };
 }
 
-export default function Home({ matches, isLive }) {
+export default function Home({isAndroid, isIOS,  matches, isLive }) {
   const {t} = useTranslation()
   const today = moment();
   // const [date, setDate] = useState(today.format('YYYY-MM-DD'))
@@ -83,7 +97,7 @@ export default function Home({ matches, isLive }) {
           })}
 
         </div>
-        <BottomNavBar router={router}  />
+        <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router}  />
       </main>
     </>
   );

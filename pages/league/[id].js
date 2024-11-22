@@ -76,7 +76,6 @@ export default function League({league}) {
 
     function getMatches() {
       const url = `${SERVER_BASE_URL}/api/v1/matches?league_id=${league.id}&week=${week}&season=2024/25`
-      console.log(url)
       fetch(url, {
         method: 'GET',
         // headers: { 'Content-Type': 'application/json' },
@@ -125,7 +124,6 @@ export default function League({league}) {
       if (!team1 || !team2 || !week || !date || !time) return;
 
       const datetime = combineDateTimeToEpoch(date, time)
-      console.log(datetime)
       return
 
       fetch(`${SERVER_BASE_URL}/api/v1/matches`, {

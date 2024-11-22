@@ -15,22 +15,34 @@ import MatchItemMobile from '@/js/MatchItemMobile';
 import { i18n } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 const inter = Inter({ subsets: ['latin'] });
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
     const { query } = context;
     const { locale } = context;
 
-    const { req } = context
+    let isAndroid = false;
+    let isIOS = false
+    {
+        const userAgent = context.req.headers['user-agent'];
+        const parser = new UAParser(userAgent);
+        const uaResult = parser.getResult();
+        const osName = uaResult.os.name || 'Unknown';
+        isAndroid = osName == 'Android'
+        isIOS = osName == 'iOS'
+    }
 
     return {
         props: {
             locale,
+            isAndroid,
+            isIOS,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
-export default function Home({ locale }) {
+export default function Home({ isAndroid, isIOS, locale }) {
     const router = useRouter()
 
     function getLangs() {
@@ -73,7 +85,7 @@ export default function Home({ locale }) {
 
 
 
-                <BottomNavBar router={router} page={EPAGE_CAL} />
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
             </main>
         </>
     );

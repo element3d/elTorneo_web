@@ -35,27 +35,14 @@ export async function getServerSideProps(context) {
   const token = req.cookies.token;
 
   let isAndroid = false;
-  let isIos = false
-  let isChrome = false
+  let isIOS = false
   {
     const userAgent = context.req.headers['user-agent'];
-
-    // Initialize the parser with the user-agent string
     const parser = new UAParser(userAgent);
     const uaResult = parser.getResult();
-
-    // Extract browser and OS information
-    const browserName = uaResult.browser.name || 'Unknown';
-    const browserVersion = uaResult.browser.version || 'Unknown';
     const osName = uaResult.os.name || 'Unknown';
-    const osVersion = uaResult.os.version || 'Unknown';
     isAndroid = osName == 'Android'
-    isIos = osName == 'iOS'
-    isChrome = browserName == 'Mobile Chrome'
-    console.log('----------------------------')
-    console.log(browserName)
-    console.log(osName)
-    
+    isIOS = osName == 'iOS'
   }
 
   const leagues = await fetch(`${SERVER_BASE_URL}/api/v1/leagues`, {
@@ -108,6 +95,7 @@ export async function getServerSideProps(context) {
       table,
       locale,
       isAndroid,
+      isIOS,
       miniLeague: routerMiniLeague,
       matchOfDay: getRandomMatch(matches),
       ...(await serverSideTranslations(locale)),
@@ -115,7 +103,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ leagues, isAndroid, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
+export default function Home({ leagues, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
   const { t } = useTranslation()
   const [name, setName] = useState('');
   const [specialMatchId, setSpecialMatchId] = useState('')
@@ -145,13 +133,13 @@ export default function Home({ leagues, isAndroid, locale, miniLeague, serverLea
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar locale={locale} title={serverLeague?.name} showLang router={router} />
-        { isAndroid ? <div className={styles.install_cont}>
-          <img className={styles.gplay_icon} src={`${SERVER_BASE_URL}/data/icons/google-play.svg`}/>
-          <span>Android Google Play</span>
+        {isAndroid ? <div className={styles.install_cont}>
+          <img className={styles.gplay_icon} src={`${SERVER_BASE_URL}/data/icons/google-play.svg`} />
+          <span>Available on Google Play</span>
           <button className={styles.install_button} onClick={onInstall}>
             Install now
           </button>
-        </div> : null }
+        </div> : null}
         <LeaguesPanel router={router} league={serverLeague} weeks={weeks} week={week} leagues={leagues} />
         <div className={styles.switch_cont}>
           <MatchLiveItem match={matchOfDay} router={router} leagueName={serverLeague.name} />
@@ -159,7 +147,7 @@ export default function Home({ leagues, isAndroid, locale, miniLeague, serverLea
         </div>
         {view == 1 ? <HomeMatchesPanel league={league} matches={matches} router={router} /> :
           <LeagueTablePanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />}
-        <BottomNavBar router={router} page={EPAGE_HOME} />
+        <BottomNavBar isIOS={isIOS} isAndroid={isAndroid} router={router} page={EPAGE_HOME} />
       </main>
     </>
   );

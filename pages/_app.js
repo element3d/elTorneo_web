@@ -12,9 +12,7 @@ function App({ Component, pageProps }) {
 
   useEffect(() => {
     const token = Cookies.get('token')
-    console.log('Coockies token = ' + token)
     if (token) { 
-      localStorage.setItem('is_tg', true)
       return
     }
 
@@ -23,7 +21,6 @@ function App({ Component, pageProps }) {
       if (tg) {
         tg.ready();
         const user = tg.initDataUnsafe.user;
-        console.log('User:', user);
 
         if (user) {
          
@@ -45,8 +42,6 @@ function App({ Component, pageProps }) {
             })
             .then((token) => {
               Cookies.set('token', token)
-              localStorage.setItem('is_tg', true)
-              // localStorage.setItem('tg_token', token)
               // router.reload()
             })
         } else {
@@ -55,7 +50,7 @@ function App({ Component, pageProps }) {
       }
 
     } else {
-      console.log('No telegram =============')
+     
     }
 
     return () => {

@@ -31,7 +31,7 @@
     height: 100px;
     border-radius: 50px;
     overflow: hidden;
-    border: 2px solid #8E8E93;
+    border: 2px solid #EAEDF1;
     position: relative;
 }
 
@@ -45,6 +45,19 @@
     background-color: #FF2882;
     border: none;
     outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ava {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mini_button:active {
+    opacity: .8;
 }
 
 .ava_blank {
@@ -68,15 +81,24 @@
     height: 40px;
     border: none;
     outline: none;
+    font-size: 16px;
     border-bottom: 1px solid black;
+    /* background-color: red; */
+}
+
+.input_cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .email {
-    margin-top: 10px;
+    margin-top: 15px;
     font-size: 14px;
     color: #8E8E93;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 .text_button {
@@ -86,8 +108,31 @@
     display: flex;
     font-weight: bold;
     margin-top: 12px;
+    font-size: 16px;
 }
 
 .text_button:active {
+    opacity: .8;
+}
+
+.edit_icon {
+    width: 16px;
+    height: 16px;
+}
+.save {
+    position: absolute;
+    right: 0;
+    border: none;
+    outline: none;
+    height: 24px;
+    padding-left: 12px;
+    color: white;
+    font-weight: bold;
+    padding-right: 12px;
+    border-radius: 12px;
+    background-color: #FF2882;
+}
+
+.save:active {
     opacity: .8;
 }

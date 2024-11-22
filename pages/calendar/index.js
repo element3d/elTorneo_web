@@ -15,6 +15,7 @@ import MatchItemMobile from '@/js/MatchItemMobile';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { UAParser } from 'ua-parser-js';
 
 export async function getServerSideProps(context) {
   const { query } = context;
@@ -23,6 +24,17 @@ export async function getServerSideProps(context) {
 
   const {req} = context
   const token = req.cookies.token;
+
+  let isAndroid = false;
+  let isIOS = false
+  {
+      const userAgent = context.req.headers['user-agent'];
+      const parser = new UAParser(userAgent);
+      const uaResult = parser.getResult();
+      const osName = uaResult.os.name || 'Unknown';
+      isAndroid = osName == 'Android'
+      isIOS = osName == 'iOS'
+  }
 
   const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=en`
   const matches = await fetch(url, {
@@ -36,13 +48,15 @@ export async function getServerSideProps(context) {
   return {
     props: {
       matches: matches,
+      isAndroid,
+      isIOS,
       date: moment(timestamp).format('YYYY-MM-DD'),
       ...(await serverSideTranslations(locale)),
     },
   };
 }
 
-export default function Home({ matches, date }) {
+export default function Home({isAndroid, isIOS,  matches, date }) {
   const {t} = useTranslation()
   const router = useRouter()
   let currentLeague = null
@@ -90,7 +104,7 @@ export default function Home({ matches, date }) {
 
           {!matches.length ? <span className={styles.no_matches}>There are no matches.</span> : null}
         </div>
-        <BottomNavBar router={router} page={EPAGE_CAL} />
+        <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
       </main>
     </>
   );
