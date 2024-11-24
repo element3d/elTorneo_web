@@ -20,6 +20,9 @@ import { UAParser } from 'ua-parser-js';
 export async function getServerSideProps(context) {
     const { query } = context;
     const { locale } = context;
+    const { req } = context;
+
+    const token = req.cookies.token;
 
     let isAndroid = false;
     let isIOS = false
@@ -36,6 +39,7 @@ export async function getServerSideProps(context) {
     const page = query.page ? Number(query.page) : 1;
     const league = query.league ? Number(query.league) : 1;
 
+    let me = null
     const requestOptions = {
         method: 'GET',
         headers: {
@@ -51,11 +55,28 @@ export async function getServerSideProps(context) {
             return null
         })
 
+    if (token) {
+        const requestOptions1 = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token
+            },
+        };
+
+        me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions1)
+            .then(response => {
+                if (response.status === 200) return response.json();
+                return null;
+            });
+    }
+
     return {
         props: {
             table,
             isAndroid,
             isIOS,
+            me,
             league: Number.parseInt(league),
             page: Number.parseInt(page),
             ...(await serverSideTranslations(locale)),
@@ -64,8 +85,8 @@ export async function getServerSideProps(context) {
 }
 
 
-function TableItem({ pos, player, onClick }) {
-    return <div className={styles.table_item} onClick={onClick}>
+function TableItem({ isMe, pos, player, onClick }) {
+    return <div className={styles.table_item} style={{ backgroundColor: `${isMe ? 'white' : 'transparent'}` }} onClick={onClick}>
         {pos == 1 ? <img className={styles.trophy} src={`${SERVER_BASE_URL}/data/icons/trophy.svg`} /> : <span className={styles.table_number}>{pos}</span>}
         <span className={styles.table_player_name}>{player.name}</span>
         <span className={styles.table_number}>{player.totalPredictions}</span>
@@ -78,11 +99,11 @@ function LeagueChip({ league, selected, isMy, onClick }) {
 
     return <div onClick={onClick} className={selected ? styles.league_chip_sel : styles.league_chip}>
         <span>{t('league')} {league}</span>
-        {isMy ? <span>{t('your_league')}</span> : null}
+        {isMy ? <span className={styles.chip_subtitle}>{t('your_league')}</span> : null}
     </div>
 }
 
-export default function Home({ isAndroid, isIOS, table, page, league }) {
+export default function Home({ me, isAndroid, isIOS, table, page, league }) {
     const router = useRouter()
     const { t } = useTranslation()
 
@@ -113,6 +134,18 @@ export default function Home({ isAndroid, isIOS, table, page, league }) {
         router.push(`/profile/${id}`)
     }
 
+    function onNavInfo() {
+        router.push('/info')
+    }
+
+    function isShowMoveToLeague() {
+        if (!me) return false
+        if (me.league == 2) return true
+        if (me.points > 20) return false
+
+        return true
+    }
+
     return (
         <>
             <Head>
@@ -124,13 +157,17 @@ export default function Home({ isAndroid, isIOS, table, page, league }) {
             <main className={`${styles.main} ${inter.className}`}>
                 <AppBar title={'el Torneo'} />
                 <div className={styles.award_panel_cont}>
-                    <AwardsPanel league={league} showLeague={true} />
+                    <AwardsPanel league={league} showLeague={true} router={router} />
                 </div>
 
                 <div className={styles.leagues_cont}>
-                    <LeagueChip selected={league == 1} onClick={onNavLeague1} league={1} />
-                    <LeagueChip selected={league == 2} onClick={onNavLeague2} league={2} />
+                    <LeagueChip selected={league == 1} onClick={onNavLeague1} league={1} isMy={me?.league == 1} />
+                    <LeagueChip selected={league == 2} onClick={onNavLeague2} league={2} isMy={me?.league == 2} />
+                    <button onClick={onNavInfo} className={styles.info_button}>i</button>
                 </div>
+                {isShowMoveToLeague() ? <div className={styles.leagues_cont} style={{ marginTop: '10px' }}>
+                    <button onClick={onNavInfo} className={styles.move_league}>{t('move_to_league')} {me.league == 1 ? 2 : 1}</button>
+                </div> : null}
 
                 <div className={styles.table_cont}>
                     <div className={styles.table_header}>
@@ -141,16 +178,16 @@ export default function Home({ isAndroid, isIOS, table, page, league }) {
                     </div>
 
                     {table.map((u, i) => {
-                        return <TableItem key={`${u.id}_${u.name}`} pos={(page - 1) * 20 + i + 1} player={u} onClick={() => onNavProfile(u.id)} />
+                        return <TableItem key={`${u.id}_${u.name}`} isMe={me?.id == u.id} pos={(page - 1) * 20 + i + 1} player={u} onClick={() => onNavProfile(u.id)} />
                     })}
                 </div>
 
                 <div className={styles.prev_next_cont}>
-                    {showPrev ? <span onClick={onPrev} className={`${styles.prev} ${showNext ? null : styles.text_center}`}>{'< Previous'}</span> : null}
-                    {showNext ? <span onClick={onNext} className={`${styles.next} ${showPrev ? null : styles.text_center}`}>{'Next >'}</span> : null}
+                    {showPrev ? <span onClick={onPrev} className={`${styles.prev} ${showNext ? null : styles.text_center}`}>{'< ' + t('prev')}</span> : null}
+                    {showNext ? <span onClick={onNext} className={`${styles.next} ${showPrev ? null : styles.text_center}`}>{t('next') + ' >'}</span> : null}
                 </div>
 
-                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_TAB} />
+                <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_TAB} />
             </main>
         </>
     );

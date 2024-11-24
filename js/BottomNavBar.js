@@ -1,6 +1,8 @@
 import styles from '@/styles/BottomNavBar.module.css';
 import { SERVER_BASE_URL } from './Config';
 import Cookies from 'js-cookie';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 
 export const EPAGE_HOME = 1
 export const EPAGE_CAL = 2
@@ -14,7 +16,17 @@ function NavBarButton({onClick, icon}) {
     </div>)
 }
 
-export default function BottomNavBar({router, isIOS, isAndroid, page}) {
+export default function BottomNavBar({router, me, isIOS, isAndroid, page}) {
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+          setCurrentTime(new Date()); // Update the state with the new time
+        }, 10000); // Set the interval to update every minute (60000 milliseconds)
+    
+        return () => clearInterval(timer); // Clean up the interval on component unmount
+      }, []);
+
     function onNavHome() {
         router.push('/')
     }
@@ -24,7 +36,10 @@ export default function BottomNavBar({router, isIOS, isAndroid, page}) {
     }
 
     function onNavTable() {
-        router.push('/table')
+        if (me) {
+            return router.push(`/table?league=${me.league}`)    
+        }
+        router.push(`/table`)
     }
 
     function onNavLive() {
@@ -39,22 +54,27 @@ export default function BottomNavBar({router, isIOS, isAndroid, page}) {
             router.push('/profile')
     }
 
+    const renderTime = () => {
+        // Format the time as a string, e.g., HH:mm
+        return moment(currentTime).format('HH:mm')
+      };
+
     return (<div className={styles.panel}>
        <NavBarButton onClick={onNavHome} icon={page == EPAGE_HOME ? 'home_black' : 'home'}/>
        <div></div>
        <NavBarButton onClick={onNavCalendar} icon={page == EPAGE_CAL ? 'cal_active' : 'cal'}/>
        { isIOS ? <div className={styles.live} onClick={onNavLive}>
             <div className={styles.live_text}>LIVE</div>
-            <div className={styles.time}>12:30</div>
+            <div className={styles.time}>{renderTime()}</div>
        </div> : null }
        { isAndroid ? <div className={styles.live_and} onClick={onNavLive}>
             <div className={styles.live_text_and}>LIVE</div>
-            <div className={styles.time_and}>12:30</div>
+            <div className={styles.time_and}>{renderTime()}</div>
        </div> : null }
 
        {!isIOS && !isAndroid ? <div className={styles.live_and} onClick={onNavLive}>
             <div className={styles.live_text_and}>LIVE</div>
-            <div className={styles.time_and}>12:30</div>
+            <div className={styles.time_and}>{renderTime()}</div>
        </div> : null }
        <NavBarButton onClick={onNavTable} icon={page == EPAGE_TAB ? 'stats_active' : 'stats'}/>
        <div></div>

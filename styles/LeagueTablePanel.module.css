@@ -7,6 +7,8 @@
     font-weight: bold;
     font-size: 13px;
     margin-bottom: 30px;
+    margin-top: 10px;
+    font-family: 'Open Sans';
 }
 
 .padding {
@@ -23,6 +25,7 @@
     align-items: center;
     justify-content: center;
     height: 52px;
+    font-family: 'Open Sans';
 }
 
 .team_header {
@@ -34,6 +37,8 @@
     align-items: center;
     justify-content: center;
     height: 52px;
+    font-family: 'Open Sans';
+
 }
 
 .pos {

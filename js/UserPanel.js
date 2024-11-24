@@ -22,7 +22,7 @@ export default function UserPanel({router, user, pos, isMe}) {
         </div>
         <div className={styles.name_cont}>
             <span className={styles.name}>{user.name}</span>
-            <span className={styles.desc}>{t('place_in_el_torneo')}:  {user.position}</span>
+            { user.position > 0 ? <span className={styles.desc}>{t('place_in_el_torneo')}:  {user.position}</span> : null }
             <span className={styles.desc}>{t('points')}:  {user.points}</span>
         </div>
 

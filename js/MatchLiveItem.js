@@ -88,7 +88,7 @@ export default function MatchLiveItem({ router, match, leagueName }) {
           <span className={styles.score}>{match.team2_score_live}</span>
         </div>
         <div className={styles.status}>
-          <span>{match.elapsed}'</span>
+          <span>{ match.status == 'HT' ? "HT" : match.elapsed + " '"}</span>
         </div>
       </div> : null}
     </div>

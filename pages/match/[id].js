@@ -21,6 +21,9 @@ const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
+import MatchEventsPanel from '@/js/MatchEventsPanel';
+import MatchStatsPanel from '@/js/MatchStatsPanel';
+import MatchLineupsPanel from '@/js/MatchLineupsPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -88,11 +91,20 @@ export async function getServerSideProps(context) {
         me.token = token
     }
 
+    const header = await fetch(`${SERVER_BASE_URL}/api/v1/match/header?match_id=${id}`, {
+        method: 'GET',
+    })
+        .then(response => response.json())
+
     const v = view || ''
     let predicts = []
     let summary = {}
     let h2hMatches = []
     let table = []
+    let events = []
+    let stats = []
+    let lineups = []
+
     if (v == '') {
         summary = await fetch(`${SERVER_BASE_URL}/api/v1/match/predicts?match_id=${data[0].id}`, {
             method: 'GET',
@@ -132,6 +144,24 @@ export async function getServerSideProps(context) {
             // headers: { 'Content-Type': 'application/json' },
         })
             .then(response => response.json())
+    } else if (v == 'events') {
+        events = await fetch(`${SERVER_BASE_URL}/api/v1/match/events?match_id=${id}`, {
+            method: 'GET',
+            // headers: { 'Content-Type': 'application/json' },
+        })
+            .then(response => response.json())
+    } else if (v == 'stats') {
+        stats = await fetch(`${SERVER_BASE_URL}/api/v1/match/statistics?match_id=${id}`, {
+            method: 'GET',
+            // headers: { 'Content-Type': 'application/json' },
+        })
+            .then(response => response.json())
+    } else if (v == 'lineups') {
+        lineups = await fetch(`${SERVER_BASE_URL}/api/v1/match/lineups?match_id=${id}`, {
+            method: 'GET',
+            // headers: { 'Content-Type': 'application/json' },
+        })
+            .then(response => response.json())
     }
 
     return {
@@ -143,6 +173,10 @@ export async function getServerSideProps(context) {
             view: view || '',
             table: table,
             predict,
+            events,
+            stats,
+            lineups,
+            header,
             me,
             isAndroid,
             isIOS,
@@ -158,7 +192,7 @@ function Chip({ title, selected, onClick }) {
 }
 
 
-export default function Home({ isAndroid, isIOS, me, match, predict, view, top20Predicts, summary, h2hMatches, table }) {
+export default function Home({ isAndroid, isIOS, me, match, predict, view, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header }) {
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
     const today = moment();
@@ -184,6 +218,18 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
 
     function onNavTable() {
         router.push(`/match/${match.id}?view=table`)
+    }
+
+    function onNavEvents() {
+        router.push(`/match/${match.id}?view=events`)
+    }
+
+    function onNavStats() {
+        router.push(`/match/${match.id}?view=stats`)
+    }
+
+    function onNavLineups() {
+        router.push(`/match/${match.id}?view=lineups`)
     }
 
     function renderPredictsView() {
@@ -284,13 +330,20 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                     <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
                     <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
                     <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip>
+                    {header.statistics ? <Chip title={t('statistics')} selected={view == 'stats'} onClick={onNavStats}></Chip> : null}
+                    {header.events ? <Chip title={t('events')} selected={view == 'events'} onClick={onNavEvents}></Chip> : null}
+                    {header.lineups ? <Chip title={t('lineups')} selected={view == 'lineups'} onClick={onNavLineups}></Chip> : null}
+
                 </div>
 
                 {view == '' ? renderPredictsView() : null}
                 {view == 'h2h' ? renderH2HView() : null}
                 {view == 'table' ? renderTableView() : null}
+                {view == 'events' ? <MatchEventsPanel events={events} /> : null}
+                {view == 'stats' ? <MatchStatsPanel stats={stats} /> : null}
+                {view == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
 
-                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
+                <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>
     );

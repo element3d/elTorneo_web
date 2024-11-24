@@ -82,7 +82,23 @@ export async function getServerSideProps(context) {
     } else {
       weeks = serverLeague.weeks.slice(0, serverLeague.week + NUM_NEXT_WEEKS);
     }
+  }
 
+  let me = null
+  if (token) {
+    const requestOptions1 = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authentication': token
+      },
+    };
+
+    me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions1)
+      .then(response => {
+        if (response.status === 200) return response.json();
+        return null;
+      });
   }
 
   return {
@@ -96,6 +112,7 @@ export async function getServerSideProps(context) {
       locale,
       isAndroid,
       isIOS,
+      me,
       miniLeague: routerMiniLeague,
       matchOfDay: getRandomMatch(matches),
       ...(await serverSideTranslations(locale)),
@@ -103,7 +120,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ leagues, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
+export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
   const { t } = useTranslation()
   const [name, setName] = useState('');
   const [specialMatchId, setSpecialMatchId] = useState('')
@@ -135,9 +152,9 @@ export default function Home({ leagues, isAndroid, isIOS, locale, miniLeague, se
         <AppBar locale={locale} title={serverLeague?.name} showLang router={router} />
         {isAndroid ? <div className={styles.install_cont}>
           <img className={styles.gplay_icon} src={`${SERVER_BASE_URL}/data/icons/google-play.svg`} />
-          <span>Available on Google Play</span>
+          <span>{t('available_google_play')}</span>
           <button className={styles.install_button} onClick={onInstall}>
-            Install now
+            {t('install_now')}
           </button>
         </div> : null}
         <LeaguesPanel router={router} league={serverLeague} weeks={weeks} week={week} leagues={leagues} />
@@ -147,7 +164,7 @@ export default function Home({ leagues, isAndroid, isIOS, locale, miniLeague, se
         </div>
         {view == 1 ? <HomeMatchesPanel league={league} matches={matches} router={router} /> :
           <LeagueTablePanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />}
-        <BottomNavBar isIOS={isIOS} isAndroid={isAndroid} router={router} page={EPAGE_HOME} />
+        <BottomNavBar me={me} isIOS={isIOS} isAndroid={isAndroid} router={router} page={EPAGE_HOME} />
       </main>
     </>
   );

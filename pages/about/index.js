@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { Inter } from 'next/font/google';
-import styles from '@/styles/Calendar.module.css';
+import styles from '@/styles/About.module.css';
 import { useRouter } from 'next/router';
 import { SERVER_BASE_URL } from '@/js/Config';
 import AppBar from '@/js/AppBar';
@@ -12,17 +12,19 @@ import BottomNavBar, { EPAGE_CAL } from '@/js/BottomNavBar';
 import moment from 'moment';
 import Calendar from '@/js/Calendar';
 import MatchItemMobile from '@/js/MatchItemMobile';
-import MatchLiveItem from '@/js/MatchLiveItem';
-import { useTranslation } from 'next-i18next';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
+import InstallPanel from '@/js/InstallPanel';
 
 export async function getServerSideProps(context) {
   const { query } = context;
-  const { req } = context;
-  const token = req.cookies.token;
+  const timestamp = query.date ? Number(query.date) : new Date(moment().format('YYYY-MM-DD')).getTime();
   const { locale } = context;
+
+  const { req } = context
+  const token = req.cookies.token;
 
   let isAndroid = false;
   let isIOS = false
@@ -33,30 +35,6 @@ export async function getServerSideProps(context) {
     const osName = uaResult.os.name || 'Unknown';
     isAndroid = osName == 'Android'
     isIOS = osName == 'iOS'
-  }
-
-  let isLive = true
-  const url = `${SERVER_BASE_URL}/api/v1/matches/live`
-  let matches = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authentication': token ? token : ''
-    },
-  })
-    .then(response => response.json())
-
-  if (!matches.length) {
-    isLive = false
-    const url = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
-    matches = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authentication': token ? token : ''
-      },
-    })
-      .then(response => response.json())
   }
 
   let me = null
@@ -76,11 +54,8 @@ export async function getServerSideProps(context) {
       });
   }
 
-
   return {
     props: {
-      matches: matches,
-      isLive,
       isAndroid,
       isIOS,
       me,
@@ -89,12 +64,9 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ me, isAndroid, isIOS, matches, isLive }) {
+export default function Home({ me, isAndroid, isIOS }) {
   const { t } = useTranslation()
-  const today = moment();
-  // const [date, setDate] = useState(today.format('YYYY-MM-DD'))
   const router = useRouter()
-  let currentLeague = null
 
   return (
     <>
@@ -107,15 +79,25 @@ export default function Home({ me, isAndroid, isIOS, matches, isLive }) {
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar title={'el Torneo'} />
 
-        <h3 className={styles.live_title}> {isLive ? t('live_matches') : t('upcoming_matches')}</h3>
-        <div className={styles.matches_cont}>
+        <div className={styles.padding}>
+            <h3 className={styles.title}>{t('awards')}</h3>
+            <span className={styles.text}>{t('awards_info')}</span>
 
-          {matches.map((m, i) => {
-            return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
+            <h3 className={styles.title}>{t('rules')}</h3>
+            <span className={styles.text}>{t('rules_info')}</span>
 
-          })}
+            <h4>{t('supermatch')}</h4>
+            <span className={styles.text}>{t('supermatch_msg')}</span>
 
+            <h4>{t('quest')}</h4>
+            <span className={styles.text}>{t('quest_match_msg')}</span>
+
+            <h3 className={styles.title}>{t('about_us')}</h3>
+            <span className={styles.text}>{t('about_us_msg')}</span>
+
+            {isAndroid ? <InstallPanel /> : null }
         </div>
+      
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
       </main>
     </>

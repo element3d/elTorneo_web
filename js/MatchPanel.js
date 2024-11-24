@@ -50,6 +50,7 @@ export default function MatchPanel({ router, me, match, predict }) {
     }
 
     function isLive() {
+        if (isPstOrInt()) return false
         if (isNotStarted() || isFinished()) return false
         return true
     }
@@ -132,7 +133,7 @@ export default function MatchPanel({ router, me, match, predict }) {
     }
 
     // function login() {
-    //     signinGoogle('narekhovhannisyanim4@gmail.com', 'narek im4')
+    //     signinGoogle('narekhovhannisyanim9@gmail.com', 'narek im4')
     //             .then((token) => {
     //                 Cookies.set('token', token);
     //                 router.reload()
@@ -206,6 +207,11 @@ export default function MatchPanel({ router, me, match, predict }) {
         setTeam2Score('')
     }
 
+    function isPstOrInt() {
+        if (match.status == "PST" || match.status == "INT") return true
+        return false
+    }
+
     return (<div className={styles.panel}>
         <span>{getDate()}</span>
         <span className={styles.week}>{t('matchday')} {match.week}</span>
@@ -227,6 +233,14 @@ export default function MatchPanel({ router, me, match, predict }) {
                 </div>
             </div> : null}
 
+            {isPstOrInt() ? <div className={styles.live_panel}>
+                <div className={styles.live_score_panel}>
+                    <div className={styles.pst}>
+                        <span>{match.status}</span>
+                    </div>
+                </div>
+           </div> : null}
+
             {isNotStarted() && !predict ? <div className={styles.live_panel}>
                 <div className={styles.live_score_panel}>
                     <input type='tel' maxLength={1} className={styles.score_input} value={team1Score} onChange={onScore1Change} />
@@ -242,11 +256,11 @@ export default function MatchPanel({ router, me, match, predict }) {
                     <span className={styles.score_label}>{match.team2_score_live}</span>
                 </div>
                 <div className={styles.status}>
-                    <span>{match.elapsed}'</span>
+                    <span>{ match.status == 'HT' ? 'HT' : match.elapsed + " '"}</span>
                 </div>
             </div> : null}
         </div>
-        {predict ? <div className={styles.predict_item} style={{ backgroundColor: getBgColor(predict), color: getBorderColor(predict) }}>
+        {predict && predict.status != 4 ? <div className={styles.predict_item} style={{ backgroundColor: getBgColor(predict), color: getBorderColor(predict) }}>
             <span >Prediction {predict.team1_score} : {predict.team2_score}</span>
         </div> : null}
 
@@ -256,7 +270,7 @@ export default function MatchPanel({ router, me, match, predict }) {
                 <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`}/>
             </div>
         </button> : null}
-        {showPredictButton() ? <button onClick={onPredict} disabled={team1Score.length == 0 || team2Score.length == 0} className={styles.sign_in_btn} style={{ opacity: team1Score.length && team2Score.length ? 1 : .5 }}>Predict</button> : null}
+        {showPredictButton() ? <button onClick={onPredict} disabled={team1Score.length == 0 || team2Score.length == 0} className={styles.sign_in_btn} style={{ opacity: team1Score.length && team2Score.length ? 1 : .6 }}>Predict</button> : null}
 
 
     </div>)

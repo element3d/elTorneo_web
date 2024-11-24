@@ -1,25 +1,20 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { Inter } from 'next/font/google';
-import styles from '@/styles/Profile.module.css';
+import styles from '@/styles/About.module.css';
 import { useRouter } from 'next/router';
 import { SERVER_BASE_URL } from '@/js/Config';
 import AppBar from '@/js/AppBar';
-import BottomNavBar from '@/js/BottomNavBar';
-import UserPanel from '@/js/UserPanel';
-import MatchItemMobile from '@/js/MatchItemMobile';
-import ProfileStatsPanel from '@/js/ProfileStatsPanel';
-import ProfileMatchesPanel from '@/js/ProfileMatchesPanel';
+import BottomNavBar, { EPAGE_CAL } from '@/js/BottomNavBar';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
+import InstallPanel from '@/js/InstallPanel';
 
 export async function getServerSideProps(context) {
-    const { params } = context;
-    const { id } = params;
-    const { query } = context;
-    const globalPage = query.page ? Number(query.page) : 1;
     const { locale } = context;
+
     const { req } = context
     const token = req.cookies.token;
 
@@ -33,24 +28,6 @@ export async function getServerSideProps(context) {
         isAndroid = osName == 'Android'
         isIOS = osName == 'iOS'
     }
-
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
-
-    const user = await fetch(`${SERVER_BASE_URL}/api/v1/user?user_id=${id}`, requestOptions)
-        .then(response => {
-            if (response.status === 200) return response.json();
-            return null;
-        });
-
-    const initialPredicts = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${globalPage}&user_id=${user.id}&league_id=${-1}`, {
-        method: 'GET',
-        headers: {},
-    }).then(response => response.json());
 
     let me = null
     if (token) {
@@ -69,24 +46,50 @@ export async function getServerSideProps(context) {
             });
     }
 
-
     return {
         props: {
-            user,
-            globalPage,
-            initialPredicts,
             isAndroid,
             isIOS,
             me,
+            token,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
+export default function Home({ me, token, isAndroid, isIOS }) {
+    const { t } = useTranslation()
+    const router = useRouter()
 
-export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, initialPredicts }) {
-    const router = useRouter();
-    const [predicts, setPredicts] = useState(initialPredicts.predicts);
+    const onMoveToLeague = () => {
+        const league = me.league == 1 ? 2 : 1
+
+        fetch(`${SERVER_BASE_URL}/api/v1/me/movetoleague`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token
+            },
+            body: JSON.stringify({
+                league: league
+            })
+        })
+            .then(response => {
+                if (response.status != 200) {
+                    return
+                    // throw new Error('Network response was not ok');
+                }
+                router.push(`/table?league=${league}`)
+            })
+            .catch(error => {
+                // Handle errors here
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    };
+
+    function isShowMoveToLeague() {
+        return me && (me.points <= 20 || me.league == 2)
+    }
 
     return (
         <>
@@ -97,12 +100,18 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
-                <AppBar title="el Torneo" />
-                <UserPanel user={user} />
+                <AppBar title={'el Torneo'} />
+
                 <div className={styles.padding}>
-                    <ProfileStatsPanel stats={initialPredicts} />
-                    <ProfileMatchesPanel isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
+                    <h3 className={styles.title}>{t('leagues_title')}</h3>
+                    <span className={styles.text}>{t('leagues_msg')}</span>
+
+                    {isShowMoveToLeague() ?
+                        <button onClick={onMoveToLeague} className={styles.move_button}>{t('move_to_league')} {me.league == 1 ? "2" : '1'}</button> : null}
+
+                    {/* {isAndroid ? <InstallPanel /> : null} */}
                 </div>
+
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>

@@ -107,6 +107,21 @@
     font-size: 14px;
 }
 
+.pst {
+    padding-left: 14px;
+    padding-right: 14px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    color: #FF4747;
+    margin-top: 4px;
+    background-color: #FF474719;
+    border: 1px solid #FF4747;
+    font-size: 14px;
+}
+
 .predict_item {
     font-size: 13px;
     /* background-color: red; */

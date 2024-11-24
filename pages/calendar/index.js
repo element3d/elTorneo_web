@@ -22,42 +22,61 @@ export async function getServerSideProps(context) {
   const timestamp = query.date ? Number(query.date) : new Date(moment().format('YYYY-MM-DD')).getTime();
   const { locale } = context;
 
-  const {req} = context
+  const { req } = context
   const token = req.cookies.token;
 
   let isAndroid = false;
   let isIOS = false
   {
-      const userAgent = context.req.headers['user-agent'];
-      const parser = new UAParser(userAgent);
-      const uaResult = parser.getResult();
-      const osName = uaResult.os.name || 'Unknown';
-      isAndroid = osName == 'Android'
-      isIOS = osName == 'iOS'
+    const userAgent = context.req.headers['user-agent'];
+    const parser = new UAParser(userAgent);
+    const uaResult = parser.getResult();
+    const osName = uaResult.os.name || 'Unknown';
+    isAndroid = osName == 'Android'
+    isIOS = osName == 'iOS'
   }
 
   const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=en`
   const matches = await fetch(url, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json',
-       'Authentication': token ? token : ''
-     },
+    headers: {
+      'Content-Type': 'application/json',
+      'Authentication': token ? token : ''
+    },
   })
     .then(response => response.json())
+
+  let me = null
+  if (token) {
+    const requestOptions1 = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authentication': token
+      },
+    };
+
+    me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions1)
+      .then(response => {
+        if (response.status === 200) return response.json();
+        return null;
+      });
+  }
 
   return {
     props: {
       matches: matches,
       isAndroid,
       isIOS,
+      me,
       date: moment(timestamp).format('YYYY-MM-DD'),
       ...(await serverSideTranslations(locale)),
     },
   };
 }
 
-export default function Home({isAndroid, isIOS,  matches, date }) {
-  const {t} = useTranslation()
+export default function Home({ me, isAndroid, isIOS, matches, date }) {
+  const { t } = useTranslation()
   const router = useRouter()
   let currentLeague = null
 
@@ -104,7 +123,7 @@ export default function Home({isAndroid, isIOS,  matches, date }) {
 
           {!matches.length ? <span className={styles.no_matches}>There are no matches.</span> : null}
         </div>
-        <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
+        <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
       </main>
     </>
   );

@@ -2,7 +2,7 @@ import styles from '@/styles/AwardsPanel.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-export default function AwardsPanel({showLeague, league}) {
+export default function AwardsPanel({router, showLeague, league}) {
     const {t} = useTranslation()
 
     function getImg() {
@@ -11,11 +11,15 @@ export default function AwardsPanel({showLeague, league}) {
         if (league == 2) return `${SERVER_BASE_URL}/data/icons/second.png`
     }
 
-    return (<div className={styles.cont}>
+    function onNavAbout() {
+        router.push('/about')
+    }
+
+    return (<div className={styles.cont} onClick={onNavAbout}>
         <img className={styles.bg} src={getImg()}/>
         { !showLeague ? <div className={styles.overlay}></div> : null }
 
-        { showLeague ? <span className={styles.league_title}>League {league}</span> : null }
+        { showLeague ? <span className={styles.league_title}>{t('league')} {league}</span> : null }
         <span className={styles.awards_title}>{t('awards')}</span>
         <span className={styles.awards_msg}>{t('award_msg')}</span>
         
@@ -30,7 +34,7 @@ export default function AwardsPanel({showLeague, league}) {
             <div className={styles.points_loose}>-1</div>
         </div>
 
-        <div className={styles.button}>
+        <div className={styles.button} onClick={onNavAbout}>
             <span>{t('learn_more')}</span>
         </div>
     </div>)

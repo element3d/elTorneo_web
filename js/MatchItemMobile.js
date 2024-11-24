@@ -41,8 +41,8 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
         const st = match.is_special ? styles.score_white : styles.score
 
         return <div className={styles.col}>
-            <div className={styles.elapsed}>
-                {match.elapsed} '
+            <div className={styles.elapsed} style={{ border: match.is_special ? '1px solid #00C566' : 'none'  }}>
+                { match.status == 'HT' ? 'HT' : match.elapsed + " '"}
             </div>
             <div className={styles.row}>
                 <span className={st}>{match.team1_score_live}</span>

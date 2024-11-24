@@ -13,6 +13,7 @@ import ProfileMatchesPanel from '@/js/ProfileMatchesPanel';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
+import { useTranslation } from 'next-i18next';
 
 export async function getServerSideProps(context) {
     const {req} = context
@@ -77,7 +78,7 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
     const router = useRouter();
     const totalPredicts = initialPredicts.totalPredicts
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
-
+    const {t} = useTranslation()
     return (
         <>
             <Head>
@@ -90,10 +91,12 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
                 <AppBar title="el Torneo" />
                 <UserPanel user={user} isMe={true} router={router} />
                 <div className={styles.padding}>
-                    <ProfileStatsPanel stats={initialPredicts} />
+                    { initialPredicts.allPredicts > 0 ? <ProfileStatsPanel stats={initialPredicts} /> : null }
                     <ProfileMatchesPanel isMe={true} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts}/>
+
+                    {!predicts.length ? <span className={styles.no_preds}>{t('no_predicts')}</span> : null }
                 </div>
-                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_PROF}/>
+                <BottomNavBar me={user} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_PROF}/>
             </main>
         </>
     );

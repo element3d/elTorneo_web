@@ -88,3 +88,13 @@
 .next:active {
     opacity: .6;
 }
+
+.no_preds {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    font-family: 'Open Sans';
+    font-weight: bold;
+    color: #8E8E93;
+    margin-top: -20px;
+}

@@ -1,0 +1,78 @@
+.panel {
+    width: 90%;
+    align-self: center;
+    display: flex;
+    margin-bottom: 20px;
+    flex-direction: column;
+    font-family: 'Open Sans';
+}
+
+.padding {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    padding-top: 0px;
+}
+
+.item {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+    flex-direction: column;
+}
+
+.uprow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.middle_row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    /* width: 100%; */
+}
+
+.line_bg {
+    display: flex;
+    flex: 1;
+    height: 10px;
+    margin-right: 5px;
+    background-color: #EAEDF1;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.line_bg_right {
+    display: flex;
+    flex: 1;
+    height: 10px;
+    margin-right: 5px;
+    background-color: #EAEDF1;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.line {
+    height: 100%;
+    border-radius: 10px;
+}
+
+.value {
+    font-size: 15px;
+    font-family: 'Open Sans';
+    font-weight: bold;
+}
+
+.title {
+    font-size: 14px;
+    /* font-weight: bold; */
+    color: #8E8E93;
+}

@@ -124,7 +124,7 @@ export default function Home({ isAndroid, isIOS }) {
                     <p className={styles.desc}>{t('login_desc')}</p>
 
                     <div className={styles.award_panel}>
-                        <AwardsPanel />
+                        <AwardsPanel router={router} />
                     </div>
 
                     <button className={styles.button} onClick={login}>
