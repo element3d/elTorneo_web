@@ -2,12 +2,6 @@ import styles from '@/styles/UserPanel.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { faGear } from '@fortawesome/free-solid-svg-icons';
-library.add(faGear);
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-
 export default function UserPanel({router, user, pos, isMe}) {
     const {t} = useTranslation()
 
