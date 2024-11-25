@@ -20,7 +20,7 @@ export default function Calendar({router, date}) {
       }, []);
       
       useEffect(() => {
-  
+        setSelectedDate(date)
       }, [router])
 
     function onSelect(date) {
@@ -32,7 +32,7 @@ export default function Calendar({router, date}) {
        {dates.map((date) => {
         return <div key={date} className={ date == selectedDate ? styles.calendar_item_sel : styles.calendar_item} onClick={() => {onSelect(date)}}>
             <span className={ date == selectedDate ? styles.calendar_item_day_sel : styles.calendar_item_day}>{t(moment(date).format('ddd').toLowerCase())}</span>
-            <span className={  styles.calendar_item_date}>{moment(date).format('DD')}</span>
+            <span className={  styles.calendar_item_date} style={{color: date == selectedDate ? 'white' : ''}}>{moment(date).format('DD')}</span>
         </div>
        })}  
     </div>)

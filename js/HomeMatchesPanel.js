@@ -4,7 +4,7 @@ import moment from 'moment';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-export default function HomeMatchesPanel({ league, matches, router }) {
+export default function HomeMatchesPanel({ league, matches, router, onPreview }) {
     const {t} = useTranslation()
     let currMatchDate = null
 
@@ -33,7 +33,7 @@ export default function HomeMatchesPanel({ league, matches, router }) {
                     <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`}/>
                     <span className={styles.date}>{moment(currMatchDate).format('DD')} {t(moment(currMatchDate).format('MMM').toLowerCase())} {moment(currMatchDate).format('YYYY')}</span>
                 </div> : null }
-                <MatchItemMobile currentWeek={league.week} router={router} match={m} />
+                <MatchItemMobile onPreview={onPreview} currentWeek={league.week} router={router} match={m} />
             </div>
         })}
 

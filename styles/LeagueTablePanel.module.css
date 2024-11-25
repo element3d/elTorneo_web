@@ -26,6 +26,7 @@
     justify-content: center;
     height: 52px;
     font-family: 'Open Sans';
+    color: var(--title-color);
 }
 
 .team_header {
@@ -38,7 +39,7 @@
     justify-content: center;
     height: 52px;
     font-family: 'Open Sans';
-
+    color: var(--title-color);
 }
 
 .pos {

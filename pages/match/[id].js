@@ -24,6 +24,8 @@ import { UAParser } from 'ua-parser-js';
 import MatchEventsPanel from '@/js/MatchEventsPanel';
 import MatchStatsPanel from '@/js/MatchStatsPanel';
 import MatchLineupsPanel from '@/js/MatchLineupsPanel';
+import InstallPanel from '@/js/InstallPanel';
+import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -200,6 +202,41 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
     const router = useRouter()
     const [teamIndex, setTeamIndex] = useState(0)
 
+    const [showPreview, setShowPreview] = useState(false)
+    const [previewMatch, setPreviewMatch] = useState(null)
+
+    useEffect(() => {
+        return () => {
+            setShowPreview(false)
+            document.documentElement.style.overflow = ''; // Disable background scroll
+        }
+    }, [])
+
+    useEffect(() => {
+        const handleBackButton = (event) => {
+            event.preventDefault();
+            setShowPreview(false)
+            document.documentElement.style.overflow = '';
+        };
+
+        window.onpopstate = handleBackButton;
+
+        return () => {
+            window.onpopstate = null; // Cleanup on unmount
+        };
+    }, []);
+
+    function onPreview(m) {
+        setShowPreview(true)
+        setPreviewMatch(m)
+        document.documentElement.style.overflow = 'hidden'; // Disable background scroll
+    }
+
+    function onPreviewClose() {
+        setShowPreview(false)
+        document.documentElement.style.overflow = '';
+    }
+
     // useEffect(() => {
     //     try {
     //         (window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -286,7 +323,7 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                             <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />
                             <span className={styles.date}>{moment(currMatchDate).format('DD')} {t(moment(currMatchDate).format('MMM').toLowerCase())} {moment(currMatchDate).format('YYYY')}</span>
                         </div> : null}
-                        <MatchItemMobile router={router} match={m} showLeague={true} />
+                        <MatchItemMobile onPreview={onPreview} router={router} match={m} showLeague={true} />
                     </div>
                 })
             }
@@ -342,6 +379,9 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                 {view == 'events' ? <MatchEventsPanel events={events} /> : null}
                 {view == 'stats' ? <MatchStatsPanel stats={stats} /> : null}
                 {view == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
+
+                <InstallPanel hasBg={false} hasMargin={false}/>
+                { showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null }
 
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>

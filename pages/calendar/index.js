@@ -16,6 +16,8 @@ const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
+import InstallPanel from '@/js/InstallPanel';
+import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 
 export async function getServerSideProps(context) {
   const { query } = context;
@@ -79,6 +81,26 @@ export default function Home({ me, isAndroid, isIOS, matches, date }) {
   const { t } = useTranslation()
   const router = useRouter()
   let currentLeague = null
+  const [showPreview, setShowPreview] = useState(false)
+  const [previewMatch, setPreviewMatch] = useState(null)
+
+  useEffect(() => {
+    return () => {
+      setShowPreview(false)
+      document.documentElement.style.overflow = ''; // Disable background scroll
+    }
+  }, [date])
+
+  function onPreview(m) {
+    setShowPreview(true)
+    setPreviewMatch(m)
+    document.documentElement.style.overflow = 'hidden'; // Disable background scroll
+  }
+
+  function onPreviewClose() {
+    setShowPreview(false)
+    document.documentElement.style.overflow = '';
+  }
 
   return (
     <>
@@ -117,12 +139,15 @@ export default function Home({ me, isAndroid, isIOS, matches, date }) {
                   <span className={styles.league_week}>Matchday {m.week}</span>
                 </div>
               </div> : null}
-              <MatchItemMobile currentWeek={m.currentWeek} router={router} match={m} />
+              <MatchItemMobile currentWeek={m.currentWeek} router={router} match={m} onPreview={onPreview}/>
             </div>
           })}
 
           {!matches.length ? <span className={styles.no_matches}>There are no matches.</span> : null}
+
+          <InstallPanel hasBg={false} hasMargin={true}/>
         </div>
+        { showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null }
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
       </main>
     </>

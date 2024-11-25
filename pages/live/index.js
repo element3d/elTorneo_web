@@ -17,6 +17,7 @@ import { useTranslation } from 'next-i18next';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
+import InstallPanel from '@/js/InstallPanel';
 
 export async function getServerSideProps(context) {
   const { query } = context;
@@ -116,6 +117,7 @@ export default function Home({ me, isAndroid, isIOS, matches, isLive }) {
           })}
 
         </div>
+        <InstallPanel hasBg={false}/>
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
       </main>
     </>

@@ -20,6 +20,7 @@
 .date {
     font-size: 13px;
     font-family: 'Roboto';
+    color: var(--title-color);
 }
 
 .mt_0 {

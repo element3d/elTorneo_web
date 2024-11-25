@@ -13,6 +13,7 @@ import ProfileMatchesPanel from '@/js/ProfileMatchesPanel';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
+import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -47,7 +48,7 @@ export async function getServerSideProps(context) {
             return null;
         });
 
-    const initialPredicts = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${globalPage}&user_id=${user.id}&league_id=${-1}`, {
+    const initialPredicts = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${((globalPage - 1) * 5) + 1}&user_id=${user.id}&league_id=${-1}`, {
         method: 'GET',
         headers: {},
     }).then(response => response.json());
@@ -88,6 +89,44 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
     const router = useRouter();
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
 
+    const [showPreview, setShowPreview] = useState(false)
+    const [previewMatch, setPreviewMatch] = useState(null)
+
+    useEffect(() => {
+        return () => {
+            setShowPreview(false)
+            document.documentElement.style.overflow = ''; // Disable background scroll
+        }
+    }, [])
+
+    useEffect(() => {
+        const handleBackButton = (event) => {
+            event.preventDefault();
+            setShowPreview(false)
+            document.documentElement.style.overflow = '';
+        };
+
+        window.onpopstate = handleBackButton;
+
+        return () => {
+            window.onpopstate = null; // Cleanup on unmount
+        };
+    }, []);
+
+    function onPreview(m) {
+        setShowPreview(true)
+        setPreviewMatch(m)
+        document.documentElement.style.overflow = 'hidden'; // Disable background scroll
+    }
+
+    function onPreviewClose() {
+        setShowPreview(false)
+        document.documentElement.style.overflow = '';
+    }
+
+    useEffect(()=> {
+        setPredicts(initialPredicts.predicts)
+    }, [initialPredicts])
     return (
         <>
             <Head>
@@ -101,8 +140,9 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
                 <UserPanel user={user} />
                 <div className={styles.padding}>
                     <ProfileStatsPanel stats={initialPredicts} />
-                    <ProfileMatchesPanel isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
+                    <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                 </div>
+                { showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null }
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>

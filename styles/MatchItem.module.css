@@ -35,6 +35,7 @@
     align-items: center;
     justify-content: flex-end;
     font-family: 'Open Sans';
+    color: var(--title-color);
 }
 
 .team_item_right {
@@ -44,7 +45,7 @@
     display: flex;
     align-items: center;
     font-family: 'Open Sans';
-
+    color: var(--title-color);
     justify-content: flex-start;
 }
 
@@ -146,6 +147,7 @@
     justify-content: center;
     margin-bottom: 6px;
     font-family: 'Roboto';
+    color: var(--title-color);
 }
 
 .league_panel_top {
@@ -342,4 +344,28 @@
     border-radius: 6px;
     font-weight: bold;
     margin-bottom: 2px;
+}
+
+.preview {
+    width: 24px;
+    height: 24px;
+    border-radius: 20px;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    border: none;
+    outline: none;
+    background-color: #FF2882;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview:active {
+    opacity: .8;
+}
+
+.preview_icon {
+    width: 20px;
+    height: 20px;
 }

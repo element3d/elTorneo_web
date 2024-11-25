@@ -16,7 +16,8 @@ function TeamItemRight({ team, isSpecial }) {
     </div>)
 }
 
-export default function MatchItemMobile({ currentWeek, router, match, showLeague }) {
+export default function MatchItemMobile({ currentWeek, router, match, showLeague, onPreview }) {
+ 
     const { t } = useTranslation()
 
     const showPoints = match.status != 'PST' && match.predict && match.predict.status > 0
@@ -65,11 +66,6 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
         </div>
     }
 
-
-    function isLive() {
-        return false
-    }
-
     function isFinished() {
         if (match.status == 'FT') return true
         if (match.team1_score != -1 && match.team2_score != -1) return true
@@ -86,6 +82,7 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
     }
 
     function isLive() {
+        if (match.status == 'PST') return false
         if (isNotStarted() || isFinished()) return false
         return true
     }
@@ -221,5 +218,9 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
             </div>
         </div>
             : null}
+
+        {match.preview?.length ? <button className={styles.preview} onClick={(e) => {onPreview(match), e.stopPropagation()}}>
+            <img className={styles.preview_icon} src={`${SERVER_BASE_URL}/data/icons/camera.svg`}/>
+        </button> : null}
     </div>)
 }

@@ -16,6 +16,7 @@ import { useTranslation } from 'next-i18next';
 const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
+import InstallPanel from '@/js/InstallPanel';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -186,6 +187,8 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
                     {showPrev ? <span onClick={onPrev} className={`${styles.prev} ${showNext ? null : styles.text_center}`}>{'< ' + t('prev')}</span> : null}
                     {showNext ? <span onClick={onNext} className={`${styles.next} ${showPrev ? null : styles.text_center}`}>{t('next') + ' >'}</span> : null}
                 </div>
+
+                <InstallPanel hasBg={false} hasMargin={true}/>
 
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_TAB} />
             </main>

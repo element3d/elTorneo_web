@@ -5,7 +5,7 @@
     /* padding: 6rem; */
     min-height: 100vh;
     background-color: #f7f7f7;
-    padding-bottom: 50px;
+    padding-bottom: 80px;
 }
 
 .calendar_panel {
@@ -56,6 +56,7 @@
     font-size: 14px;
     padding-left: 10px;
     font-family: 'Roboto';
+    color: var(--title-color);
 }
 
 .calendar_item_day {
@@ -75,6 +76,7 @@
     font-size: 14px;
     font-weight: bold;
     font-family: 'Open Sans';
+    color: var(--title-color);
 }
 
 .league_cont {
@@ -107,6 +109,7 @@
     font-weight: bold;
     font-size: 14px;
     font-family: 'Open Sans';
+    color: var(--title-color);
 }
 
 .league_week {
@@ -136,4 +139,5 @@
     text-align: start;
     margin-top: 20px;
     padding-left: 20px;
+    color: var(--title-color);
 }

@@ -98,3 +98,10 @@
     color: #8E8E93;
     margin-top: -20px;
 }
+
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}

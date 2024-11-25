@@ -24,6 +24,7 @@
     width: 80%;
     min-width: 320px;
     text-align: center;
+    color: var(--title-color);
 }   
 
 .desc {

@@ -16,6 +16,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 
 import { UAParser } from 'ua-parser-js';
+import InstallPanel from '@/js/InstallPanel';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -138,6 +139,7 @@ export default function Home({ isAndroid, isIOS }) {
 {/* 7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30 */}
                    
                 </div>
+                <InstallPanel hasMargin={true}/>
                 <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>

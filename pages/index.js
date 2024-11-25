@@ -15,6 +15,7 @@ const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
+import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -124,11 +125,43 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
   const { t } = useTranslation()
   const [name, setName] = useState('');
   const [specialMatchId, setSpecialMatchId] = useState('')
-  const [league, setLeague] = useState(serverLeague)
-  // const league = serverLeague
-  // const [week, setWeek] = useState(1)
-  // const [matches, setMatches] = useState([])
+  const league = serverLeague
+  
   const [view, setView] = useState(1)
+  const [showPreview, setShowPreview] = useState(false)
+  const [previewMatch, setPreviewMatch] = useState(null)
+
+  useEffect(() => {
+    return () => {
+      setShowPreview(false)
+      document.documentElement.style.overflow = ''; // Disable background scroll
+    }
+  }, [serverLeague])
+
+  useEffect(() => {
+    const handleBackButton = (event) => {
+      event.preventDefault();
+      setShowPreview(false)
+      document.documentElement.style.overflow = '';
+    };
+
+    window.onpopstate = handleBackButton;
+
+    return () => {
+      window.onpopstate = null; // Cleanup on unmount
+    };
+  }, []);
+
+  function onPreview(m) {
+    setShowPreview(true)
+    setPreviewMatch(m)
+    document.documentElement.style.overflow = 'hidden'; // Disable background scroll
+  }
+
+  function onPreviewClose() {
+    setShowPreview(false)
+    document.documentElement.style.overflow = '';
+  }
 
   const router = useRouter()
 
@@ -162,8 +195,11 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
           <MatchLiveItem match={matchOfDay} router={router} leagueName={serverLeague.name} />
           <Switch title1={t('matches')} title2={t('table')} selected={view} onSelect={onSelect} />
         </div>
-        {view == 1 ? <HomeMatchesPanel league={league} matches={matches} router={router} /> :
+        {view == 1 ? <HomeMatchesPanel league={league} matches={matches} router={router} onPreview={onPreview} /> :
           <LeagueTablePanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />}
+
+        {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
+
         <BottomNavBar me={me} isIOS={isIOS} isAndroid={isAndroid} router={router} page={EPAGE_HOME} />
       </main>
     </>
