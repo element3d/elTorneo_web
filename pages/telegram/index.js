@@ -45,11 +45,37 @@ export async function getServerSideProps(context) {
 export default function Home({ isAndroid, isIOS }) {
     const { t } = useTranslation()
     const router = useRouter()
+    const [code, setCode] = useState('')
+
+    function onCodeChange(e) {
+        setCode(e.target.value)
+    }
 
     function navToBot() {
         window.location.href = 'tg://resolve?domain=elTorneoBot';
     }
- 
+
+    function onSignIn() {
+        const requestOptions = {
+            method: 'POST',
+            body: JSON.stringify({
+                tg_code: Number.parseInt(code),
+            })
+        };
+        return fetch(`${SERVER_BASE_URL}/api/v1/signin/tgcode`, requestOptions)
+            .then(response => {
+                if (response.status == 200)
+                    return response.text()
+
+                // setError(t('incorrect_login'))
+                return null
+            })
+            .then((token) => {
+                Cookies.set('token', token)
+                // router.reload()
+            })
+    }
+
     return (
         <>
             <Head>
@@ -71,9 +97,11 @@ export default function Home({ isAndroid, isIOS }) {
                     <button className={styles.bot_button} onClick={navToBot}>@elTorneoBot</button>
                     <p className={styles.desc}>{"Navigate to Telegram bot and launch the el Torneo Web App. Copy the authentication code and paste to the input field below."}</p>
 
-                    <input type='tel' placeholder='Code' className={styles.tinput}/>
+                    <input type='tel' maxLength={6} placeholder='Code' className={styles.tinput} value={code} onChange={onCodeChange} />
 
-                    <button className={styles.install_button}>{t('sign_in')}</button>
+                    <button disabled={code.length != 6} className={styles.install_button} onClick={onSignIn} style={{
+                        opacity: code.length == 6 ? 1 : .6
+                    }}>{t('sign_in')}</button>
                 </div>
                 {/* <InstallPanel hasMargin={true} /> */}
                 <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
