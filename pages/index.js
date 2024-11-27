@@ -16,6 +16,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
+import TelegramCodePanel from '@/js/TelegramCodePanel';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -183,13 +184,16 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar locale={locale} title={serverLeague?.name} showLang router={router} />
-        {isAndroid ? <div className={styles.install_cont}>
+        {/* {isAndroid ? <div className={styles.install_cont}>
           <img className={styles.gplay_icon} src={`${SERVER_BASE_URL}/data/icons/google-play.svg`} />
           <span>{t('available_google_play')}</span>
           <button className={styles.install_button} onClick={onInstall}>
             {t('install_now')}
           </button>
-        </div> : null}
+        </div> : null} */}
+
+         { me ? <TelegramCodePanel hasBg={true} me={me}/> : null }
+
         <LeaguesPanel router={router} league={serverLeague} weeks={weeks} week={week} leagues={leagues} />
         <div className={styles.switch_cont}>
           <MatchLiveItem match={matchOfDay} router={router} leagueName={serverLeague.name} />

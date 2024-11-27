@@ -105,6 +105,10 @@ export default function Home({ isAndroid, isIOS }) {
 
     });
 
+    function navTelegram() {
+        router.push('/telegram')
+    }
+
     return (
         <>
             <Head>
@@ -128,18 +132,33 @@ export default function Home({ isAndroid, isIOS }) {
                         <AwardsPanel router={router} />
                     </div>
 
-                    <button className={styles.button} onClick={login}>
+                    <div className={styles.buttons_cont}>
+                        <div className={styles.line}></div>
+                        <span className={styles.join_text}>{t('join_now')}</span>
+                        <div className={styles.line}></div>
+                    </div>
+
+                    <div className={styles.buttons_row}>
+                        <button className={styles.button_compact} onClick={login}>
+                            <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`} />
+                        </button>
+                        <button className={styles.button_compact} onClick={navTelegram}>
+                            <img className={styles.ticon} src={`${SERVER_BASE_URL}/data/icons/telegram.svg`} />
+                        </button>
+                    </div>
+
+                    {/* <button className={styles.button} onClick={login}>
                         <span>{t('join_now')}</span>
                         <div className={styles.gcont}>
                             <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`} />
                         </div>
-                    </button>
+                    </button> */}
                     {/* curl -X POST "https://api.telegram.org/bot7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30/sendMessage" -H "Content-Type: application/json" -d "{\"chat_id\":\"660322879\",\"text\":\"Click the button below to start el Torneo:\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Start el Torneo\",\"web_app\":{\"url\":\"https://eltorneo.am\"}}]]}}" */}
 
-{/* 7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30 */}
-                   
+                    {/* 7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30 */}
+
                 </div>
-                <InstallPanel hasMargin={true}/>
+                <InstallPanel hasMargin={true} />
                 <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>
