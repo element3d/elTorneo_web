@@ -11,7 +11,7 @@ export default function TelegramCodePanel({hasBg, me, hasMargin = false}) {
 
     return <div className={styles.install_cont} style={{backgroundColor: hasBg ? 'white' : 'transparent', marginTop: hasMargin? '20px' : '0px'}}>
         <img className={styles.gplay_icon} src={`${SERVER_BASE_URL}/data/icons/telegram.svg`} />
-        <span>{"Authentication code"}</span>
+        <span>{t("auth_code")}</span>
         <span className={styles.code}>
             {me.tgCode}
         </span>
