@@ -143,7 +143,7 @@ export default function Home({ me, isAndroid, isIOS, matches, date }) {
             </div>
           })}
 
-          {!matches.length ? <span className={styles.no_matches}>There are no matches.</span> : null}
+          {!matches.length ? <span className={styles.no_matches}>{t('no_matches_found')}</span> : null}
 
           <InstallPanel hasBg={false} hasMargin={true}/>
         </div>

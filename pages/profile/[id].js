@@ -136,14 +136,14 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
-                <AppBar title="el Torneo" />
+                <AppBar router={router} title="el Torneo" />
                 <UserPanel user={user} />
                 <div className={styles.padding}>
                     <ProfileStatsPanel stats={initialPredicts} />
                     <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                 </div>
                 { showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null }
-                <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
+                <BottomNavBar  me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>
     );

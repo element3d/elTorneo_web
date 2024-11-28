@@ -34,6 +34,7 @@ export async function getServerSideProps(context) {
     }
 
     const token = req.cookies.token;
+
     if (!token) {
         return {
             redirect: {
@@ -130,7 +131,7 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
-                <AppBar title="el Torneo" />
+                <AppBar router={router} title="el Torneo" />
                 <UserPanel user={user} isMe={true} router={router} />
                 <div className={styles.padding}>
                     {initialPredicts.allPredicts > 0 ? <ProfileStatsPanel stats={initialPredicts} /> : null}

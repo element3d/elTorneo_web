@@ -46,6 +46,7 @@ export default function Home({ isAndroid, isIOS }) {
     const { t } = useTranslation()
     const router = useRouter()
     const [code, setCode] = useState('')
+    const [error, setError] = useState(null)
 
     function onCodeChange(e) {
         setCode(e.target.value)
@@ -66,12 +67,17 @@ export default function Home({ isAndroid, isIOS }) {
             .then(response => {
                 if (response.status == 200)
                     return response.text()
-
+                if (response.status == 403) {
+                    setError(t('incorrect_code'))
+                }
                 // setError(t('incorrect_login'))
                 return null
             })
             .then((token) => {
+                if (!token) return
+                
                 Cookies.set('token', token)
+                router.replace('/profile')
                 // router.reload()
             })
     }
@@ -93,15 +99,16 @@ export default function Home({ isAndroid, isIOS }) {
 
                 <div className={styles.cont}>
                     <img className={styles.ticon_big} src={`${SERVER_BASE_URL}/data/icons/telegram.svg`} />
-                    <h1 className={styles.title_tg}>Sign in with Telegram Bot</h1>
+                    <h1 className={styles.title_tg}>{t('signin_tg_title')}</h1>
                     <button className={styles.bot_button} onClick={navToBot}>@elTorneoBot</button>
-                    <p className={styles.desc}>{"Navigate to Telegram bot and launch the el Torneo Web App. Copy the authentication code and paste to the input field below."}</p>
+                    <p className={styles.desc}>{t('signin_tg_msg')}</p>
 
-                    <input type='tel' maxLength={6} placeholder='Code' className={styles.tinput} value={code} onChange={onCodeChange} />
+                    <input type='tel' maxLength={6} placeholder={t('code')} className={styles.tinput} value={code} onChange={onCodeChange} />
+                    <span className={styles.error}>{error}</span>
 
                     <button disabled={code.length != 6} className={styles.install_button} onClick={onSignIn} style={{
                         opacity: code.length == 6 ? 1 : .6
-                    }}>{t('sign_in')}</button>
+                    }}>{t('signin')}</button>
                 </div>
                 {/* <InstallPanel hasMargin={true} /> */}
                 <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />

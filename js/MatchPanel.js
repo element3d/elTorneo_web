@@ -143,15 +143,19 @@ export default function MatchPanel({ router, me, match, predict }) {
     //             })
     // }
 
-    const login = useGoogleLogin({
-        onSuccess,
-        clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
-        isSignedIn: true,
-        accessType: 'offline',
-        fetchBasicProfile: true,
-        scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+    function login() {
+        router.push('/login')
+    }
 
-    });
+    // const login = useGoogleLogin({
+    //     onSuccess,
+    //     clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
+    //     isSignedIn: true,
+    //     accessType: 'offline',
+    //     fetchBasicProfile: true,
+    //     scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+
+    // });
 
     function getTime(ts) {
         const date = new Date(ts);
@@ -264,11 +268,11 @@ export default function MatchPanel({ router, me, match, predict }) {
             <span >Prediction {predict.team1_score} : {predict.team2_score}</span>
         </div> : null}
 
-        {showLoginButton() ? <button onClick={login} className={styles.sign_in_btn} style={{paddingRight: '2px'}}>
+        {showLoginButton() ? <button onClick={login} className={styles.sign_in_btn} >
             <span>{t('sign_in_to_predict')}</span>
-            <div className={styles.gcont}>
+            {/* <div className={styles.gcont}>
                 <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`}/>
-            </div>
+            </div> */}
         </button> : null}
         {showPredictButton() ? <button onClick={onPredict} disabled={team1Score.length == 0 || team2Score.length == 0} className={styles.sign_in_btn} style={{ opacity: team1Score.length && team2Score.length ? 1 : .6 }}>Predict</button> : null}
 

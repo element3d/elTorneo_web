@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
-import { Inter } from 'next/font/google';
+import { Cookie, Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import { useRouter } from 'next/router';
 import { SERVER_BASE_URL } from '@/js/Config';
@@ -17,6 +17,7 @@ import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 import TelegramCodePanel from '@/js/TelegramCodePanel';
+import Cookies from 'js-cookie';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -140,6 +141,7 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
   }, [serverLeague])
 
   useEffect(() => {
+    // Cookies.remove('token')
     const handleBackButton = (event) => {
       event.preventDefault();
       setShowPreview(false)
