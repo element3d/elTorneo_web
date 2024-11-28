@@ -47,79 +47,13 @@ export default function Home({ isAndroid, isIOS }) {
     const router = useRouter()
 
     const [username, setUsername] = useState('')
+    const [name, setName] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState(null)
     const [showPass, setShowPass] = useState(false)
 
     function toggleShowPass() {
         setShowPass(!showPass)
-    }
-
-    function signinGoogle(email, name) {
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify({
-                email: email,
-                name: name
-            })
-        };
-        return fetch(`${SERVER_BASE_URL}/api/v1/signin/googlemail`, requestOptions)
-            .then(response => {
-                if (response.status == 200)
-                    return response.text()
-
-                // setError(t('incorrect_login'))
-                return null
-            })
-    }
-
-    const onSuccess = async (tokenResponse) => {
-        try {
-            // Extract the access token from the tokenResponse
-            const accessToken = tokenResponse.access_token;
-
-            // Fetch user information from Google's API
-            const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            });
-
-            const userInfo = await response.json();
-
-            // You can access user's email and name like this:
-            const email = userInfo.email;
-            const name = userInfo.name;
-
-            signinGoogle(email, name)
-                .then((token) => {
-                    Cookies.set('token', token);
-                    router.replace('/profile')
-                })
-                .catch((err) => {
-                    console.error(err)
-                })
-        } catch (error) {
-            console.error('Error fetching user info:', error);
-        }
-    }
-
-    const login = useGoogleLogin({
-        onSuccess,
-        clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
-        isSignedIn: true,
-        accessType: 'offline',
-        fetchBasicProfile: true,
-        scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-
-    });
-
-    function navTelegram() {
-        router.push('/telegram')
-    }
-
-    function onNavRegister() {
-        router.push('/register')
     }
 
     function isValidUsername(username) {
@@ -136,7 +70,7 @@ export default function Home({ isAndroid, isIOS }) {
         return true;
     }
 
-    function onSignIn() {
+    function onRegister() {
         if (username.length < 6) {
             setError(t('err_username_len'))
             return
@@ -146,6 +80,10 @@ export default function Home({ isAndroid, isIOS }) {
             return
         }
 
+        if (name.length < 2) {
+            setError(t('err_name_len'))
+            return
+        }
         if (password.length < 6) {
             setError(t('err_password_len'))
             return
@@ -155,33 +93,34 @@ export default function Home({ isAndroid, isIOS }) {
             return
         }
 
-        setError(null)
+
         const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
                 username: username,
+                name: name,
                 password, password
             })
         };
-        return fetch(`${SERVER_BASE_URL}/api/v1/signin`, requestOptions)
+        return fetch(`${SERVER_BASE_URL}/api/v1/signup`, requestOptions)
             .then(response => {
                 if (response.status == 200)
                     return response.text()
-                if (response.status == 404) {
-                    setError(t('err_user_not_found'))
-                }
+
                 if (response.status == 403) {
-                    setError(t('err_incorrect_password'))
+                    setError(t('err_user_exists'))
                 }
                 // setError(t('incorrect_login'))
                 return null
             })
             .then((token) => {
-                if (!token) return
-
                 Cookies.set('token', token);
                 router.replace('/profile')
             })
+    }
+
+    function onNameChange(e) {
+        setName(e.target.value)
     }
 
     function onUsernameChange(e) {
@@ -192,10 +131,14 @@ export default function Home({ isAndroid, isIOS }) {
         setPassword(e.target.value)
     }
 
+    function onNavSignin() {
+        router.push('/login')
+    }
+ 
     return (
         <>
             <Head>
-                <title>el Torneo - {t('signin')}</title>
+                <title>el Torneo</title>
                 <meta name="description" content="World's biggest football fan tournament." />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
@@ -215,60 +158,36 @@ export default function Home({ isAndroid, isIOS }) {
                         <AwardsPanel router={router} />
                     </div> */}
 
-                    <div className={styles.buttons_row} style={{marginTop: '0px'}}>
-                        <button className={styles.button_compact} onClick={login}>
-                            <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`} />
-                            {t('signin_google')}
-                        </button>
-                        <button className={styles.button_compact} onClick={navTelegram}>
-                            <img className={styles.ticon} src={`${SERVER_BASE_URL}/data/icons/telegram.svg`} />
-                            {t('signin_telegram')}
-                        </button>
-                    </div>
-
-                    <div className={styles.buttons_cont}>
-                        <div className={styles.line}></div>
-                        <span className={styles.join_text}>{t('or')}</span>
-                        <div className={styles.line}></div>
-                    </div>
-
                     <div className={styles.login_cont}>
                         <div className={styles.input_cont}>
                             <span className={styles.placeholder}>{t('username')}</span>
-                            <input className={styles.login_input} type='text' value={username} onChange={onUsernameChange} />
+                            <input className={styles.login_input} type='text' value={username} onChange={onUsernameChange}/>
+                        </div>
+
+                        <div className={styles.input_cont}>
+                            <span className={styles.placeholder}>{t('name')}</span>
+                            <input className={styles.login_input} type='text' value={name} onChange={onNameChange}/>
                         </div>
 
                         <div className={styles.input_cont}>
                             <span className={styles.placeholder}>{t('password')}</span>
-                            <input className={styles.login_input} type={!showPass ? 'password' : 'text'} value={password} onChange={onPasswordChange} />
+                            <input className={styles.login_input} type={!showPass ? 'password' : 'text'} value={password} onChange={onPasswordChange}/>
                             <div className={styles.eye} onClick={toggleShowPass}>
                                 <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye.svg`}/>
                             </div>
                         </div>
-                        <span className={styles.error}>{error}</span>
-                        <button className={styles.login_button} onClick={onSignIn}>
-                            {t('signin')}
-                        </button>
 
+                        <span className={styles.error}>{error}</span>
+
+                        <button className={styles.login_button} onClick={onRegister}>
+                        {t('register')}
+                        </button>
+                        
                         <div className={styles.dont_cont}>
-                            <span>{t('dont_have_acc')}</span>
-                            <button className={styles.dont_button} onClick={onNavRegister}>{t('register')}</button>
+                            <span>{t('already_have_acc')}</span>
+                            <button className={styles.dont_button} onClick={onNavSignin}>{t('signin')}</button>
                         </div>
                     </div>
-
-                 
-
-
-
-                    {/* <button className={styles.button} onClick={login}>
-                        <span>{t('join_now')}</span>
-                        <div className={styles.gcont}>
-                            <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`} />
-                        </div>
-                    </button> */}
-                    {/* curl -X POST "https://api.telegram.org/bot7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30/sendMessage" -H "Content-Type: application/json" -d "{\"chat_id\":\"660322879\",\"text\":\"Click the button below to start el Torneo:\",\"reply_markup\":{\"inline_keyboard\":[[{\"text\":\"Start el Torneo\",\"web_app\":{\"url\":\"https://eltorneo.am\"}}]]}}" */}
-
-                    {/* 7617197735:AAEv15rEm0sGbj9FAcyoO73fi_mELR1OU30 */}
 
                 </div>
                 {/* <InstallPanel hasMargin={true} /> */}
