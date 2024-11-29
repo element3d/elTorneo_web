@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Match.module.css';
 import { useRouter } from 'next/router';
@@ -187,8 +187,8 @@ export async function getServerSideProps(context) {
     };
 }
 
-function Chip({ title, selected, onClick }) {
-    return <div className={selected ? styles.chip_sel : styles.chip} onClick={onClick}>
+function Chip({ ref, title, selected, onClick }) {
+    return <div ref={ref} className={selected ? styles.chip_sel : styles.chip} onClick={onClick}>
         <span>{title}</span>
     </div>
 }
@@ -204,8 +204,17 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
+    const viewsRef = useRef()
+    const containerRef = useRef(null);
 
     useEffect(() => {
+        if (view == 'events' || view == 'stats' || view == 'lineups') {
+            if (containerRef?.current) {
+                containerRef.current.scrollLeft = containerRef.current.scrollWidth;
+                // viewsRef.current.scrollIntoView({ behavior: 'smooth', inline: 'end' });
+            }
+        }
+
         return () => {
             setShowPreview(false)
             document.documentElement.style.overflow = ''; // Disable background scroll
@@ -363,13 +372,13 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                 </div>
                 <MatchPanel me={me} router={router} match={match} predict={predict} />
 
-                <div className={styles.view_row}>
+                <div ref={containerRef} className={styles.view_row} >
                     <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
                     <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
                     <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip>
                     {header.statistics ? <Chip title={t('statistics')} selected={view == 'stats'} onClick={onNavStats}></Chip> : null}
                     {header.events ? <Chip title={t('events')} selected={view == 'events'} onClick={onNavEvents}></Chip> : null}
-                    {header.lineups ? <Chip title={t('lineups')} selected={view == 'lineups'} onClick={onNavLineups}></Chip> : null}
+                    {header.lineups ? <Chip ref={viewsRef} title={t('lineups')} selected={view == 'lineups'} onClick={onNavLineups}></Chip> : null}
 
                 </div>
 
@@ -380,8 +389,8 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                 {view == 'stats' ? <MatchStatsPanel stats={stats} /> : null}
                 {view == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
 
-                <InstallPanel hasBg={false} hasMargin={false}/>
-                { showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null }
+                {isAndroid ? <InstallPanel hasBg={false} hasMargin={false} /> : null}
+                {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
 
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>

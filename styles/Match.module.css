@@ -65,6 +65,19 @@
     scrollbar-width: none;
 }
 
+@media (max-width: 768px) {
+    .view_row {
+      overflow-x: scroll;
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      scrollbar-width: none; /* Firefox */
+  
+      /* Hide scrollbar for WebKit browsers */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
 .padding_top {
     padding-top: 10px;
     width: 100%;
