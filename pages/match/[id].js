@@ -133,6 +133,7 @@ export async function getServerSideProps(context) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authentication': token ? token : ''
                 // 'Authentication': authManager.getToken() ? authManager.getToken() : ''
             },
         })
