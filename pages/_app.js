@@ -22,10 +22,10 @@ function App({ Component, pageProps }) {
         tg.ready();
         const user = tg.initDataUnsafe.user;
 
-        tg.disableVerticalSwipes();
-        tg.lockOrientation();
-        tg.requestFullScreen?.()
-        tg.enableClosingConfirmation()
+        // tg.disableVerticalSwipes();
+        // tg.lockOrientation();
+        // tg.requestFullScreen?.()
+        // tg.enableClosingConfirmation()
 
         if (user) {
          
