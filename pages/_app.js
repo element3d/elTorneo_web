@@ -23,8 +23,18 @@ function App({ Component, pageProps }) {
     if (window.Telegram) {
       const tg = window.Telegram.WebApp;
       if (tg) {
+        console.log(tg)
         tg.ready();
-        const user = tg.initDataUnsafe.user;
+        let user = null
+        const initData = tg.initData;
+        const urlParams = new URLSearchParams(initData);
+        const userJson = urlParams.get('user'); // Contains encoded user information
+        if (userJson) {
+          user = JSON.parse(userJson);
+          console.log("User information:", user);
+        } else {
+          console.error("User information not found in initData");
+        }
         // tg.disableVerticalSwipes();
         // tg.lockOrientation();
         // tg.requestFullScreen?.()
