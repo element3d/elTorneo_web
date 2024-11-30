@@ -33,6 +33,7 @@ function App({ Component, pageProps }) {
           user = JSON.parse(userJson);
           console.log("User information:", user);
         } else {
+          alert('Telegram not found')
           console.error("User information not found in initData");
         }
         // tg.disableVerticalSwipes();
