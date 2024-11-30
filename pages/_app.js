@@ -14,8 +14,9 @@ function App({ Component, pageProps }) {
     const token = Cookies.get('token')
     console.log("======================== TG")
     console.log(token)
-    alert(token)
     if (token) { 
+      console.log("========= HAS TOKEN =============== TG")
+
       return
     }
 
@@ -24,14 +25,16 @@ function App({ Component, pageProps }) {
       if (tg) {
         tg.ready();
         const user = tg.initDataUnsafe.user;
-        alert(user.username)
         // tg.disableVerticalSwipes();
         // tg.lockOrientation();
         // tg.requestFullScreen?.()
         // tg.enableClosingConfirmation()
 
         if (user) {
-         
+          // alert(token)
+
+          alert(user.username)
+
           const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
