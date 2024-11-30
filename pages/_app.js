@@ -32,6 +32,8 @@ function App({ Component, pageProps }) {
         if (userJson) {
           user = JSON.parse(userJson);
           console.log("User information:", user);
+          alert('Telegram user found')
+
         } else {
           alert('Telegram not found')
           console.error("User information not found in initData");
@@ -67,7 +69,8 @@ function App({ Component, pageProps }) {
               // router.reload()
             })
         } else {
-          
+          alert('Telegram not TG found')
+
         }
       }
 
