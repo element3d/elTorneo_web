@@ -34,7 +34,7 @@ export async function getServerSideProps(context) {
   const routerMiniLeague = query.mini ? Number(query.mini) : 0;
   const { locale } = context;
 
-  const { req } = context
+  const { req, res } = context
   const token = req.cookies.token;
 
   let isAndroid = false;
@@ -102,6 +102,8 @@ export async function getServerSideProps(context) {
         if (response.status === 200) return response.json();
         return null;
       });
+
+    if (!me)   res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
   }
 
   return {
