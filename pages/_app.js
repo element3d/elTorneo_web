@@ -7,10 +7,38 @@ import { useRouter } from "next/router";
 import Script from 'next/script';
 import { useEffect } from "react";
 
-function App({ Component, pageProps }) {
+export async function getServerSideProps(context) {
+  const { req } = context;   
+  const token = req.cookies.token;
+  let me = null
+  if (token) {
+    me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, prequestOptions)
+    .then(response => {
+        if (response.status !== 200) {
+            return;
+        }
+        return response.json()
+    })
+  }
+
+  return {
+    props: {
+        me,
+        ...(await serverSideTranslations(locale)),
+    },
+};
+}
+
+function App({ Component, pageProps, me }) {
   const router = useRouter()
+  console.log('====================')
+  console.log(pageProps)
+  console.log('======== 00000000000 ============')
+
+  if (!pageProps.me) Cookies.remove('token')
 
   useEffect(() => {
+
     alert('use effect')
     const token = Cookies.get('token')
     alert(token)
