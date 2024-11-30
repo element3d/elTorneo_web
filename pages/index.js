@@ -133,6 +133,8 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
   const [showPreview, setShowPreview] = useState(false)
   const [previewMatch, setPreviewMatch] = useState(null)
 
+  if (!me) Cookies.remove('token')
+
   useEffect(() => {
     return () => {
       setShowPreview(false)
