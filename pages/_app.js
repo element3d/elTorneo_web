@@ -12,6 +12,9 @@ function App({ Component, pageProps }) {
 
   useEffect(() => {
     const token = Cookies.get('token')
+    console.log("======================== TG")
+    console.log(token)
+    alert(token)
     if (token) { 
       return
     }
@@ -21,7 +24,7 @@ function App({ Component, pageProps }) {
       if (tg) {
         tg.ready();
         const user = tg.initDataUnsafe.user;
-
+        alert(user.username)
         // tg.disableVerticalSwipes();
         // tg.lockOrientation();
         // tg.requestFullScreen?.()
@@ -68,12 +71,12 @@ function App({ Component, pageProps }) {
       src="https://telegram.org/js/telegram-web-app.js"
       strategy="beforeInteractive"
     />
-    <Script
+    {/* <Script
       id="adsbygoogle-init"
       strategy="afterInteractive"
       crossOrigin="anonymous"
       src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-7041403371220271`}
-    />
+    /> */}
     <GoogleOAuthProvider clientId="854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com"> <Component {...pageProps} /></GoogleOAuthProvider>
   </>;
 }
