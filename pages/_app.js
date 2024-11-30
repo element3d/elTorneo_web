@@ -69,13 +69,16 @@ function App({ Component, pageProps }) {
               // router.reload()
             })
         } else {
-          alert('Telegram not TG found')
+          alert('Telegram not TG user found')
 
         }
+      } else {
+        alert('Telegram not TG found')
       }
 
     } else {
-     
+      alert('Telegram window not TG found')
+
     }
 
     return () => {
