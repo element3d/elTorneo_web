@@ -11,23 +11,14 @@ function App({ Component, pageProps }) {
   const router = useRouter()
   
   useEffect(() => {
-
-    alert('use effect')
     const token = Cookies.get('token')
-    alert(token)
-
-    console.log("======================== TG")
-    console.log(token)
     if (token) { 
-      console.log("========= HAS TOKEN =============== TG")
-
       return
     }
 
     if (window.Telegram) {
       const tg = window.Telegram.WebApp;
       if (tg) {
-        console.log(tg)
         tg.ready();
         let user = null
         const initData = tg.initData;
@@ -35,12 +26,8 @@ function App({ Component, pageProps }) {
         const userJson = urlParams.get('user'); // Contains encoded user information
         if (userJson) {
           user = JSON.parse(userJson);
-          console.log("User information:", user);
-          alert('Telegram user found')
-
         } else {
-          alert('Telegram not found')
-          console.error("User information not found in initData");
+         
         }
         // tg.disableVerticalSwipes();
         // tg.lockOrientation();
@@ -48,10 +35,6 @@ function App({ Component, pageProps }) {
         // tg.enableClosingConfirmation()
 
         if (user) {
-          // alert(token)
-
-          alert(user.username)
-
           const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
@@ -73,15 +56,12 @@ function App({ Component, pageProps }) {
               // router.reload()
             })
         } else {
-          alert('Telegram not TG user found')
 
         }
       } else {
-        alert('Telegram not TG found')
       }
 
     } else {
-      alert('Telegram window not TG found')
 
     }
 
