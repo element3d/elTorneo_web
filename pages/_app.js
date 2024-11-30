@@ -12,8 +12,9 @@ function App({ Component, pageProps }) {
 
   useEffect(() => {
     alert('use effect')
-    alert(token)
     const token = Cookies.get('token')
+    alert(token)
+
     console.log("======================== TG")
     console.log(token)
     if (token) { 
