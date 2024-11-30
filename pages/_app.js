@@ -11,6 +11,8 @@ function App({ Component, pageProps }) {
   const router = useRouter()
 
   useEffect(() => {
+    alert('use effect')
+    alert(token)
     const token = Cookies.get('token')
     console.log("======================== TG")
     console.log(token)
