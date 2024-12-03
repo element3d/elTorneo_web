@@ -23,7 +23,24 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
     const showPoints = match.status != 'PST' && match.predict && match.predict.status > 0
 
     function onNavMatch() {
-        if (match.status == 'PST' || match.week > currentWeek) return
+        if (match.status == 'PST') return
+
+        if (match.week > currentWeek) {
+            const matchDate = new Date(match.date); // Ensure match.date is a valid date
+            const currentDate = new Date(); // Current date and time
+        
+            // Calculate the difference in time (milliseconds)
+            const timeDifference = matchDate - currentDate;
+        
+            // Convert the time difference to days
+            const daysDifference = timeDifference / (1000 * 60 * 60 * 24);
+        
+            if (daysDifference > 2) {
+                return; // Match is starting in more than 2 days
+            }
+        
+            // Continue with your logic for matches starting within 2 days
+        }
         router.push(`/match/${match.id}`)
     }
 

@@ -158,5 +158,7 @@
     "signin_tg_msg": "Open the Telegram bot and launch the el Torneo Web App. Copy the authentication code and paste it into the field below.",
     "code": "Code",
     "incorrect_code": "Incorrect code.",
-    "auth_code": "Authentication code"
+    "auth_code": "Authentication code",
+    "season": "Season",
+    "awards_info_short": "Join the ultimate free football prediction tournament, open to fans from all over the world. Sign in, make your predictions, and climb the leaderboard by following the rules. Ready to compete? Welcome to el Torneo!"
 }

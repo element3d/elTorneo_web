@@ -29,8 +29,8 @@ function App({ Component, pageProps }) {
         } else {
          
         }
-        // tg.disableVerticalSwipes();
-        // tg.lockOrientation();
+        tg.disableVerticalSwipes?.();
+        tg.lockOrientation?.();
         // tg.requestFullScreen?.()
         // tg.enableClosingConfirmation()
 

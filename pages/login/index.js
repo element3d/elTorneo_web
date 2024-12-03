@@ -160,7 +160,7 @@ export default function Home({ isAndroid, isIOS }) {
             method: 'POST',
             body: JSON.stringify({
                 username: username,
-                password, password
+                password: password
             })
         };
         return fetch(`${SERVER_BASE_URL}/api/v1/signin`, requestOptions)

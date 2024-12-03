@@ -99,7 +99,7 @@ export default function Home({ isAndroid, isIOS }) {
             body: JSON.stringify({
                 username: username,
                 name: name,
-                password, password
+                password: password
             })
         };
         return fetch(`${SERVER_BASE_URL}/api/v1/signup`, requestOptions)

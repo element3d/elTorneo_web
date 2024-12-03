@@ -95,11 +95,18 @@ function TableItem({ isMe, pos, player, onClick }) {
     </div>
 }
 
+
+function getLeagueName(league, t) {
+    if (league == 1) return 'el Torneo'
+    if (league == 3) return 'Telegram ' + t('league')
+    return `${t('league')} ${league}`
+}
+
 function LeagueChip({ league, selected, isMy, onClick }) {
     const { t } = useTranslation()
 
     return <div onClick={onClick} className={selected ? styles.league_chip_sel : styles.league_chip}>
-        <span>{t('league')} {league}</span>
+         <span>{getLeagueName(league, t)}</span> 
         {isMy ? <span className={styles.chip_subtitle}>{t('your_league')}</span> : null}
     </div>
 }
@@ -131,6 +138,12 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
         router.push(`/table?page=${1}&league=${2}`)
     }
 
+    function onNavLeague3() {
+        if (league == 3) return
+
+        router.push(`/table?page=${1}&league=${3}`)
+    }
+
     function onNavProfile(id) {
         router.push(`/profile/${id}`)
     }
@@ -139,8 +152,10 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
         router.push('/info')
     }
 
+
     function isShowMoveToLeague() {
         if (!me) return false
+        if (me.league == 3) return false
         if (me.league == 2) return true
         if (me.points > 20) return false
 
@@ -164,6 +179,8 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
                 <div className={styles.leagues_cont}>
                     <LeagueChip selected={league == 1} onClick={onNavLeague1} league={1} isMy={me?.league == 1} />
                     <LeagueChip selected={league == 2} onClick={onNavLeague2} league={2} isMy={me?.league == 2} />
+                    <LeagueChip selected={league == 3} onClick={onNavLeague3} league={3} isMy={me?.league == 3} />
+
                     <button onClick={onNavInfo} className={styles.info_button}>i</button>
                 </div>
                 {isShowMoveToLeague() ? <div className={styles.leagues_cont} style={{ marginTop: '10px' }}>

@@ -100,7 +100,7 @@ export default function Home({ me, token, isAndroid, isIOS }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
-                <AppBar title={'el Torneo'} />
+                <AppBar title={'el Torneo'} router={router} />
 
                 <div className={styles.padding}>
                     <h3 className={styles.title}>{t('leagues_title')}</h3>

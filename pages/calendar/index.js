@@ -38,7 +38,7 @@ export async function getServerSideProps(context) {
     isIOS = osName == 'iOS'
   }
 
-  const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=en`
+  const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=${locale}`
   const matches = await fetch(url, {
     method: 'GET',
     headers: {
@@ -136,7 +136,7 @@ export default function Home({ me, isAndroid, isIOS, matches, date }) {
                 <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${m.league_name}_colored.png`} />
                 <div className={styles.league_name_cont}>
                   <span className={styles.league_name}>{m.league_name}</span>
-                  <span className={styles.league_week}>Matchday {m.week}</span>
+                  <span className={styles.league_week}>{t('matchday')} {m.week}</span>
                 </div>
               </div> : null}
               <MatchItemMobile currentWeek={m.currentWeek} router={router} match={m} onPreview={onPreview}/>

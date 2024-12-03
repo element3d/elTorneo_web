@@ -158,5 +158,7 @@
     "signin_tg_msg": "Abra o bot do Telegram e inicie o aplicativo web el Torneo. Copie o código de autenticação e cole no campo abaixo.",
     "code": "Código",
     "incorrect_code": "Código incorreto.",
-    "auth_code": "Código de autenticação"
+    "auth_code": "Código de autenticação",
+    "season": "Temporada",
+    "awards_info_short": "Participe do torneio gratuito de palpites de futebol definitivo, aberto para fãs de todo o mundo. Faça login, envie seus palpites e suba no ranking seguindo as regras. Pronto para competir? Bem-vindo ao el Torneo!"
 }

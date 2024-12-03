@@ -158,5 +158,7 @@
     "signin_tg_msg": "Ouvrez le bot Telegram et lancez l'application web el Torneo. Copiez le code d'authentification et collez-le dans le champ ci-dessous.",
     "code": "Code",
     "incorrect_code": "Code incorrect.",
-    "auth_code": "Code d'authentification"
+    "auth_code": "Code d'authentification",
+    "season": "Saison",
+    "awards_info_short": "Rejoignez le tournoi gratuit ultime de pronostics football, ouvert aux fans du monde entier. Connectez-vous, faites vos pronostics et grimpez dans le classement en suivant les règles. Prêt à relever le défi ? Bienvenue à el Torneo !"
 }

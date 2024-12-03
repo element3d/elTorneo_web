@@ -158,5 +158,7 @@
     "signin_tg_msg": "Otvorite Telegram bot i pokrenite el Torneo web aplikaciju. Kopirajte autentifikacijski kod i zalijepite ga u polje ispod.",
     "code": "Kod",
     "incorrect_code": "Pogrešan kod.",
-    "auth_code": "Autentifikacijski kod"
+    "auth_code": "Autentifikacijski kod",
+    "season": "Sezona",
+    "awards_info_short": "Pridružite se ultimativnom besplatnom turniru u predviđanju nogometnih utakmica, otvorenom za navijače iz cijelog svijeta. Prijavite se, napravite svoje prognoze i penjte se na ljestvici pridržavajući se pravila. Spremni za natjecanje? Dobrodošli u el Torneo!"
 }

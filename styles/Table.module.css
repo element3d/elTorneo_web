@@ -97,20 +97,37 @@
     opacity: .6;
 }
 
+@media (max-width: 768px) {
+    .leagues_cont {
+      overflow-x: scroll;
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      scrollbar-width: none; /* Firefox */
+  
+      /* Hide scrollbar for WebKit browsers */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
 .leagues_cont {
     user-select: none;
     width: 100%;
     padding-left: 20px;
+    padding-right: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    overflow-x: scroll;
 }
 
 .league_chip {
     padding-left: 20px;
     padding-right: 20px;
     height: 40px;
-    width: auto;
+    /* min-width: 100px; */
+    /* width: auto; */
+    white-space: nowrap;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -129,6 +146,8 @@
 }
 
 .league_chip_sel {
+    /* min-width: 100px; */
+    white-space: nowrap;
     padding-left: 20px;
     padding-right: 20px;
     height: 40px;
@@ -159,6 +178,7 @@
     outline: none;
     width: 40px;
     height: 40px;
+    min-width: 40px;
     border-radius: 20px;
     color: white;
     font-size: 20px;

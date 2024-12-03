@@ -158,6 +158,8 @@
     "signin_tg_msg": "Abre el bot de Telegram y lanza la aplicación web de el Torneo. Copia el código de autenticación y pégalo en el campo de abajo.",
     "code": "Código",
     "incorrect_code": "Código incorrecto.",
-    "auth_code": "Código de autenticación"
+    "auth_code": "Código de autenticación",
+    "season": "Temporada",
+    "awards_info_short": "Únete al torneo gratuito de predicciones de fútbol definitivo, abierto a aficionados de todo el mundo. Inicia sesión, haz tus predicciones y sube en la clasificación siguiendo las reglas. ¿Listo para competir? ¡Bienvenido a el Torneo!"
 
 }

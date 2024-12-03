@@ -158,5 +158,7 @@
     "signin_tg_msg": "Öffnen Sie den Telegram-Bot und starten Sie die el Torneo Web-App. Kopieren Sie den Authentifizierungscode und fügen Sie ihn in das untenstehende Feld ein.",
     "code": "Code",
     "incorrect_code": "Falscher Code.",
-    "auth_code": "Authentifizierungscode"
+    "auth_code": "Authentifizierungscode",
+    "season": "Saison",
+    "awards_info_short": "Nimm am ultimativen kostenlosen Fußball-Tippspiel-Turnier teil, das für Fans aus der ganzen Welt offen ist. Melde dich an, gib deine Tipps ab und klettere in der Rangliste, indem du die Regeln befolgst. Bereit zum Mitmachen? Willkommen bei el Torneo!"
 }

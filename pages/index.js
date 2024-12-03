@@ -62,7 +62,7 @@ export async function getServerSideProps(context) {
   }
 
   const week = routerWeek == -1 ? serverLeague.week : routerWeek;
-  const url = `${SERVER_BASE_URL}/api/v1/matches?league_id=${routerLeague}&week=${week}&season=2024/25`
+  const url = `${SERVER_BASE_URL}/api/v1/matches?league_id=${routerLeague}&week=${week}&season=2024/25&lang=${locale}`
   const matches = await fetch(url, {
     method: 'GET',
     headers: {

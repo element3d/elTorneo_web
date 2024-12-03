@@ -77,11 +77,11 @@ export default function Home({ me, isAndroid, isIOS }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <AppBar title={'el Torneo'} />
+        <AppBar title={'el Torneo'} router={router} />
 
         <div className={styles.padding}>
-            <h3 className={styles.title}>{t('awards')}</h3>
-            <span className={styles.text}>{t('awards_info')}</span>
+            <h3 className={styles.title}>{t('learn_more')}</h3>
+            <span className={styles.text}>{t('awards_info_short')}</span>
 
             <h3 className={styles.title}>{t('rules')}</h3>
             <span className={styles.text}>{t('rules_info')}</span>
@@ -92,8 +92,8 @@ export default function Home({ me, isAndroid, isIOS }) {
             <h4>{t('quest')}</h4>
             <span className={styles.text}>{t('quest_match_msg')}</span>
 
-            <h3 className={styles.title}>{t('about_us')}</h3>
-            <span className={styles.text}>{t('about_us_msg')}</span>
+            {/* <h3 className={styles.title}>{t('about_us')}</h3>
+            <span className={styles.text}>{t('about_us_msg')}</span> */}
 
             {isAndroid ? <InstallPanel /> : null }
         </div>
