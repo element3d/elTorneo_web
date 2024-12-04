@@ -32,7 +32,11 @@ export async function getServerSideProps(context) {
     const { id } = params;
     const { req } = context;
     const { locale } = context;
-    const token = req.cookies.token;
+    
+    const token = null
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
 
     const { query } = context;
     const { view } = query;
@@ -252,9 +256,9 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
     useEffect(() => {
         try {
             (window.adsbygoogle = window.adsbygoogle || []).push({});
-          } catch (err) {
+        } catch (err) {
             console.log(err);
-          }
+        }
         // const installGoogleAds = () => {
         //     const elem = document.createElement("script");
         //     elem.src =
@@ -313,7 +317,7 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                 data-ad-format="auto"
                 data-full-width-responsive="true"
             ></ins> */}
-{/* <ins className="adsbygoogle"
+            {/* <ins className="adsbygoogle"
         style={{ display: "block", height: "400px" }}
         data-ad-client="ca-pub-7041403371220271"
      data-ad-slot="6978928230"

@@ -31,7 +31,11 @@ export async function getServerSideProps(context) {
         isIOS = osName == 'iOS'
     }
 
-    const token = req.cookies.token;
+    const token = null
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+
     if (!token) {
         return {
             redirect: {
@@ -130,10 +134,10 @@ export default function Home({ isAndroid, isIOS, me, token, locale }) {
             headers: {
                 'Authentication': token
             },
-          };
-          
-            fetch(`${SERVER_BASE_URL}/api/v1/me/avatar`, requestOptions)
-            .then((u)=>{
+        };
+
+        fetch(`${SERVER_BASE_URL}/api/v1/me/avatar`, requestOptions)
+            .then((u) => {
                 setNewAva(null)
                 router.reload()
             })
@@ -143,20 +147,20 @@ export default function Home({ isAndroid, isIOS, me, token, locale }) {
     function onSaveName() {
         const requestOptions = {
             method: 'PUT',
-            headers: { 
-              'Content-Type': 'application/json',
-              'Authentication': token
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token
             },
-            body: JSON.stringify({ 
-              name: name
-             })
-          };
-    
-          fetch(`${SERVER_BASE_URL}/api/v1/me/name`, requestOptions)
+            body: JSON.stringify({
+                name: name
+            })
+        };
+
+        fetch(`${SERVER_BASE_URL}/api/v1/me/name`, requestOptions)
             .then(response => {
                 if (response.status == 200) {
                     return response.text()
-                }             
+                }
                 return null
             })
             .then(data => {

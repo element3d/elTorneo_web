@@ -23,7 +23,10 @@ export async function getServerSideProps(context) {
     const { locale } = context;
     const { req } = context;
 
-    const token = req.cookies.token;
+    const token = null
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
 
     let isAndroid = false;
     let isIOS = false
@@ -106,7 +109,7 @@ function LeagueChip({ league, selected, isMy, onClick }) {
     const { t } = useTranslation()
 
     return <div onClick={onClick} className={selected ? styles.league_chip_sel : styles.league_chip}>
-         <span>{getLeagueName(league, t)}</span> 
+        <span>{getLeagueName(league, t)}</span>
         {isMy ? <span className={styles.chip_subtitle}>{t('your_league')}</span> : null}
     </div>
 }
@@ -205,7 +208,7 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
                     {showNext ? <span onClick={onNext} className={`${styles.next} ${showPrev ? null : styles.text_center}`}>{t('next') + ' >'}</span> : null}
                 </div>
 
-                {isAndroid ? <InstallPanel hasBg={false} hasMargin={true}/> : null }
+                {isAndroid ? <InstallPanel hasBg={false} hasMargin={true} /> : null}
 
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_TAB} />
             </main>

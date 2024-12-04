@@ -33,7 +33,10 @@ export async function getServerSideProps(context) {
         isIOS = osName == 'iOS'
     }
 
-    const token = req.cookies.token;
+    const token = null
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
 
     if (!token) {
         return {
@@ -139,7 +142,7 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
 
                     {!predicts.length ? <span className={styles.no_preds}>{t('no_predicts')}</span> : null}
                 </div>
-                { showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null }
+                {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
                 <BottomNavBar me={user} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_PROF} />
             </main>
         </>

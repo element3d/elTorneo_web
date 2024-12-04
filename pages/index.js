@@ -35,9 +35,12 @@ export async function getServerSideProps(context) {
   const { locale } = context;
 
   const { req, res } = context
-  const token = null//req.cookies.token;
+  const token = null
+  if (req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  }
 
-  res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
+  // res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
 
   let isAndroid = false;
   let isIOS = false
@@ -137,7 +140,7 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
   const [showPreview, setShowPreview] = useState(false)
   const [previewMatch, setPreviewMatch] = useState(null)
 
-  if (!me) Cookies.remove('token')
+  // if (!me) Cookies.remove('token')
 
   useEffect(() => {
     return () => {

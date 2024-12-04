@@ -25,7 +25,10 @@ export async function getServerSideProps(context) {
   const { locale } = context;
 
   const { req } = context
-  const token = req.cookies.token;
+  const token = null
+  if (req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  }
 
   let isAndroid = false;
   let isIOS = false

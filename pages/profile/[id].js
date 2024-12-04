@@ -22,7 +22,11 @@ export async function getServerSideProps(context) {
     const globalPage = query.page ? Number(query.page) : 1;
     const { locale } = context;
     const { req } = context
-    const token = req.cookies.token;
+
+    const token = null
+    if (req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
 
     let isAndroid = false;
     let isIOS = false
@@ -124,7 +128,7 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
         document.documentElement.style.overflow = '';
     }
 
-    useEffect(()=> {
+    useEffect(() => {
         setPredicts(initialPredicts.predicts)
     }, [initialPredicts])
     return (
@@ -142,8 +146,8 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
                     <ProfileStatsPanel stats={initialPredicts} />
                     <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                 </div>
-                { showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null }
-                <BottomNavBar  me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
+                {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
+                <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
         </>
     );
