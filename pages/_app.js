@@ -35,10 +35,13 @@ function App({ Component, pageProps }) {
         } else {
          
         }
-        tg.setHeaderColor('#0a0909')
+        // tg.setHeaderColor('#0a0909')
         tg.BackButton.show()
         tg.disableVerticalSwipes?.();
         tg.lockOrientation?.();
+        tg.BackButton.onClick(() => {
+          router.back()
+        }) 
         // tg.requestFullScreen?.()
         // tg.enableClosingConfirmation()
 
