@@ -21,11 +21,7 @@ function App({ Component, pageProps }) {
     //   }
     // }
 
-    const token = Cookies.get('token')
-    if (token) { 
-      return
-    }
-
+    
     if (window.Telegram) {
       const tg = window.Telegram.WebApp;
       if (tg) {
@@ -45,6 +41,11 @@ function App({ Component, pageProps }) {
         tg.lockOrientation?.();
         // tg.requestFullScreen?.()
         // tg.enableClosingConfirmation()
+
+        const token = Cookies.get('token')
+        if (token) { 
+          return
+        }
 
         if (user) {
           const requestOptions = {
