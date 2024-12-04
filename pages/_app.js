@@ -11,6 +11,8 @@ function App({ Component, pageProps }) {
   const router = useRouter()
   
   useEffect(() => {
+    Cookies.remove('token')
+
     // (window.adsbygoogle = window.adsbygoogle || []).push({});
 
     // if (typeof window !== 'undefined' && window.adsbygoogle) {
