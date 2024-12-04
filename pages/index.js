@@ -36,8 +36,10 @@ export async function getServerSideProps(context) {
 
   const { req, res } = context
   let token = null
+  let token1 = null
+
   if (req.cookies && req.cookies.token) {
-    token = req.cookies.token;
+    token1 = req.cookies.token;
   }
 
   // res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
@@ -123,6 +125,7 @@ export async function getServerSideProps(context) {
       isAndroid,
       isIOS,
       me,
+      token1,
       miniLeague: routerMiniLeague,
       matchOfDay: getRandomMatch(matches),
       ...(await serverSideTranslations(locale)),
@@ -130,7 +133,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
+export default function Home({ leagues, token1, me, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
   const { t } = useTranslation()
   const [name, setName] = useState('');
   const [specialMatchId, setSpecialMatchId] = useState('')
@@ -150,6 +153,7 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
   }, [serverLeague])
 
   useEffect(() => {
+    alert(token1)
     // Cookies.remove('token')
     const handleBackButton = (event) => {
       event.preventDefault();
