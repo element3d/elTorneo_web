@@ -11,7 +11,7 @@ function App({ Component, pageProps }) {
   const router = useRouter()
   
   useEffect(() => {
-    Cookies.remove('token')
+    // Cookies.set('token')
 
     // (window.adsbygoogle = window.adsbygoogle || []).push({});
 
