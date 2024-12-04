@@ -17,10 +17,18 @@ export default function Document() {
           strategy="lazyOnload"
           crossOrigin="anonymous"
         /> */}
-<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
+   {/* Telegram WebApp Script */}
+   <script
+          src="https://telegram.org/js/telegram-web-app.js?56"
+          async
+        ></script>
 
-           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7041403371220271"
-     crossorigin="anonymous"></script>
+        {/* Google AdSense Script */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7041403371220271"
+          crossOrigin="anonymous"
+        ></script>
       </Head>
       <body>
     
