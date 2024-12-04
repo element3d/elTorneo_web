@@ -37,6 +37,8 @@ export async function getServerSideProps(context) {
   const { req, res } = context
   const token = req.cookies.token;
 
+  res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
+
   let isAndroid = false;
   let isIOS = false
   {
