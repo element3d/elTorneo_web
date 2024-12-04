@@ -35,7 +35,7 @@ export async function getServerSideProps(context) {
   const { locale } = context;
 
   const { req, res } = context
-  const token = req.cookies.token;
+  const token = null//req.cookies.token;
 
   res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
 
