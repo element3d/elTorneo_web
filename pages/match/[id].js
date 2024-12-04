@@ -313,13 +313,13 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                 data-ad-format="auto"
                 data-full-width-responsive="true"
             ></ins> */}
-<ins className="adsbygoogle"
+{/* <ins className="adsbygoogle"
         style={{ display: "block", height: "400px" }}
         data-ad-client="ca-pub-7041403371220271"
      data-ad-slot="6978928230"
      data-ad-format="auto"
     //  data-adtest="on"
-     data-full-width-responsive="true"></ins>
+     data-full-width-responsive="true"></ins> */}
 
             <MatchTop20Panel router={router} match={match} predicts={top20Predicts} />
         </div>
