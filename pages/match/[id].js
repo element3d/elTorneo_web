@@ -249,13 +249,29 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
         document.documentElement.style.overflow = '';
     }
 
-    // useEffect(() => {
-    //     try {
-    //         (window.adsbygoogle = window.adsbygoogle || []).push({});
-    //     } catch (err) {
-    //         console.error(err);
-    //     }
-    // }, []);
+    useEffect(() => {
+        try {
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          } catch (err) {
+            console.log(err);
+          }
+        // const installGoogleAds = () => {
+        //     const elem = document.createElement("script");
+        //     elem.src =
+        //       "//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+        //     elem.async = true;
+        //     elem.defer = true;
+        //     document.body.insertBefore(elem, document.body.firstChild);
+        //   };
+        //   installGoogleAds();
+        //   (window.adsbygoogle = window.adsbygoogle || []).push({});
+
+        // try {
+        //     (window.adsbygoogle = window.adsbygoogle || []).push({});
+        // } catch (err) {
+        //     console.error(err);
+        // }
+    }, []);
 
     function onNavH2H() {
         router.push(`/match/${match.id}?view=h2h`)
@@ -289,14 +305,21 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
         return <div className={styles.padding}>
             <MatchSummaryPanel match={match} summary={summary} />
 
-            <ins
+            {/* <ins
                 className="adsbygoogle"
-                style={{ display: 'block' }}
+                style={{ display: 'block',height: '400px' }}
                 data-ad-client="pub-7041403371220271"
-                data-ad-slot="xxxxxxxxxx"
+                data-ad-slot="6978928230"
                 data-ad-format="auto"
                 data-full-width-responsive="true"
-            ></ins>
+            ></ins> */}
+<ins className="adsbygoogle"
+        style={{ display: "block", height: "400px" }}
+        data-ad-client="ca-pub-7041403371220271"
+     data-ad-slot="6978928230"
+     data-ad-format="auto"
+    //  data-adtest="on"
+     data-full-width-responsive="true"></ins>
 
             <MatchTop20Panel router={router} match={match} predicts={top20Predicts} />
         </div>

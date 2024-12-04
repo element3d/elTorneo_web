@@ -11,6 +11,16 @@ function App({ Component, pageProps }) {
   const router = useRouter()
   
   useEffect(() => {
+    // (window.adsbygoogle = window.adsbygoogle || []).push({});
+
+    // if (typeof window !== 'undefined' && window.adsbygoogle) {
+    //   try {
+    //     (window.adsbygoogle = window.adsbygoogle || []).push({});
+    //   } catch (err) {
+    //     console.error('AdSense Error:', err);
+    //   }
+    // }
+
     const token = Cookies.get('token')
     if (token) { 
       return
@@ -75,12 +85,7 @@ function App({ Component, pageProps }) {
       src="https://telegram.org/js/telegram-web-app.js"
       strategy="beforeInteractive"
     />
-    {/* <Script
-      id="adsbygoogle-init"
-      strategy="afterInteractive"
-      crossOrigin="anonymous"
-      src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=pub-7041403371220271`}
-    /> */}
+ 
     <GoogleOAuthProvider clientId="854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com"> <Component {...pageProps} /></GoogleOAuthProvider>
   </>;
 }
