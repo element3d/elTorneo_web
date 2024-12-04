@@ -39,6 +39,8 @@ function App({ Component, pageProps }) {
         } else {
          
         }
+
+        tg.BackButton.show()
         tg.disableVerticalSwipes?.();
         tg.lockOrientation?.();
         // tg.requestFullScreen?.()
@@ -81,11 +83,11 @@ function App({ Component, pageProps }) {
   }, []);
 
   return <>
-    <Script
+    {/* <Script
       src="https://telegram.org/js/telegram-web-app.js"
       strategy="beforeInteractive"
     />
- 
+  */}
     <GoogleOAuthProvider clientId="854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com"> <Component {...pageProps} /></GoogleOAuthProvider>
   </>;
 }

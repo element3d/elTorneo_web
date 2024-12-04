@@ -17,6 +17,7 @@ export default function Document() {
           strategy="lazyOnload"
           crossOrigin="anonymous"
         /> */}
+<script src="https://telegram.org/js/telegram-web-app.js?56"></script>
 
            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7041403371220271"
      crossorigin="anonymous"></script>
