@@ -39,7 +39,7 @@ function App({ Component, pageProps }) {
         } else {
          
         }
-
+        tg.setHeaderColor('#0a0909')
         tg.BackButton.show()
         tg.disableVerticalSwipes?.();
         tg.lockOrientation?.();
