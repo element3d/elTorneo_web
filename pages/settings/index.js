@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
         isIOS = osName == 'iOS'
     }
 
-    const token = null
+    let token = null
     if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
     }

@@ -23,7 +23,7 @@ export async function getServerSideProps(context) {
     const { locale } = context;
     const { req } = context
 
-    const token = null
+    let token = null
     if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
     }
