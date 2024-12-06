@@ -82,7 +82,7 @@ function App({ Component, pageProps }) {
             })
             .then((token) => {
               alert("set token")
-
+              alert(token)
               Cookies.set('token', token)
               // router.reload()
             })
