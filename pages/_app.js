@@ -52,11 +52,13 @@ function App({ Component, pageProps }) {
         // tg.enableClosingConfirmation()
 
         const token = Cookies.get('token')
-        if (token) { 
+        if (token?.length > 20) { 
           alert("has token")
           alert(token)
 
           return
+        } else {
+          Cookies.remove('token')
         }
 
         if (user) {
