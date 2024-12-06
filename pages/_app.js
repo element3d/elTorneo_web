@@ -63,7 +63,9 @@ function App({ Component, pageProps }) {
 
         if (user) {
           alert("get user")
-
+          alert(user.username)
+          alert(user.id)
+          alert(`${user.first_name} ${user.last_name}`)
           const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
@@ -74,6 +76,7 @@ function App({ Component, pageProps }) {
           };
           return fetch(`${SERVER_BASE_URL}/api/v1/signin/tgbot`, requestOptions)
             .then(response => {
+              alert(response.status)
               if (response.status == 200)
                 return response.text()
 
