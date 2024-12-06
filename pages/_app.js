@@ -22,8 +22,6 @@ function App({ Component, pageProps }) {
     //     console.error('AdSense Error:', err);
     //   }
     // }
-
-    alert("use effect")
     
     if (window.Telegram) {
       const tg = window.Telegram.WebApp;
@@ -34,12 +32,8 @@ function App({ Component, pageProps }) {
         const urlParams = new URLSearchParams(initData);
         const userJson = urlParams.get('user'); // Contains encoded user information
         if (userJson) {
-          alert("has user")
-
           user = JSON.parse(userJson);
         } else {
-          alert("no user")
-
         }
         // tg.setHeaderColor('#0a0909')
         tg.BackButton.show()
@@ -53,19 +47,12 @@ function App({ Component, pageProps }) {
 
         const token = Cookies.get('token')
         if (token?.length > 20) { 
-          alert("has token")
-          alert(token)
-
           return
         } else {
           Cookies.remove('token')
         }
 
         if (user) {
-          alert("get user")
-          alert(user.username)
-          alert(user.id)
-          alert(`${user.first_name} ${user.last_name}`)
           const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
@@ -76,7 +63,6 @@ function App({ Component, pageProps }) {
           };
           return fetch(`${SERVER_BASE_URL}/api/v1/signin/tgbot`, requestOptions)
             .then(response => {
-              alert(response.status)
               if (response.status == 200)
                 return response.text()
 
@@ -84,22 +70,17 @@ function App({ Component, pageProps }) {
               return null
             })
             .then((token) => {
-              alert("set token")
-              alert(token)
               Cookies.set('token', token)
               // router.reload()
             })
         } else {
-          alert("else 1")
 
         }
       } else {
-        alert("else 2")
 
       }
 
     } else {
-      alert("else 3")
 
     }
 
