@@ -23,6 +23,7 @@ function App({ Component, pageProps }) {
     //   }
     // }
 
+    alert("use effect")
     
     if (window.Telegram) {
       const tg = window.Telegram.WebApp;
@@ -33,9 +34,12 @@ function App({ Component, pageProps }) {
         const urlParams = new URLSearchParams(initData);
         const userJson = urlParams.get('user'); // Contains encoded user information
         if (userJson) {
+          alert("has user")
+
           user = JSON.parse(userJson);
         } else {
-         
+          alert("no user")
+
         }
         // tg.setHeaderColor('#0a0909')
         tg.BackButton.show()
@@ -49,10 +53,15 @@ function App({ Component, pageProps }) {
 
         const token = Cookies.get('token')
         if (token) { 
+          alert("has token")
+          alert(token)
+
           return
         }
 
         if (user) {
+          alert("get user")
+
           const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
@@ -70,16 +79,22 @@ function App({ Component, pageProps }) {
               return null
             })
             .then((token) => {
+              alert("set token")
+
               Cookies.set('token', token)
               // router.reload()
             })
         } else {
+          alert("else 1")
 
         }
       } else {
+        alert("else 2")
+
       }
 
     } else {
+      alert("else 3")
 
     }
 
