@@ -69,7 +69,7 @@ function App({ Component, pageProps }) {
           const requestOptions = {
             method: 'POST',
             body: JSON.stringify({
-              tg_username: user.username,
+              tg_username: user.username ? user.username : '',
               name: `${user.first_name} ${user.last_name}`,
               tg_id: user.id
             })
