@@ -112,12 +112,12 @@ export async function getServerSideProps(context) {
     let lineups = []
 
     if (v == '') {
-        summary = await fetch(`${SERVER_BASE_URL}/api/v1/match/predicts?match_id=${data[0].id}`, {
+        summary = await fetch(`${SERVER_BASE_URL}/api/v1/match/predicts?match_id=${data[0].id}&season=${data[0].season}`, {
             method: 'GET',
         })
             .then(response => response.json())
 
-        predicts = await fetch(`${SERVER_BASE_URL}/api/v1/match/predicts/top3?match_id=${data[0].id}`, {
+        predicts = await fetch(`${SERVER_BASE_URL}/api/v1/match/predicts/top3?match_id=${data[0].id}&season=${data[0].season}`, {
             method: 'GET',
         })
             .then(response => response.json())
@@ -173,6 +173,17 @@ export async function getServerSideProps(context) {
             .then(response => response.json())
     }
 
+    let settings = null
+    {
+        settings = await fetch(`${SERVER_BASE_URL}/api/v1/settings`, requestOptions)
+        .then(response => {
+            if (response.status == 200)
+                return response.json()
+
+            return null
+        })
+    }
+
     return {
         props: {
             match: data.length ? data[0] : null,
@@ -186,6 +197,7 @@ export async function getServerSideProps(context) {
             stats,
             lineups,
             header,
+            settings,
             me,
             isAndroid,
             isIOS,
@@ -201,7 +213,7 @@ function Chip({ ref, title, selected, onClick }) {
 }
 
 
-export default function Home({ isAndroid, isIOS, me, match, predict, view, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header }) {
+export default function Home({ isAndroid, isIOS, me, match, predict, view, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header,settings }) {
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
     const today = moment();
@@ -362,7 +374,7 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
                             <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />
                             <span className={styles.date}>{moment(currMatchDate).format('DD')} {t(moment(currMatchDate).format('MMM').toLowerCase())} {moment(currMatchDate).format('YYYY')}</span>
                         </div> : null}
-                        <MatchItemMobile onPreview={onPreview} router={router} match={m} showLeague={true} />
+                        <MatchItemMobile settings={settings} onPreview={onPreview} router={router} match={m} showLeague={true} />
                     </div>
                 })
             }

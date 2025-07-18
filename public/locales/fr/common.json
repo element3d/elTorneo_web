@@ -129,7 +129,7 @@
     "quest_match_msg": "Ces matchs rares nécessitent une prédiction ; sinon, vous perdrez 2 points.",
     "sponsor": "Sponsor de el Torneo",
     "leagues_title": "Ligues 1 et 2 dans el Torneo",
-    "leagues_msg": "La Ligue 1 est destinée aux premiers participants de el Torneo qui ont accumulé suffisamment de points pour concourir pour les meilleurs prix et le titre de champion. Les nouveaux joueurs ou ceux ayant moins de points peuvent rejoindre la Ligue 2, avec la possibilité de passer à la Ligue 1 à tout moment. Cependant, seuls les joueurs ayant moins de 20 points peuvent revenir de la Ligue 1 à la Ligue 2. Choisissez votre ligue judicieusement et bienvenue à el Torneo !",
+    "leagues_msg": "Dans el Torneo, il y a quatre ligues passionnantes à choisir : Légende, Pro, Amateur et Débutant. Comme les joueurs peuvent rejoindre el Torneo à tout moment pendant le tournoi, ils ont la flexibilité de choisir la ligue qui leur convient le mieux.",
     "your_league": "Votre ligue",
     "move_to_league": "Passer à la Ligue",
     "no_players": "Aucun joueur dans la Ligue",
@@ -160,5 +160,13 @@
     "incorrect_code": "Code incorrect.",
     "auth_code": "Code d'authentification",
     "season": "Saison",
+    "beginner": "Débutant",
+    "amateur": "Amateur",
+    "pro": "Pro",
+    "legend": "Légende",
+    "legend_msg": "Disponible dès le début de la saison.",
+    "pro_msg": "Disponible à partir d'octobre.",
+    "amateur_msg": "Commence en janvier.",
+    "beginner_msg": "Commence en avril.",
     "awards_info_short": "Rejoignez le tournoi gratuit ultime de pronostics football, ouvert aux fans du monde entier. Connectez-vous, faites vos pronostics et grimpez dans le classement en suivant les règles. Prêt à relever le défi ? Bienvenue à el Torneo !"
 }

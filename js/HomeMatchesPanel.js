@@ -4,7 +4,7 @@ import moment from 'moment';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-export default function HomeMatchesPanel({ league, matches, router, onPreview }) {
+export default function HomeMatchesPanel({ isMobile, league, matches, router, onPreview }) {
     const {t} = useTranslation()
     let currMatchDate = null
 
@@ -16,7 +16,7 @@ export default function HomeMatchesPanel({ league, matches, router, onPreview })
         );
     };
 
-    return (<div className={styles.panel}>
+    return (<div className={styles.panel} style={{padding: isMobile ? '20px' : '0px'}}>
         {matches.map((m, i) => {
 
             let renderTime = false;

@@ -18,6 +18,10 @@ import { UAParser } from 'ua-parser-js';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 import TelegramCodePanel from '@/js/TelegramCodePanel';
 import Cookies from 'js-cookie';
+import DesktopMenuPanel from '@/js/DesktopMenuPanel';
+import DesktopLeaguesMiddlePanel from '@/js/DesktopLeaguesMiddlePanel';
+import DesktopRightPanel from '@/js/DesktopRightPanel';
+import DesktopAppBar from '@/js/DesktopAppBar';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -29,7 +33,7 @@ function getRandomMatch(matches) {
 export async function getServerSideProps(context) {
   const { params } = context;
   const { query } = context;
-  const routerLeague = query.league ? Number(query.league) : 1;
+  let routerLeague = query.league ? Number(query.league) : -1;
   const routerWeek = query.week ? Number(query.week) : -1;
   const routerMiniLeague = query.mini ? Number(query.mini) : 0;
   const { locale } = context;
@@ -59,15 +63,20 @@ export async function getServerSideProps(context) {
     .then(response => response.json())
 
   let serverLeague = null
-  for (let i = 0; i < leagues.length; ++i) {
-    if (leagues[i].id == routerLeague) {
-      serverLeague = leagues[i]
-      break
+  if (routerLeague > 0) {
+    for (let i = 0; i < leagues.length; ++i) {
+      if (leagues[i].id == routerLeague) {
+        serverLeague = leagues[i]
+        break
+      }
     }
+  } else {
+    serverLeague = leagues[0]
+    routerLeague = serverLeague.id
   }
 
   const week = routerWeek == -1 ? serverLeague.week : routerWeek;
-  const url = `${SERVER_BASE_URL}/api/v1/matches?league_id=${routerLeague}&week=${week}&season=2024/25&lang=${locale}`
+  const url = `${SERVER_BASE_URL}/api/v1/matches?league_id=${routerLeague}&week=${week}&season=20${serverLeague.season}&lang=${locale}`
   const matches = await fetch(url, {
     method: 'GET',
     headers: {
@@ -87,6 +96,25 @@ export async function getServerSideProps(context) {
   if (serverLeague.num_weeks != 0) {
     if (serverLeague.type == 0) {
       weeks = Array.from({ length: Math.min(serverLeague.week + NUM_NEXT_WEEKS, serverLeague.num_weeks) }, (_, index) => { return { week: index + 1, type: 0 } });
+      if (serverLeague.id == 1) {
+        if (weeks.length > 8)
+          weeks[8].type = 1
+        if (weeks.length > 9)
+          weeks[9].type = 5
+        if (weeks.length > 10)
+          weeks[10].type = 2
+        if (weeks.length > 11)
+          weeks[11].type = 3
+        if (weeks.length > 12)
+          weeks[12].type = 4
+      } else if (serverLeague.id == 7) {
+        if (weeks.length > 6)
+          weeks[6].type = 2
+        if (weeks.length > 7)
+          weeks[7].type = 3
+        if (weeks.length > 8)
+          weeks[8].type = 4
+      }
     } else {
       weeks = serverLeague.weeks.slice(0, serverLeague.week + NUM_NEXT_WEEKS);
     }
@@ -108,8 +136,10 @@ export async function getServerSideProps(context) {
         return null;
       });
 
-    if (!me)   res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
+    if (!me) res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
   }
+
+  const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
 
   return {
     props: {
@@ -119,6 +149,7 @@ export async function getServerSideProps(context) {
       weeks,
       week: week,
       table,
+      isMobile,
       locale,
       isAndroid,
       isIOS,
@@ -130,12 +161,12 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
+export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
   const { t } = useTranslation()
   const [name, setName] = useState('');
   const [specialMatchId, setSpecialMatchId] = useState('')
   const league = serverLeague
-  
+
   const [view, setView] = useState(1)
   const [showPreview, setShowPreview] = useState(false)
   const [previewMatch, setPreviewMatch] = useState(null)
@@ -185,6 +216,30 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
     window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
   }
 
+  function renderDesktop() {
+    return <>
+      <Head>
+        <title>el Torneo - {serverLeague?.name}</title>
+        <meta name="description" content="Worlds biggest football fan tournament." />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <main className={`${styles.main} ${inter.className}`}>
+
+        <DesktopAppBar router={router} />
+        <div className={styles.desktop_panels_cont}>
+          <DesktopMenuPanel leagues={leagues} router={router} />
+          <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} />
+          <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />
+        </div>
+      </main>
+    </>
+  }
+
+  if (!isMobile) {
+    return renderDesktop()
+  }
+
   return (
     <>
       <Head>
@@ -203,14 +258,14 @@ export default function Home({ leagues, me, isAndroid, isIOS, locale, miniLeague
           </button>
         </div> : null} */}
 
-         { me ? <TelegramCodePanel hasBg={true} me={me}/> : null }
+        {/* {me ? <TelegramCodePanel hasBg={true} me={me} /> : null} */}
 
         <LeaguesPanel router={router} league={serverLeague} weeks={weeks} week={week} leagues={leagues} />
         <div className={styles.switch_cont}>
           <MatchLiveItem match={matchOfDay} router={router} leagueName={serverLeague.name} />
           <Switch title1={t('matches')} title2={t('table')} selected={view} onSelect={onSelect} />
         </div>
-        {view == 1 ? <HomeMatchesPanel league={league} matches={matches} router={router} onPreview={onPreview} /> :
+        {view == 1 ? <HomeMatchesPanel league={league} matches={matches} router={router} onPreview={onPreview} isMobile={isMobile} /> :
           <LeagueTablePanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />}
 
         {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}

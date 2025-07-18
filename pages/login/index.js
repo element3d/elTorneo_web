@@ -220,10 +220,10 @@ export default function Home({ isAndroid, isIOS }) {
                             <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`} />
                             {t('signin_google')}
                         </button>
-                        <button className={styles.button_compact} onClick={navTelegram}>
+                        {/* <button className={styles.button_compact} onClick={navTelegram}>
                             <img className={styles.ticon} src={`${SERVER_BASE_URL}/data/icons/telegram.svg`} />
                             {t('signin_telegram')}
-                        </button>
+                        </button> */}
                     </div>
 
                     <div className={styles.buttons_cont}>

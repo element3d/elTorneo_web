@@ -206,3 +206,20 @@
 .move_league:active {
     opacity: .8;
 }
+
+.desktop_panels_cont {
+    padding-top: 40px;
+    display: flex;
+    flex-direction: row;
+}
+
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    padding-left: 20px;
+}
+
+.mt20 {
+    margin-top: 10px;
+}

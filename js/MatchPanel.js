@@ -265,7 +265,7 @@ export default function MatchPanel({ router, me, match, predict }) {
             </div> : null}
         </div>
         {predict && predict.status != 4 ? <div className={styles.predict_item} style={{ backgroundColor: getBgColor(predict), color: getBorderColor(predict) }}>
-            <span >Prediction {predict.team1_score} : {predict.team2_score}</span>
+            <span >{t('prediction')} {predict.team1_score} : {predict.team2_score}</span>
         </div> : null}
 
         {showLoginButton() ? <button onClick={login} className={styles.sign_in_btn} >
@@ -274,7 +274,7 @@ export default function MatchPanel({ router, me, match, predict }) {
                 <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`}/>
             </div> */}
         </button> : null}
-        {showPredictButton() ? <button onClick={onPredict} disabled={team1Score.length == 0 || team2Score.length == 0} className={styles.sign_in_btn} style={{ opacity: team1Score.length && team2Score.length ? 1 : .6 }}>Predict</button> : null}
+        {showPredictButton() ? <button onClick={onPredict} disabled={team1Score.length == 0 || team2Score.length == 0} className={styles.sign_in_btn} style={{ opacity: team1Score.length && team2Score.length ? 1 : .6 }}>{t('predict')}</button> : null}
 
 
     </div>)

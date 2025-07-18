@@ -129,7 +129,7 @@
     "quest_match_msg": "Estos partidos raros requieren una predicción; de lo contrario, perderás 2 puntos.",
     "sponsor": "Patrocinador de el Torneo",
     "leagues_title": "Ligas 1 y 2 en el Torneo",
-    "leagues_msg": "La Liga 1 es para los primeros participantes de el Torneo que han acumulado suficientes puntos para competir por los mejores premios y el título de campeón. Los nuevos jugadores o aquellos con menos puntos pueden unirse a la Liga 2, con la opción de ascender a la Liga 1 en cualquier momento. Sin embargo, solo los jugadores con menos de 20 puntos pueden regresar de la Liga 1 a la Liga 2. ¡Elige tu liga con sabiduría y bienvenido a el Torneo!",
+    "leagues_msg": "En el Torneo, hay cuatro emocionantes ligas para elegir: Leyenda, Pro, Aficionado y Principiante. Como los jugadores pueden unirse al Torneo en cualquier momento durante el torneo, tienen la flexibilidad de elegir la liga que mejor se adapte a ellos.",
     "your_league": "Tu liga",
     "move_to_league": "Mover a la Liga",
     "no_players": "No hay jugadores en la Liga",
@@ -160,6 +160,14 @@
     "incorrect_code": "Código incorrecto.",
     "auth_code": "Código de autenticación",
     "season": "Temporada",
+    "beginner": "Principiante",
+    "amateur": "Aficionado",
+    "pro": "Pro",
+    "legend": "Leyenda",
+    "legend_msg": "Disponible desde el inicio de la temporada.",
+    "pro_msg": "Disponible a partir de octubre.",
+    "amateur_msg": "Comienza en enero.",
+    "beginner_msg": "Comienza en abril.",
     "awards_info_short": "Únete al torneo gratuito de predicciones de fútbol definitivo, abierto a aficionados de todo el mundo. Inicia sesión, haz tus predicciones y sube en la clasificación siguiendo las reglas. ¿Listo para competir? ¡Bienvenido a el Torneo!"
 
 }

@@ -91,6 +91,7 @@
     flex-direction: column;
     width: 100%;
     padding: 20px;
+    padding-top: 15px;
 }
 
 .league_icon {
@@ -137,7 +138,14 @@
 .live_title {
     width: 100%;
     text-align: start;
-    margin-top: 20px;
+    margin-top: 15px;
     padding-left: 20px;
     color: var(--title-color);
 }
+
+
+.desktop_panels_cont {
+    padding-top: 40px;
+    display: flex;
+    flex-direction: row;
+  }

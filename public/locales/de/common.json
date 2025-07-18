@@ -129,7 +129,7 @@
     "quest_match_msg": "Diese seltenen Spiele erfordern eine Vorhersage; andernfalls verlierst du 2 Punkte.",
     "sponsor": "Sponsor von el Torneo",
     "leagues_title": "Ligen 1 und 2 im el Torneo",
-    "leagues_msg": "Die Liga 1 ist für die ersten Teilnehmer von el Torneo, die genug Punkte gesammelt haben, um um die Hauptpreise und den Meistertitel zu kämpfen. Neue Spieler oder diejenigen mit weniger Punkten können der Liga 2 beitreten, mit der Möglichkeit, jederzeit in die Liga 1 aufzusteigen. Allerdings können nur Spieler mit weniger als 20 Punkten von Liga 1 zurück in Liga 2 wechseln. Wähle deine Liga mit Bedacht und willkommen bei el Torneo!",
+    "leagues_msg": "Im el Torneo gibt es vier spannende Ligen zur Auswahl: Legende, Profi, Amateur und Anfänger. Da Spieler dem el Torneo jederzeit während des Turniers beitreten können, haben sie die Flexibilität, die Liga zu wählen, die am besten zu ihnen passt.",
     "your_league": "Deine Liga",
     "move_to_league": "Wechsel zur Liga",
     "no_players": "Keine Spieler in der Liga",
@@ -160,5 +160,13 @@
     "incorrect_code": "Falscher Code.",
     "auth_code": "Authentifizierungscode",
     "season": "Saison",
+    "beginner": "Anfänger",
+    "amateur": "Amateur",
+    "pro": "Profi",
+    "legend": "Legende",
+    "legend_msg": "Verfügbar ab dem Beginn der Saison.",
+    "pro_msg": "Verfügbar ab Oktober.",
+    "amateur_msg": "Beginnt im Januar.",
+    "beginner_msg": "Beginnt im April.",
     "awards_info_short": "Nimm am ultimativen kostenlosen Fußball-Tippspiel-Turnier teil, das für Fans aus der ganzen Welt offen ist. Melde dich an, gib deine Tipps ab und klettere in der Rangliste, indem du die Regeln befolgst. Bereit zum Mitmachen? Willkommen bei el Torneo!"
 }

@@ -1,0 +1,39 @@
+.bg {
+    width: 100%;
+    height: 100%;
+    background-color: #00000066;
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.content {
+    background-color: white;
+    width: 600px;
+    max-height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    border-radius: 20px;
+    overflow-y: scroll;
+}
+
+.option {
+    min-height: 40px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+
+.option:hover {
+    background-color: #00000022;
+}

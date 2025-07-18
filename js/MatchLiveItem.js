@@ -13,7 +13,7 @@ function TeamItem({ team, isHome, style }) {
   </div>
 }
 
-export default function MatchLiveItem({ router, match, leagueName }) {
+export default function MatchLiveItem({ router, isMobile, match, leagueName }) {
   const {t} = useTranslation()
 
   function isFinished() {
@@ -51,7 +51,7 @@ export default function MatchLiveItem({ router, match, leagueName }) {
     router.push(`/match/${match.id}`)
   }
 
-  return (<div className={styles.cont} onClick={onNavMatch}>
+  return (<div className={styles.cont} onClick={onNavMatch} style={{minHeight: isMobile ? '0px' : '190px'}}>
     <img className={styles.bg} src={`${SERVER_BASE_URL}/data/leagues/${leagueName}_banner2.png`} />
 
     <span className={styles.league_title}>{leagueName}</span>

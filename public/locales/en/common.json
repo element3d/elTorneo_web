@@ -129,7 +129,7 @@
     "quest_match_msg": "These rare matches require a prediction; otherwise, you’ll lose 2 points.",
     "sponsor": "Sponsor of el Torneo",
     "leagues_title": "League 1 and 2 in el Torneo",
-    "leagues_msg": "League 1 is for early participants of el Torneo who have earned enough points to compete for top prizes and the championship title. New players or those with fewer points can join League 2, with the option to move up to League 1 at any time. However, only players with fewer than 20 points may transfer back from League 1 to League 2. Choose your league wisely, and welcome to el Torneo!",
+    "leagues_msg": "In el Torneo, there are four exciting leagues to choose from: Legend, Pro, Amateur, and Beginner. Since players can join el Torneo at any time during the tournament, they have the flexibility to select the league that suits them best.",
     "your_league": "Your league",
     "move_to_league": "Move to League",
     "no_players": "No players in League",
@@ -160,5 +160,13 @@
     "incorrect_code": "Incorrect code.",
     "auth_code": "Authentication code",
     "season": "Season",
+    "beginner": "Beginner",
+    "amateur": "Amateur",
+    "pro": "Pro",
+    "legend": "Legend",
+    "legend_msg": "Open from the very start of the season.",
+    "pro_msg": "Available from October.",
+    "amateur_msg": "Begins in January.",
+    "beginner_msg": "Starts in April.",
     "awards_info_short": "Join the ultimate free football prediction tournament, open to fans from all over the world. Sign in, make your predictions, and climb the leaderboard by following the rules. Ready to compete? Welcome to el Torneo!"
 }

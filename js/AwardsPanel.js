@@ -2,10 +2,12 @@ import styles from '@/styles/AwardsPanel.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-export default function AwardsPanel({router, showLeague, league}) {
+export default function AwardsPanel({router, showLeague, league, season}) {
     const {t} = useTranslation()
 
     function getImg() {
+        return `${SERVER_BASE_URL}/data/icons/throphy.png`
+
         if (!showLeague) return `${SERVER_BASE_URL}/data/icons/playstore.png`
         if (league == 1) return `${SERVER_BASE_URL}/data/icons/throphy.png`
         if (league == 2) return `${SERVER_BASE_URL}/data/icons/second.png`
@@ -18,6 +20,11 @@ export default function AwardsPanel({router, showLeague, league}) {
     }
 
     function getLeagueName() {
+        if (league == 1) return 'Legend'
+        if (league == 2) return 'Pro'
+        if (league == 3) return 'Amateur'
+        if (league == 4) return 'Beginner'
+
         if (league == 1) return 'el Torneo'
         if (league == 3) return 'Telegram ' + t('league')
         return `${t('league')} ${league}`
@@ -28,7 +35,7 @@ export default function AwardsPanel({router, showLeague, league}) {
         { !showLeague ? <div className={styles.overlay}></div> : null }
 
         { showLeague ? <span className={styles.league_title}>{getLeagueName()}</span> : null }
-        <span className={styles.awards_msg}>{t('season') + ' 24/25'}</span>
+        <span className={styles.awards_msg}>{t('season') + ` 20${season}`}</span>
         {/* <span className={styles.awards_msg}>{t('award_msg')}</span>
         
         <div className={styles.award_item}>
@@ -38,6 +45,7 @@ export default function AwardsPanel({router, showLeague, league}) {
         <span className={styles.rules_title}>{t('rules')}</span>
         <div className={styles.points_cont}>
             <div className={styles.points_score}>+3</div>
+            <div className={styles.points_win}>+2</div>
             <div className={styles.points_win}>+1</div>
             <div className={styles.points_loose}>-1</div>
         </div>

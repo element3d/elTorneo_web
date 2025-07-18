@@ -129,7 +129,7 @@
     "quest_match_msg": "Queste partite rare richiedono una previsione; altrimenti, perderai 2 punti.",
     "sponsor": "Sponsor di el Torneo",
     "leagues_title": "Leghe 1 e 2 in el Torneo",
-    "leagues_msg": "La Lega 1 è per i primi partecipanti di el Torneo che hanno guadagnato abbastanza punti per competere per i premi migliori e il titolo di campione. I nuovi giocatori o quelli con meno punti possono unirsi alla Lega 2, con la possibilità di passare alla Lega 1 in qualsiasi momento. Tuttavia, solo i giocatori con meno di 20 punti possono tornare dalla Lega 1 alla Lega 2. Scegli la tua lega con saggezza e benvenuto a el Torneo!",
+    "leagues_msg": "In el Torneo, ci sono quattro entusiasmanti leghe tra cui scegliere: Leggenda, Pro, Amatore e Principiante. Poiché i giocatori possono unirsi a el Torneo in qualsiasi momento durante il torneo, hanno la flessibilità di scegliere la lega che meglio si adatta a loro.",
     "your_league": "La tua lega",
     "move_to_league": "Passa alla Lega",
     "no_players": "Nessun giocatore nella Lega",
@@ -160,5 +160,13 @@
     "incorrect_code": "Codice errato.",
     "auth_code": "Codice di autenticazione",
     "season": "Stagione",
+    "beginner": "Principiante",
+    "amateur": "Amatore",
+    "pro": "Pro",
+    "legend": "Leggenda",
+    "legend_msg": "Disponibile dall'inizio della stagione.",
+    "pro_msg": "Disponibile da ottobre.",
+    "amateur_msg": "Inizia a gennaio.",
+    "beginner_msg": "Inizia ad aprile.",
     "awards_info_short": "Unisciti al torneo gratuito di pronostici calcistici definitivo, aperto ai fan di tutto il mondo. Accedi, fai i tuoi pronostici e sali in classifica seguendo le regole. Pronto a competere? Benvenuto a el Torneo!"
 }

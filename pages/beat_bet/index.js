@@ -22,11 +22,19 @@ import DesktopAppBar from '@/js/DesktopAppBar';
 import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import DesktopCalendarPanel from '@/js/DesktopCalendarPanel';
 import DesktopRightPanel from '@/js/DesktopRightPanel';
+import DesktopBeatBetMiddlePanel from '@/js/DesktopBeatBetMiddlePanel';
+import DesktopBeatBetStrategiesPanel, { ESTRATEGY_LEAGUE, ESTRATEGY_PLAYER, ESTRATEGY_TEAM } from '@/js/DesktopBeatBetStrategiesPanel';
+import BeatBetDialog from '@/js/BeatBetDialog';
 
 export async function getServerSideProps(context) {
   const { query } = context;
-  const timestamp = query.date ? Number(query.date) : new Date(moment().format('YYYY-MM-DD')).getTime();
   const { locale } = context;
+
+  const player = query.player ? query.player : -1
+  const team = query.team ? query.team : -1
+  const league = query.league ? query.league : -1
+  const home = query.home ? query.home : 0
+  const away = query.away ? query.away : 0
 
   const { req } = context
   let token = null
@@ -54,7 +62,12 @@ export async function getServerSideProps(context) {
     isIOS = osName == 'iOS'
   }
 
-  const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=${locale}`
+  let url = `${SERVER_BASE_URL}/api/v1/beat_bet?player=${player}&team=${team}&league=${league}`
+  if (home == 1) {
+    url += '&home=1'
+  } else if (away == 1) {
+    url += '&away=1'
+  }
   const matches = await fetch(url, {
     method: 'GET',
     headers: {
@@ -88,36 +101,60 @@ export async function getServerSideProps(context) {
       isIOS,
       isMobile,
       me,
+      player,
+      team,
+      league,
       leagues,
-      date: moment(timestamp).format('YYYY-MM-DD'),
+      home,
+      away,
       ...(await serverSideTranslations(locale)),
     },
   };
 }
 
-export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, leagues }) {
+export default function Home({ me, isAndroid, isIOS, matches, isMobile, leagues, player, league, team, home, away }) {
   const { t } = useTranslation()
   const router = useRouter()
-  let currentLeague = null
-  const [showPreview, setShowPreview] = useState(false)
-  const [previewMatch, setPreviewMatch] = useState(null)
+
+  const [showBeatBetDialog, setShowBeatBetDialog] = useState(false)
+  const [beatBetStrategy, setBeatBetStrategy] = useState(null)
+
+  // const [home, setHome] = useState(false)
+  // const [away, setAway] = useState(false)
 
   useEffect(() => {
     return () => {
-      setShowPreview(false)
       document.documentElement.style.overflow = ''; // Disable background scroll
     }
-  }, [date])
+  }, [])
 
-  function onPreview(m) {
-    setShowPreview(true)
-    setPreviewMatch(m)
-    document.documentElement.style.overflow = 'hidden'; // Disable background scroll
+  function onShowBeatBetDialog(strategy) {
+    setShowBeatBetDialog(true)
+    setBeatBetStrategy(strategy)
+    document.documentElement.style.overflow = 'hidden';
   }
 
-  function onPreviewClose() {
-    setShowPreview(false)
+  function onStrategyClick(option) {
+    setShowBeatBetDialog(false)
     document.documentElement.style.overflow = '';
+    let p = player
+    let t = team
+    let l = league
+    if (beatBetStrategy == ESTRATEGY_PLAYER) p = option.id
+    if (beatBetStrategy == ESTRATEGY_TEAM) t = option.id
+    if (beatBetStrategy == ESTRATEGY_LEAGUE) l = option.id
+
+    let path = `/beat_bet?player=${p}&team=${t}&league=${l}`
+
+    if (home) {
+      path += '&home=1'
+    } else if (away) {
+      path += '&away=1'
+    }
+
+    router.push(path)
+
+    // router.push(`/beat_bet?player=${p}&team=${t}&league=${l}`)
   }
 
   function renderDesktop() {
@@ -133,11 +170,11 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
         <DesktopAppBar router={router} />
         <div className={styles.desktop_panels_cont}>
           <DesktopMenuPanel leagues={leagues} />
-          <DesktopCalendarPanel router={router} date={date} matches={matches}/>
-          <DesktopRightPanel />
-          {/* <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} /> */}
-          {/* <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} /> */}
+          <DesktopBeatBetMiddlePanel router={router} matches={matches.predicts} />
+          <DesktopBeatBetStrategiesPanel router={router} onShowDialog={onShowBeatBetDialog} player={player} team={team} league={league} home={home} away={away} />
         </div>
+
+        {showBeatBetDialog ? <BeatBetDialog strategy={beatBetStrategy} leagues={leagues} player={player} league={league} onOptionClick={onStrategyClick} /> : null}
       </main>
     </>
   }
@@ -156,42 +193,7 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar title={'el Torneo'} />
-        <div className={styles.calendar_panel}>
-          <div className={styles.date_cont}>
-            <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />
-            <span className={styles.date}>{moment(date).format('DD')} {t(moment(date).format('MMM').toLowerCase())} {moment(date).format('YYYY')}</span>
 
-          </div>
-          <Calendar router={router} date={date} />
-        </div>
-
-        <div className={styles.matches_cont}>
-
-          {matches.map((m, i) => {
-
-            let renderLeague = false;
-            if (!currentLeague || currentLeague != m.league_name) {
-              currentLeague = m.league_name
-              renderLeague = true;
-            }
-
-            return <div key={`match_${m.id}`}>
-              {renderLeague ? <div className={`${styles.league_cont} ${i === 0 ? styles.mt_0 : ''}`} >
-                <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${m.league_name}_colored.png`} />
-                <div className={styles.league_name_cont}>
-                  <span className={styles.league_name}>{m.league_name}</span>
-                  <span className={styles.league_week}>{t('matchday')} {m.week}</span>
-                </div>
-              </div> : null}
-              <MatchItemMobile currentWeek={m.currentWeek} router={router} match={m} onPreview={onPreview} />
-            </div>
-          })}
-
-          {!matches.length ? <span className={styles.no_matches}>{t('no_matches_found')}</span> : null}
-
-          {isAndroid ? <InstallPanel hasBg={false} hasMargin={true} /> : null}
-        </div>
-        {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
       </main>
     </>

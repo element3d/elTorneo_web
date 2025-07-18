@@ -1,0 +1,56 @@
+
+.panel {
+    width: 350px;
+    /* height: 500px; */
+    background-color: white;
+    border-radius: 12px;
+}
+
+.padding {
+    width: 350px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.strat_item {
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    font-size: 14px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.button {
+    background-color: #FF2882;
+    border: none;
+    outline: none;
+    height: 30px;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+}
+
+.button:active {
+    opacity: .8;
+}
+
+.check {
+    width: 20px;
+    height: 20px;
+    background-color: #FF2882;
+    accent-color: #FF2882;
+    margin-right: 10px;
+}
+
+.check_row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

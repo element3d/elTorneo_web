@@ -8,21 +8,37 @@ const NUM_NEXT_WEEKS = 3
 function LeagueChip({ onClick, league, selected }) {
 
     function getIcon() {
-        if (selected) return`${SERVER_BASE_URL}/data/leagues/${league.name}_white.png`
+        if (selected) return `${SERVER_BASE_URL}/data/leagues/${league.name}_white.png`
 
         return `${SERVER_BASE_URL}/data/leagues/${league.name}_colored.png`
     }
 
-    return (<div onClick={() => onClick(league)} className={ selected ? styles.league_chip_sel : styles.league_chip}>
-        <img className={styles.chip_icon} src={getIcon()}/>
+    return (<div onClick={() => onClick(league)} className={selected ? styles.league_chip_sel : styles.league_chip}>
+        <img className={styles.chip_icon} src={getIcon()} />
     </div>)
 }
 
 function WeekChip({ ref, onClick, selected, week }) {
-    const { t  } = useTranslation()
+    const { t } = useTranslation()
 
-    return (<div ref={ref} onClick={() => {onClick(week)}} className={ selected ? styles.week_chip_sel : styles.week_chip}>
-        {t('matchday')} {week.week}
+    function getWeek(week) {
+        if (week.type == 0) {
+            return `${t('matchday')} ${week.week}`
+        } else if (week.type == 1) {
+            return 'KR Play-offs'
+        } else if (week.type == 2) {
+            return 'Quarter final'
+        } else if (week.type == 3) {
+            return 'Semi final'
+        } else if (week.type == 4) {
+            return 'Final'
+        } else if (week.type == 5) {
+            return 'Round of 16'
+        }
+    }
+
+    return (<div ref={ref} onClick={() => { onClick(week) }} className={selected ? styles.week_chip_sel : styles.week_chip}>
+        {/* {t('matchday')} {week.week} */}{getWeek(week)}
     </div>)
 }
 

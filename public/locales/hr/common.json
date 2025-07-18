@@ -129,7 +129,7 @@
     "quest_match_msg": "Ove rijetke utakmice zahtijevaju prognozu; u suprotnom, izgubit ćete 2 boda.",
     "sponsor": "Sponzor el Torneoa",
     "leagues_title": "Lige 1 i 2 u el Torneo",
-    "leagues_msg": "Liga 1 je za prve sudionike el Torneo koji su prikupili dovoljno bodova za natjecanje za glavne nagrade i naslov prvaka. Novi igrači ili oni s manje bodova mogu se pridružiti Ligi 2, uz mogućnost prelaska u Ligu 1 u bilo kojem trenutku. Međutim, samo igrači s manje od 20 bodova mogu se vratiti iz Lige 1 u Ligu 2. Mudro izaberi svoju ligu i dobrodošao u el Torneo!",
+    "leagues_msg": "U el Torneo postoje četiri uzbudljive lige za odabir: Legenda, Pro, Amater i Početnik. Budući da se igrači mogu pridružiti el Torneo u bilo kojem trenutku tijekom turnira, imaju fleksibilnost odabrati ligu koja im najbolje odgovara.",
     "your_league": "Tvoja liga",
     "move_to_league": "Prijelaz u Ligu",
     "no_players": "Nema igrača u Ligi",
@@ -160,5 +160,13 @@
     "incorrect_code": "Pogrešan kod.",
     "auth_code": "Autentifikacijski kod",
     "season": "Sezona",
+    "beginner": "Početnik",
+    "amateur": "Amater",
+    "pro": "Pro",
+    "legend": "Legenda",
+    "legend_msg": "Dostupno od samog početka sezone.",
+    "pro_msg": "Dostupno od listopada.",
+    "amateur_msg": "Počinje u siječnju.",
+    "beginner_msg": "Počinje u travnju.",
     "awards_info_short": "Pridružite se ultimativnom besplatnom turniru u predviđanju nogometnih utakmica, otvorenom za navijače iz cijelog svijeta. Prijavite se, napravite svoje prognoze i penjte se na ljestvici pridržavajući se pravila. Spremni za natjecanje? Dobrodošli u el Torneo!"
 }

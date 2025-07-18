@@ -1,0 +1,41 @@
+
+  
+  .desktop_appbar_cont {
+    width: 100%;
+    height: 70px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .desktop_appbar {
+    width: 1040px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: white;
+  }
+  
+  .icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .tournament_icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    margin-right: 10px;
+  }
+  
+  .home_button {
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-right: 40px;
+  }

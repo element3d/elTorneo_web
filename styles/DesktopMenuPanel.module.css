@@ -1,0 +1,54 @@
+.panel {
+    width: 230px;
+    height: 500px;
+    /* background-color: white; */
+    border-radius: 12px;
+    /* border: 1px solid white; */
+    /* padding: 10px; */
+}
+
+.menu_item {
+    background-color: white;
+    width: 100%;
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    color: black;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.league_icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    object-fit: contain;
+}
+
+.beat_bet_item {
+    background-color: #37003C;
+    width: 100%;
+    height: 46px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}

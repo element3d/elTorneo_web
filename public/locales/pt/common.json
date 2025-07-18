@@ -129,7 +129,7 @@
     "quest_match_msg": "Essas partidas raras exigem uma previsão; caso contrário, você perderá 2 pontos.",
     "sponsor": "Patrocinador do el Torneo",
     "leagues_title": "Ligas 1 e 2 no el Torneo",
-    "leagues_msg": "A Liga 1 é para os primeiros participantes do el Torneo que conquistaram pontos suficientes para competir pelos melhores prêmios e pelo título de campeão. Novos jogadores ou aqueles com menos pontos podem entrar na Liga 2, com a opção de subir para a Liga 1 a qualquer momento. No entanto, apenas jogadores com menos de 20 pontos podem voltar da Liga 1 para a Liga 2. Escolha sua liga com sabedoria e seja bem-vindo ao el Torneo!",
+    "leagues_msg": "No el Torneo, existem quatro ligas emocionantes para escolher: Lenda, Pro, Amador e Iniciante. Como os jogadores podem entrar no el Torneo a qualquer momento durante o torneio, eles têm a flexibilidade de escolher a liga que melhor se adapta a eles.",
     "your_league": "Sua liga",
     "move_to_league": "Mover para a Liga",
     "no_players": "Nenhum jogador na Liga",
@@ -160,5 +160,13 @@
     "incorrect_code": "Código incorreto.",
     "auth_code": "Código de autenticação",
     "season": "Temporada",
+    "beginner": "Iniciante",
+    "amateur": "Amador",
+    "pro": "Pro",
+    "legend": "Lenda",
+    "legend_msg": "Disponível desde o início da temporada.",
+    "pro_msg": "Disponível a partir de outubro.",
+    "amateur_msg": "Começa em janeiro.",
+    "beginner_msg": "Começa em abril.",
     "awards_info_short": "Participe do torneio gratuito de palpites de futebol definitivo, aberto para fãs de todo o mundo. Faça login, envie seus palpites e suba no ranking seguindo as regras. Pronto para competir? Bem-vindo ao el Torneo!"
 }

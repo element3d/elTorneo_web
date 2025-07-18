@@ -106,11 +106,28 @@ export default function Home({ me, token, isAndroid, isIOS }) {
                 <AppBar title={'el Torneo'} router={router} />
 
                 <div className={styles.padding}>
-                    <h3 className={styles.title}>{t('leagues_title')}</h3>
+                    <h3 className={styles.title}>{t('learn_more')}</h3>
                     <span className={styles.text}>{t('leagues_msg')}</span>
 
+                    <div className={styles.league_item}>
+                        <span className={styles.league_title}>{t('legend')}:</span>
+                        <span className={styles.league_msg}>{t('legend_msg')}</span>
+                    </div>
+                    <div className={styles.league_item}>
+                        <span className={styles.league_title}>{t('pro')}:</span>
+                        <span className={styles.league_msg}>{t('pro_msg')}</span>
+                    </div>
+                    <div className={styles.league_item}>
+                        <span className={styles.league_title}>{t('amateur')}:</span>
+                        <span className={styles.league_msg}>{t('amateur_msg')}</span>
+                    </div>
+                    <div className={styles.league_item}>
+                        <span className={styles.league_title}>{t('beginner')}:</span>
+                        <span className={styles.league_msg}>{t('beginner_msg')}</span>
+                    </div>
+
                     {isShowMoveToLeague() ?
-                        <button onClick={onMoveToLeague} className={styles.move_button}>{t('move_to_league')} {me.league == 1 ? "2" : '1'}</button> : null}
+                        <button onClick={onMoveToLeague} className={styles.move_button}>{t('move_to_league')}</button> : null}
 
                     {/* {isAndroid ? <InstallPanel /> : null} */}
                 </div>

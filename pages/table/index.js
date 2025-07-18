@@ -17,6 +17,13 @@ const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
 import InstallPanel from '@/js/InstallPanel';
+import DesktopAppBar from '@/js/DesktopAppBar';
+import DesktopMenuPanel from '@/js/DesktopMenuPanel';
+import DesktopRightPanel from '@/js/DesktopRightPanel';
+import DesktopTablePanel from '@/js/DesktopTablePanel';
+import LeagueChip from '@/js/LeagueChip';
+import TableItem from '@/js/TableItem';
+import Chip from '@/js/Chip';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -39,9 +46,19 @@ export async function getServerSideProps(context) {
         isIOS = osName == 'iOS'
     }
 
+    let leagues = []
+    const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
+    if (!isMobile) {
+        leagues = await fetch(`${SERVER_BASE_URL}/api/v1/leagues`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+    }
+
     // Check if the 'date' query parameter exists, otherwise use today's date
     const page = query.page ? Number(query.page) : 1;
     const league = query.league ? Number(query.league) : 1;
+    const season = query.season ? query.season : '25/26';
 
     let me = null
     const requestOptions = {
@@ -51,7 +68,7 @@ export async function getServerSideProps(context) {
         },
     };
 
-    const table = await fetch(`${SERVER_BASE_URL}/api/v1/table/points?page=${page}&league=${league}`, requestOptions)
+    const table = await fetch(`${SERVER_BASE_URL}/api/v1/table/points?page=${page}&league=${league}&season=${season}`, requestOptions)
         .then(response => {
             if (response.status == 200)
                 return response.json()
@@ -74,13 +91,27 @@ export async function getServerSideProps(context) {
                 return null;
             });
     }
+    let settings = null
+    {
+        settings = await fetch(`${SERVER_BASE_URL}/api/v1/settings`, requestOptions)
+        .then(response => {
+            if (response.status == 200)
+                return response.json()
 
+            return null
+        })
+    }
+    // settings[0].numLevels = 4
     return {
         props: {
             table,
             isAndroid,
             isIOS,
             me,
+            settings: settings[0],
+            isMobile,
+            leagues,
+            season,
             league: Number.parseInt(league),
             page: Number.parseInt(page),
             ...(await serverSideTranslations(locale)),
@@ -89,32 +120,7 @@ export async function getServerSideProps(context) {
 }
 
 
-function TableItem({ isMe, pos, player, onClick }) {
-    return <div className={styles.table_item} style={{ backgroundColor: `${isMe ? 'white' : 'transparent'}` }} onClick={onClick}>
-        {pos == 1 ? <img className={styles.trophy} src={`${SERVER_BASE_URL}/data/icons/trophy.svg`} /> : <span className={styles.table_number}>{pos}</span>}
-        <span className={styles.table_player_name}>{player.name}</span>
-        <span className={styles.table_number}>{player.totalPredictions}</span>
-        <span className={styles.table_number}>{player.predictions}</span>
-    </div>
-}
-
-
-function getLeagueName(league, t) {
-    if (league == 1) return 'el Torneo'
-    if (league == 3) return 'Telegram ' + t('league')
-    return `${t('league')} ${league}`
-}
-
-function LeagueChip({ league, selected, isMy, onClick }) {
-    const { t } = useTranslation()
-
-    return <div onClick={onClick} className={selected ? styles.league_chip_sel : styles.league_chip}>
-        <span>{getLeagueName(league, t)}</span>
-        {isMy ? <span className={styles.chip_subtitle}>{t('your_league')}</span> : null}
-    </div>
-}
-
-export default function Home({ me, isAndroid, isIOS, table, page, league }) {
+export default function Home({ me, isAndroid, isIOS, table, page, league, isMobile, leagues, settings, season }) {
     const router = useRouter()
     const { t } = useTranslation()
 
@@ -132,19 +138,25 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
     function onNavLeague1() {
         if (league == 1) return
 
-        router.push(`/table?page=${1}&league=${1}`)
+        router.push(`/table?page=${1}&league=${1}&season=${season}`)
     }
 
     function onNavLeague2() {
         if (league == 2) return
 
-        router.push(`/table?page=${1}&league=${2}`)
+        router.push(`/table?page=${1}&league=${2}&season=${season}`)
     }
 
     function onNavLeague3() {
         if (league == 3) return
 
-        router.push(`/table?page=${1}&league=${3}`)
+        router.push(`/table?page=${1}&league=${3}&season=${season}`)
+    }
+
+    function onNavLeague4() {
+        if (league == 4) return
+
+        router.push(`/table?page=${1}&league=${4}&season=${season}`)
     }
 
     function onNavProfile(id) {
@@ -165,6 +177,42 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
         return true
     }
 
+    function renderDesktop() {
+        return <>
+            <Head>
+                <title>el Torneo - Calendar</title>
+                <meta name="description" content="Worlds biggest football fan tournament." />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <main className={`${styles.main} ${inter.className}`}>
+
+                <DesktopAppBar router={router} />
+                <div className={styles.desktop_panels_cont}>
+                    <DesktopMenuPanel leagues={leagues} />
+                    <DesktopTablePanel league={league} router={router} me={me} table={table} page={page} showNext={showNext} showPrev={showPrev} onNext={onNext} onPrev={onPrev}/>
+                    <DesktopRightPanel />
+                </div>
+            </main>
+        </>
+    }
+
+    if (!isMobile) {
+        return renderDesktop()
+    }
+
+    function onSeason2024() {
+        if (season == '24/25') return
+
+        router.push(`/table?page=${1}&league=${1}&season=24/25`)
+    }
+
+    function onSeason2025() {
+        if (season == '25/26') return
+
+        router.push(`/table?page=${1}&league=${1}&season=25/26`)
+    }
+
     return (
         <>
             <Head>
@@ -175,20 +223,25 @@ export default function Home({ me, isAndroid, isIOS, table, page, league }) {
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
                 <AppBar title={'el Torneo'} />
+                <div className={`${styles.flexRow} ${styles.mt20}`}>
+                    <Chip title={`${t('season')} 2024/25`} selected={season == '24/25'} onClick={onSeason2024}></Chip>
+                    <Chip title={`${t('season')} 2025/26`} selected={season == '25/26'} onClick={onSeason2025}></Chip>
+                </div>
                 <div className={styles.award_panel_cont}>
-                    <AwardsPanel league={league} showLeague={true} router={router} />
+                    <AwardsPanel league={league} season={season} showLeague={true} router={router} />
                 </div>
 
                 <div className={styles.leagues_cont}>
                     <LeagueChip selected={league == 1} onClick={onNavLeague1} league={1} isMy={me?.league == 1} />
-                    <LeagueChip selected={league == 2} onClick={onNavLeague2} league={2} isMy={me?.league == 2} />
-                    <LeagueChip selected={league == 3} onClick={onNavLeague3} league={3} isMy={me?.league == 3} />
+                    {settings.numLevels >= 2 || season != settings.season ? <LeagueChip selected={league == 2} onClick={onNavLeague2} league={2} isMy={me?.league == 2} /> : null }
+                    {settings.numLevels >= 3 || season != settings.season ? <LeagueChip selected={league == 3} onClick={onNavLeague3} league={3} isMy={me?.league == 3} /> : null }
+                    {settings.numLevels >= 4 || season != settings.season ? <LeagueChip selected={league == 4} onClick={onNavLeague4} league={4} isMy={me?.league == 4} /> : null }
 
                     <button onClick={onNavInfo} className={styles.info_button}>i</button>
                 </div>
-                {isShowMoveToLeague() ? <div className={styles.leagues_cont} style={{ marginTop: '10px' }}>
+                {/* {isShowMoveToLeague() ? <div className={styles.leagues_cont} style={{ marginTop: '10px' }}>
                     <button onClick={onNavInfo} className={styles.move_league}>{t('move_to_league')} {me.league == 1 ? 2 : 1}</button>
-                </div> : null}
+                </div> : null} */}
 
                 <div className={styles.table_cont}>
                     <div className={styles.table_header}>
