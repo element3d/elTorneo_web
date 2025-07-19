@@ -187,7 +187,12 @@ export async function getServerSideProps(context) {
             method: 'GET',
             // headers: { 'Content-Type': 'application/json' },
         })
-            .then(response => response.json())
+            .then(response => {
+                if (response.status != 404)
+                    return response.json()
+
+                return []
+            })
     }
 
     let settings = null
@@ -202,9 +207,9 @@ export async function getServerSideProps(context) {
     }
 
     if (!view2) {
-        if (stats) view2 = 'stats'
-        else if (events) view2 = 'events'
-        else if (lineups) view2 = 'lineups'
+        if (stats?.length) view2 = 'stats'
+        else if (events?.length) view2 = 'events'
+        else if (lineups?.length) view2 = 'lineups'
         else view2 = 'table'
     }
 
@@ -241,7 +246,7 @@ function Chip({ ref, title, selected, onClick }) {
 
 
 export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, predict, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
-    
+
     console.log(isMobile)
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
@@ -396,7 +401,7 @@ export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, p
     }
 
     function renderH2HView() {
-        return <div className={ isMobile ? styles.padding : styles.padding_desktop}>
+        return <div className={isMobile ? styles.padding : styles.padding_desktop}>
             <Switch title1={match.team1.shortName} title2={match.team2.shortName} selected={teamIndex + 1} onSelect={onTeamSelect} />
             {
                 h2hMatches[teamIndex].map((m, i) => {
@@ -422,7 +427,7 @@ export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, p
     }
 
     function renderTableView() {
-        return <div className={ isMobile ? styles.padding_top : styles.padding_desktop}>
+        return <div className={isMobile ? styles.padding_top : styles.padding_desktop}>
             <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} isMobile={isMobile} />
         </div>
     }
@@ -458,14 +463,16 @@ export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, p
                     </div>
 
                     <div className={styles.desktop_right_cont}>
-                        <div className={styles.row}>
+                        {view2 != 'table' ? <div className={styles.row}>
                             {header.statistics ? <Chip title={t('statistics')} selected={view2 == 'stats'} onClick={onNavStatsDesktop}></Chip> : null}
                             {header.events ? <Chip title={t('events')} selected={view2 == 'events'} onClick={onNavEventsDesktop}></Chip> : null}
                             {header.lineups ? <Chip ref={viewsRef} title={t('lineups')} selected={view2 == 'lineups'} onClick={onNavLineupsDekstop}></Chip> : null}
-                        </div>
+                        </div> : null}
                         {view2 == 'events' ? <MatchEventsPanel events={events} isMobile={isMobile} /> : null}
                         {view2 == 'stats' ? <MatchStatsPanel stats={stats} isMobile={isMobile} /> : null}
                         {view2 == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
+                        {view2 == 'table' ? <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} isMobile={isMobile} /> : null}
+
                         {/* {renderTableView()} */}
                         {/* <MatchStatsPanel stats={stats} />
                          <MatchEventsPanel events={events} /> */}
