@@ -169,7 +169,7 @@ export default function Home({ me, isAndroid, isIOS, matches, isMobile, leagues,
 
         <DesktopAppBar router={router} />
         <div className={styles.desktop_panels_cont}>
-          <DesktopMenuPanel leagues={leagues} />
+          <DesktopMenuPanel leagues={leagues} router={router}/>
           <DesktopBeatBetMiddlePanel router={router} matches={matches.predicts} />
           <DesktopBeatBetStrategiesPanel router={router} onShowDialog={onShowBeatBetDialog} player={player} team={team} league={league} home={home} away={away} />
         </div>

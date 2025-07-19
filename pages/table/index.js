@@ -189,7 +189,7 @@ export default function Home({ me, isAndroid, isIOS, table, page, league, isMobi
 
                 <DesktopAppBar router={router} />
                 <div className={styles.desktop_panels_cont}>
-                    <DesktopMenuPanel leagues={leagues} />
+                    <DesktopMenuPanel leagues={leagues} router={router}/>
                     <DesktopTablePanel league={league} router={router} me={me} table={table} page={page} showNext={showNext} showPrev={showPrev} onNext={onNext} onPrev={onPrev} onNavProfile={onNavProfile}/>
                     <DesktopRightPanel />
                 </div>

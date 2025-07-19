@@ -448,7 +448,7 @@ export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, p
 
                 <DesktopAppBar router={router} />
                 <div className={styles.desktop_panels_cont}>
-                    <DesktopMenuPanel leagues={leagues} />
+                    <DesktopMenuPanel leagues={leagues} router={router}/>
                     <div className={styles.desktop_middle_cont}>
                         <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={isMobile} />
 

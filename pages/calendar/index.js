@@ -132,7 +132,7 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
 
         <DesktopAppBar router={router} />
         <div className={styles.desktop_panels_cont}>
-          <DesktopMenuPanel leagues={leagues} />
+          <DesktopMenuPanel leagues={leagues} router={router} />
           <DesktopCalendarPanel router={router} date={date} matches={matches}/>
           <DesktopRightPanel />
           {/* <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} /> */}
