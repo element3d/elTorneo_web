@@ -26,6 +26,9 @@ import MatchStatsPanel from '@/js/MatchStatsPanel';
 import MatchLineupsPanel from '@/js/MatchLineupsPanel';
 import InstallPanel from '@/js/InstallPanel';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
+import DesktopAppBar from '@/js/DesktopAppBar';
+import DesktopMenuPanel from '@/js/DesktopMenuPanel';
+import DesktopRightPanel from '@/js/DesktopRightPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -40,6 +43,16 @@ export async function getServerSideProps(context) {
 
     const { query } = context;
     const { view } = query;
+    let { view2 } = query;
+
+    let leagues = null;
+    const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
+    if (!isMobile) {
+        leagues = await fetch(`${SERVER_BASE_URL}/api/v1/leagues`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+    }
 
     let isAndroid = false;
     let isIOS = false
@@ -147,25 +160,29 @@ export async function getServerSideProps(context) {
 
         h2hMatches.push(t1Matches)
         h2hMatches.push(t2Matches)
-    } else if (v == 'table') {
+    }
+    if (v == 'table' || !isMobile) {
         table = await fetch(`${SERVER_BASE_URL}/api/v1/league/table?league_id=${data[0].league}&league_index=${data[0].team1.league_index}`, {
             method: 'GET',
             // headers: { 'Content-Type': 'application/json' },
         })
             .then(response => response.json())
-    } else if (v == 'events') {
+    }
+    if (v == 'events' || !isMobile) {
         events = await fetch(`${SERVER_BASE_URL}/api/v1/match/events?match_id=${id}`, {
             method: 'GET',
             // headers: { 'Content-Type': 'application/json' },
         })
             .then(response => response.json())
-    } else if (v == 'stats') {
+    }
+    if (v == 'stats' || !isMobile) {
         stats = await fetch(`${SERVER_BASE_URL}/api/v1/match/statistics?match_id=${id}`, {
             method: 'GET',
             // headers: { 'Content-Type': 'application/json' },
         })
             .then(response => response.json())
-    } else if (v == 'lineups') {
+    }
+    if (v == 'lineups' || !isMobile) {
         lineups = await fetch(`${SERVER_BASE_URL}/api/v1/match/lineups?match_id=${id}`, {
             method: 'GET',
             // headers: { 'Content-Type': 'application/json' },
@@ -176,12 +193,19 @@ export async function getServerSideProps(context) {
     let settings = null
     {
         settings = await fetch(`${SERVER_BASE_URL}/api/v1/settings`, requestOptions)
-        .then(response => {
-            if (response.status == 200)
-                return response.json()
+            .then(response => {
+                if (response.status == 200)
+                    return response.json()
 
-            return null
-        })
+                return null
+            })
+    }
+
+    if (!view2) {
+        if (stats) view2 = 'stats'
+        else if (events) view2 = 'events'
+        else if (lineups) view2 = 'lineups'
+        else view2 = 'table'
     }
 
     return {
@@ -191,6 +215,7 @@ export async function getServerSideProps(context) {
             top20Predicts: v == '' ? predicts.predicts : [],
             summary,
             view: view || '',
+            view2: view2 || '',
             table: table,
             predict,
             events,
@@ -199,8 +224,10 @@ export async function getServerSideProps(context) {
             header,
             settings,
             me,
+            isMobile,
             isAndroid,
             isIOS,
+            leagues,
             ...(await serverSideTranslations(locale)),
         },
     };
@@ -213,7 +240,9 @@ function Chip({ ref, title, selected, onClick }) {
 }
 
 
-export default function Home({ isAndroid, isIOS, me, match, predict, view, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header,settings }) {
+export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, predict, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
+    
+    console.log(isMobile)
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
     const today = moment();
@@ -305,12 +334,23 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
         router.push(`/match/${match.id}?view=events`)
     }
 
+    function onNavEventsDesktop() {
+        router.push(`/match/${match.id}?view=${view}&view2=events`)
+    }
+
     function onNavStats() {
         router.push(`/match/${match.id}?view=stats`)
+    }
+    function onNavStatsDesktop() {
+        router.push(`/match/${match.id}?view=${view}&view2=stats`)
     }
 
     function onNavLineups() {
         router.push(`/match/${match.id}?view=lineups`)
+    }
+
+    function onNavLineupsDekstop() {
+        router.push(`/match/${match.id}?view=${view}&view2=lineups`)
     }
 
     function renderPredictsView() {
@@ -318,7 +358,7 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
             return <span className={styles.no_predicts}>{t('no_predicts')}</span>
         }
 
-        return <div className={styles.padding}>
+        return <div className={isMobile ? styles.padding : styles.padding_desktop}>
             <MatchSummaryPanel match={match} summary={summary} />
 
             {/* <ins
@@ -356,7 +396,7 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
     }
 
     function renderH2HView() {
-        return <div className={styles.padding}>
+        return <div className={ isMobile ? styles.padding : styles.padding_desktop}>
             <Switch title1={match.team1.shortName} title2={match.team2.shortName} selected={teamIndex + 1} onSelect={onTeamSelect} />
             {
                 h2hMatches[teamIndex].map((m, i) => {
@@ -382,13 +422,68 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
     }
 
     function renderTableView() {
-        return <div className={styles.padding_top}>
-            <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} />
+        return <div className={ isMobile ? styles.padding_top : styles.padding_desktop}>
+            <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} isMobile={isMobile} />
         </div>
     }
 
     function onBack() {
         router.back()
+    }
+
+    function renderDesktop() {
+        return <>
+            <Head>
+                <title>el Torneo - Calendar</title>
+                <meta name="description" content="Worlds biggest football fan tournament." />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <main className={`${styles.main} ${inter.className}`}>
+
+                <DesktopAppBar router={router} />
+                <div className={styles.desktop_panels_cont}>
+                    <DesktopMenuPanel leagues={leagues} />
+                    <div className={styles.desktop_middle_cont}>
+                        <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={isMobile} />
+
+                        <div className={`${styles.row} ${styles.mt20}`}>
+                            <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
+                            <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
+                            <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip>
+                        </div>
+                        {view == '' ? renderPredictsView() : null}
+                        {view == 'h2h' ? renderH2HView() : null}
+                        {view == 'table' ? renderTableView() : null}
+                    </div>
+
+                    <div className={styles.desktop_right_cont}>
+                        <div className={styles.row}>
+                            {header.statistics ? <Chip title={t('statistics')} selected={view2 == 'stats'} onClick={onNavStatsDesktop}></Chip> : null}
+                            {header.events ? <Chip title={t('events')} selected={view2 == 'events'} onClick={onNavEventsDesktop}></Chip> : null}
+                            {header.lineups ? <Chip ref={viewsRef} title={t('lineups')} selected={view2 == 'lineups'} onClick={onNavLineupsDekstop}></Chip> : null}
+                        </div>
+                        {view2 == 'events' ? <MatchEventsPanel events={events} isMobile={isMobile} /> : null}
+                        {view2 == 'stats' ? <MatchStatsPanel stats={stats} isMobile={isMobile} /> : null}
+                        {view2 == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
+                        {/* {renderTableView()} */}
+                        {/* <MatchStatsPanel stats={stats} />
+                         <MatchEventsPanel events={events} /> */}
+                        {/* <MatchLineupsPanel match={match} lineups={lineups} /> */}
+                    </div>
+
+                    {/* <DesktopCalendarPanel router={router} date={date} matches={matches} /> */}
+                    {/* <DesktopRightPanel /> */}
+                    {/* <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} /> */}
+                    {/* <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} /> */}
+                </div>
+            </main>
+        </>
+    }
+
+
+    if (!isMobile) {
+        return renderDesktop()
     }
 
     return (
@@ -412,7 +507,7 @@ export default function Home({ isAndroid, isIOS, me, match, predict, view, top20
 
                     </div>
                 </div>
-                <MatchPanel me={me} router={router} match={match} predict={predict} />
+                <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={true} />
 
                 <div ref={containerRef} className={styles.view_row} >
                     <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>

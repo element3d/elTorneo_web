@@ -94,7 +94,7 @@ export default function MatchLiveItem({ router, isMobile, match, leagueName }) {
     </div>
 
     { match.predict?.status != -1 ? <div className={styles.predict}>
-      <span>Predict {match.predict.team1_score} : {match.predict.team2_score}</span>
+      <span>{t('prediction')} {match.predict.team1_score} : {match.predict.team2_score}</span>
     </div> : null }
 
   </div>)

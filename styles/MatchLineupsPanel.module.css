@@ -15,6 +15,14 @@
     padding: 20px;
 }
 
+.padding {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    margin-top: 20px;
+    border-radius: 16px;
+}
+
 .header {
     display: flex;
     flex-direction: row;

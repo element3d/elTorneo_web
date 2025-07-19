@@ -2,14 +2,14 @@ import styles from '@/styles/UserPanel.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-export default function UserPanel({router, user, pos, isMe}) {
+export default function UserPanel({router, user, pos, isMe, isMobile=true}) {
     const {t} = useTranslation()
 
     function onNavSettings() {
         router.push('/settings')
     }
 
-    return (<div className={styles.panel}>
+    return (<div className={ isMobile ? styles.panel : styles.panel_desktop}>
         <div className={styles.ava_cont}>
             { user.avatar.length ? <img className={styles.ava} src={`${SERVER_BASE_URL}/${user.avatar}`}/>
             : <img className={styles.ava_blank} src={`${SERVER_BASE_URL}/data/icons/profile_blank.svg`}/>}

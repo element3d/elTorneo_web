@@ -3,7 +3,7 @@ import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
 
-export default function MatchLineupsPanel({ match, lineups }) {
+export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
     const { t } = useTranslation()
 
     function getKitImage(name) {
@@ -131,7 +131,7 @@ export default function MatchLineupsPanel({ match, lineups }) {
         return ""
     }
 
-    return <div className={styles.padding}>
+    return <div className={ isMobile ? styles.padding : styles.padding_desktop}>
         <div className={styles.panel}>
             <LineupsHeader></LineupsHeader>
 

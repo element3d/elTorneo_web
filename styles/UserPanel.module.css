@@ -9,6 +9,19 @@
     align-items: center;
 }
 
+.panel_desktop {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    padding-left: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    background-color: white;
+    align-items: center;
+}
+
 .ava_cont {
     width: 70px;
     height: 70px;

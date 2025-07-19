@@ -17,6 +17,7 @@ import { useTranslation } from 'next-i18next';
 
 import { UAParser } from 'ua-parser-js';
 import InstallPanel from '@/js/InstallPanel';
+import RegisterPanel from '@/js/RegisterPanel';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -43,93 +44,9 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home({ isAndroid, isIOS }) {
-    const { t } = useTranslation()
     const router = useRouter()
 
-    const [username, setUsername] = useState('')
-    const [name, setName] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState(null)
-    const [showPass, setShowPass] = useState(false)
-
-    function toggleShowPass() {
-        setShowPass(!showPass)
-    }
-
-    function isValidUsername(username) {
-        // Check if the username is at least 6 characters long
-        if (username.length < 6) {
-            return false;
-        }
-    
-        // Check if the username contains any spaces or line endings
-        if (/\s/.test(username)) {
-            return false;
-        }
-    
-        return true;
-    }
-
-    function onRegister() {
-        if (username.length < 6) {
-            setError(t('err_username_len'))
-            return
-        }
-        if (!isValidUsername(username)) {
-            setError(t('err_username'))
-            return
-        }
-
-        if (name.length < 2) {
-            setError(t('err_name_len'))
-            return
-        }
-        if (password.length < 6) {
-            setError(t('err_password_len'))
-            return
-        }
-        if (!isValidUsername(password)) {
-            setError(t('err_password'))
-            return
-        }
-
-
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify({
-                username: username,
-                name: name,
-                password: password
-            })
-        };
-        return fetch(`${SERVER_BASE_URL}/api/v1/signup`, requestOptions)
-            .then(response => {
-                if (response.status == 200)
-                    return response.text()
-
-                if (response.status == 403) {
-                    setError(t('err_user_exists'))
-                }
-                // setError(t('incorrect_login'))
-                return null
-            })
-            .then((token) => {
-                Cookies.set('token', token);
-                router.replace('/profile')
-            })
-    }
-
-    function onNameChange(e) {
-        setName(e.target.value)
-    }
-
-    function onUsernameChange(e) {
-        setUsername(e.target.value)
-    }
-
-    function onPasswordChange(e) {
-        setPassword(e.target.value)
-    }
+ 
 
     function onNavSignin() {
         router.push('/login')
@@ -150,46 +67,7 @@ export default function Home({ isAndroid, isIOS }) {
                     </div>
                 </div>
 
-                <div className={styles.cont}>
-                    <h1 className={styles.title}>el Torneo</h1>
-                    <p className={styles.desc}>{t('login_desc')}</p>
-
-                    {/* <div className={styles.award_panel}>
-                        <AwardsPanel router={router} />
-                    </div> */}
-
-                    <div className={styles.login_cont}>
-                        <div className={styles.input_cont}>
-                            <span className={styles.placeholder}>{t('username')}</span>
-                            <input className={styles.login_input} type='text' value={username} onChange={onUsernameChange}/>
-                        </div>
-
-                        <div className={styles.input_cont}>
-                            <span className={styles.placeholder}>{t('name')}</span>
-                            <input className={styles.login_input} type='text' value={name} onChange={onNameChange}/>
-                        </div>
-
-                        <div className={styles.input_cont}>
-                            <span className={styles.placeholder}>{t('password')}</span>
-                            <input className={styles.login_input} type={!showPass ? 'password' : 'text'} value={password} onChange={onPasswordChange}/>
-                            <div className={styles.eye} onClick={toggleShowPass}>
-                                <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye.svg`}/>
-                            </div>
-                        </div>
-
-                        <span className={styles.error}>{error}</span>
-
-                        <button className={styles.login_button} onClick={onRegister}>
-                        {t('register')}
-                        </button>
-                        
-                        <div className={styles.dont_cont}>
-                            <span>{t('already_have_acc')}</span>
-                            <button className={styles.dont_button} onClick={onNavSignin}>{t('signin')}</button>
-                        </div>
-                    </div>
-
-                </div>
+                <RegisterPanel onNavSignin={onNavSignin}/>
                 {/* <InstallPanel hasMargin={true} /> */}
                 <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>

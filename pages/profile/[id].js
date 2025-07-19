@@ -14,6 +14,11 @@ const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
+import DesktopAppBar from '@/js/DesktopAppBar';
+import DesktopMenuPanel from '@/js/DesktopMenuPanel';
+import DesktopRightPanel from '@/js/DesktopRightPanel';
+import LoginPanel from '@/js/LoginPanel';
+import RegisterPanel from '@/js/RegisterPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -26,6 +31,15 @@ export async function getServerSideProps(context) {
     let token = null
     if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
+    }
+
+    let leagues = null;
+    const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
+    if (!isMobile) {
+        leagues = await fetch(`${SERVER_BASE_URL}/api/v1/leagues`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
     }
 
     let isAndroid = false;
@@ -82,6 +96,8 @@ export async function getServerSideProps(context) {
             initialPredicts,
             isAndroid,
             isIOS,
+            isMobile,
+            leagues,
             me,
             ...(await serverSideTranslations(locale)),
         },
@@ -89,12 +105,13 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, initialPredicts }) {
+export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues }) {
     const router = useRouter();
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
+    const [logOrReg, setLogOrReg] = useState(0)
 
     useEffect(() => {
         return () => {
@@ -131,6 +148,48 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
     useEffect(() => {
         setPredicts(initialPredicts.predicts)
     }, [initialPredicts])
+
+    function onNavRegister() {
+        setLogOrReg(1)
+    }
+
+    function onNavLogin() {
+        setLogOrReg(0)
+    }
+
+    function renderDesktop() {
+        return <>
+            <Head>
+                <title>el Torneo - Calendar</title>
+                <meta name="description" content="Worlds biggest football fan tournament." />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <main className={`${styles.main} ${inter.className}`}>
+
+                <DesktopAppBar router={router} />
+                <div className={styles.desktop_panels_cont}>
+                    <DesktopMenuPanel leagues={leagues} />
+                    <div className={styles.desktop_middle_cont}>
+                        <UserPanel user={user} isMobile={false} />
+                        <ProfileStatsPanel stats={initialPredicts} />
+                        <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
+                    </div>
+
+                    <div className={styles.desktop_right_cont}>
+                        { logOrReg == 0 ? 
+                            <LoginPanel router={router} onNavRegister={onNavRegister}/> :
+                            <RegisterPanel onNavSignin={onNavLogin} /> }
+                    </div>
+                </div>
+            </main>
+        </>
+    }
+
+    if (!isMobile) {
+        return renderDesktop()
+    }
+
     return (
         <>
             <Head>

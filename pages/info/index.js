@@ -91,6 +91,7 @@ export default function Home({ me, token, isAndroid, isIOS }) {
     };
 
     function isShowMoveToLeague() {
+        return false;
         return me && (me.points <= 20 || me.league == 2)
     }
 

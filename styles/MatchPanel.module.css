@@ -15,6 +15,23 @@
     color: var(--title-color);
 }
 
+.panel_desktop {
+    width: 400px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    /* height: 150px; */
+    background-color: white;
+    border-radius: 16px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-family: 'Roboto';
+    color: var(--title-color);
+}
+
 .team_item {
    display: flex;
    flex-direction: column;

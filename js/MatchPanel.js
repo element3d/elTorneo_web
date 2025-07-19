@@ -16,7 +16,8 @@ function TeamItem({ team, isHome, style }) {
     </div>
 }
 
-export default function MatchPanel({ router, me, match, predict }) {
+export default function MatchPanel({ router, me, match, predict, isMobile}) {
+    console.log(isMobile)
     const {t} = useTranslation()
     const [team1Score, setTeam1Score] = useState('')
     const [team2Score, setTeam2Score] = useState('')
@@ -216,7 +217,7 @@ export default function MatchPanel({ router, me, match, predict }) {
         return false
     }
 
-    return (<div className={styles.panel}>
+    return (<div className={ isMobile ? styles.panel : styles.panel_desktop }>
         <span>{getDate()}</span>
         <span className={styles.week}>{t('matchday')} {match.week}</span>
         <div className={styles.teams_row}>

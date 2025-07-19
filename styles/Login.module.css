@@ -218,6 +218,7 @@
     flex-direction: column;
     /* background-color: red; */
     width: 100%;
+    align-items: center;
   }
 
   .input_cont {

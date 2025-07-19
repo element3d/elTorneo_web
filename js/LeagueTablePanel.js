@@ -2,7 +2,7 @@ import styles from '@/styles/LeagueTablePanel.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
-export default function LeagueTablePanel({ router, table, league, miniLeague, group }) {
+export default function LeagueTablePanel({ router, table, league, miniLeague, group, isMobile }) {
     const {t} = useTranslation()
     let currentGroup = 0
     let currentPos = 1
@@ -33,7 +33,7 @@ export default function LeagueTablePanel({ router, table, league, miniLeague, gr
         router.push(`?league=${league.id}&mini=${i}`)
     }
 
-    return (<div className={styles.cont}>
+    return (<div className={ isMobile ? styles.cont : styles.cont_desktop}>
 
         { league.num_leagues > 1 ? <div className={styles.mini_cont}>
             {
@@ -44,7 +44,7 @@ export default function LeagueTablePanel({ router, table, league, miniLeague, gr
                 })
             }
         </div> : null }
-        <div className={styles.padding}>
+        <div className={ isMobile ? styles.padding : styles.padding_desktop}>
             <div className={styles.team_header}>
                 <span className={styles.pos}>Pos</span>
                 <div className={styles.name_header}>

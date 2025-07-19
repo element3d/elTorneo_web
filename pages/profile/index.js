@@ -15,12 +15,23 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
 import { useTranslation } from 'next-i18next';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
+import DesktopAppBar from '@/js/DesktopAppBar';
+import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 
 export async function getServerSideProps(context) {
     const { req } = context
     const { query } = context;
     const globalPage = query.page ? Number(query.page) : 1;
     const { locale } = context;
+
+    let leagues = null;
+    const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
+    if (!isMobile) {
+        leagues = await fetch(`${SERVER_BASE_URL}/api/v1/leagues`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+    }
 
     let isAndroid = false;
     let isIOS = false
@@ -73,13 +84,15 @@ export async function getServerSideProps(context) {
             initialPredicts,
             isAndroid,
             isIOS,
+            isMobile,
+            leagues,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
 
-export default function Home({ isAndroid, isIOS, user, stats, globalPage, initialPredicts }) {
+export default function Home({ isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues }) {
     const router = useRouter();
     const totalPredicts = initialPredicts.totalPredicts
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
@@ -124,6 +137,37 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
     useEffect(() => {
         setPredicts(initialPredicts.predicts)
     }, [initialPredicts])
+
+    function renderDesktop() {
+        return <>
+            <Head>
+                <title>el Torneo - Calendar</title>
+                <meta name="description" content="Worlds biggest football fan tournament." />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <main className={`${styles.main} ${inter.className}`}>
+
+                <DesktopAppBar router={router} />
+                <div className={styles.desktop_panels_cont}>
+                    <DesktopMenuPanel leagues={leagues} />
+                    <div className={styles.desktop_middle_cont}>
+                        <UserPanel user={user} isMobile={false} />
+                        <ProfileStatsPanel stats={initialPredicts} />
+                        <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
+                    </div>
+
+                    <div className={styles.desktop_right_cont}>
+                       
+                    </div>
+                </div>
+            </main>
+        </>
+    }
+
+    if (!isMobile) {
+        return renderDesktop()
+    }
 
     return (
         <>
