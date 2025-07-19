@@ -150,7 +150,7 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
 
                 <DesktopAppBar router={router} />
                 <div className={styles.desktop_panels_cont}>
-                    <DesktopMenuPanel leagues={leagues} />
+                    <DesktopMenuPanel leagues={leagues} router={router}/>
                     <div className={styles.desktop_middle_cont}>
                         <UserPanel user={user} isMobile={false} />
                         <ProfileStatsPanel stats={initialPredicts} />

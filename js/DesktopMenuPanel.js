@@ -8,7 +8,7 @@ export default function DesktopMenuPanel({ router, leagues }) {
     }
 
     function onLeagueClick(l) {
-        router.push(`?league=${l.id}`)
+        router.push(`/?league=${l.id}`)
     }
 
     return <div className={styles.panel}>
