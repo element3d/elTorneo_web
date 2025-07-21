@@ -19,6 +19,7 @@ import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import DesktopRightPanel from '@/js/DesktopRightPanel';
 import LoginPanel from '@/js/LoginPanel';
 import RegisterPanel from '@/js/RegisterPanel';
+import LangPanel from '@/js/LangPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -98,6 +99,7 @@ export async function getServerSideProps(context) {
             isIOS,
             isMobile,
             leagues,
+            locale,
             me,
             ...(await serverSideTranslations(locale)),
         },
@@ -105,13 +107,15 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues }) {
+export default function Home({ me, locale, isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues }) {
     const router = useRouter();
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
+    const [showSignIn, setShowSignIn] = useState(1)
     const [logOrReg, setLogOrReg] = useState(0)
+    const [showLang, setShowLang] = useState(0)
 
     useEffect(() => {
         return () => {
@@ -157,6 +161,29 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
         setLogOrReg(0)
     }
 
+    function onShowLang() {
+        setShowLang(1)
+        setShowSignIn(0)
+    }
+
+    function onShowSignIn() {
+        setShowSignIn(1)
+    }
+
+    function renderDesktopRightPanel() {
+        if (showSignIn) {
+            return <div className={styles.desktop_right_cont}>
+                {logOrReg == 0 ?
+                    <LoginPanel router={router} onNavRegister={onNavRegister} /> :
+                    <RegisterPanel onNavSignin={onNavLogin} />}
+            </div>
+        } else if (showLang) {
+            return <div className={styles.desktop_right_cont}>
+                <LangPanel router={router} locale={locale}/>
+            </div>
+        }
+    }
+
     function renderDesktop() {
         return <>
             <Head>
@@ -167,20 +194,16 @@ export default function Home({ me, isAndroid, isIOS, user, stats, globalPage, in
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} />
+                <DesktopAppBar router={router} onShowLang={onShowLang} onSignIn={onShowSignIn} />
                 <div className={styles.desktop_panels_cont}>
-                    <DesktopMenuPanel leagues={leagues} router={router}/>
+                    <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
                         <UserPanel user={user} isMobile={false} />
                         <ProfileStatsPanel stats={initialPredicts} />
                         <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                     </div>
 
-                    <div className={styles.desktop_right_cont}>
-                        { logOrReg == 0 ? 
-                            <LoginPanel router={router} onNavRegister={onNavRegister}/> :
-                            <RegisterPanel onNavSignin={onNavLogin} /> }
-                    </div>
+                    {renderDesktopRightPanel()}
                 </div>
             </main>
         </>

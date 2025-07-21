@@ -74,4 +74,11 @@
     /* margin-top: 20px; */
     color: #8E8E93;
     font-weight: bold;
+    width: 100%;
+    display: flex;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    /* background-color: red; */
+    margin-top: 20px;
 }

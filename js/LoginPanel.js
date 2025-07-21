@@ -6,7 +6,7 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 
 
-export default function LoginPanel({router, onNavRegister}) {
+export default function LoginPanel({router, onLogin, onNavRegister}) {
     const { t } = useTranslation()
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -52,7 +52,8 @@ export default function LoginPanel({router, onNavRegister}) {
             signinGoogle(email, name)
                 .then((token) => {
                     Cookies.set('token', token);
-                    router.replace('/profile')
+                    if (onLogin) onLogin()
+                    else router.replace('/profile')
                 })
                 .catch((err) => {
                     console.error(err)

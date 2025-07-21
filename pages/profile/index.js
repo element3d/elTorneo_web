@@ -17,6 +17,7 @@ import { useTranslation } from 'next-i18next';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 import DesktopAppBar from '@/js/DesktopAppBar';
 import DesktopMenuPanel from '@/js/DesktopMenuPanel';
+import MatchLiveItem from '@/js/MatchLiveItem';
 
 export async function getServerSideProps(context) {
     const { req } = context
@@ -77,6 +78,28 @@ export async function getServerSideProps(context) {
         headers: {},
     }).then(response => response.json());
 
+    const url = `${SERVER_BASE_URL}/api/v1/matches/live`
+    let matches = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authentication': token ? token : ''
+        },
+    })
+        .then(response => response.json())
+
+    if (!matches.length) {
+        const url = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+        matches = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token ? token : ''
+            },
+        })
+            .then(response => response.json())
+    }
+
     return {
         props: {
             user,
@@ -86,13 +109,14 @@ export async function getServerSideProps(context) {
             isIOS,
             isMobile,
             leagues,
+            matches,
             ...(await serverSideTranslations(locale)),
         },
     };
 }
 
 
-export default function Home({ isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues }) {
+export default function Home({ isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues, matches }) {
     const router = useRouter();
     const totalPredicts = initialPredicts.totalPredicts
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
@@ -148,17 +172,20 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} />
+                <DesktopAppBar router={router} me={user} isMe={true} />
                 <div className={styles.desktop_panels_cont}>
-                    <DesktopMenuPanel leagues={leagues} router={router}/>
+                    <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
                         <UserPanel user={user} isMobile={false} />
                         <ProfileStatsPanel stats={initialPredicts} />
                         <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                     </div>
 
-                    <div className={styles.desktop_right_cont}>
-                       
+                    <div className={styles.desktop_right_cont_live}>
+                        {matches.map((m, i) => {
+                            if (i > 5) return
+                            return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
+                        })}
                     </div>
                 </div>
             </main>

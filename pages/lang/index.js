@@ -12,10 +12,10 @@ import BottomNavBar, { EPAGE_CAL } from '@/js/BottomNavBar';
 import moment from 'moment';
 import Calendar from '@/js/Calendar';
 import MatchItemMobile from '@/js/MatchItemMobile';
-import { i18n } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 const inter = Inter({ subsets: ['latin'] });
 import { UAParser } from 'ua-parser-js';
+import LangPanel from '@/js/LangPanel';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -45,25 +45,6 @@ export async function getServerSideProps(context) {
 export default function Home({ isAndroid, isIOS, locale }) {
     const router = useRouter()
 
-    function getLangs() {
-        return {
-            "en": "English",
-            "es": "Español",
-            "ru": "Русский",
-            "fr": "Français",
-            "it": "Italiano",
-            "pt": "Português",
-            "de": "Deutsch",
-            "hr": "Hrvatski",
-        }
-    }
-
-    function onSetLang(l) {
-        i18n.changeLanguage(l);
-
-        router.push('/', '/', { locale: l });
-    }
-
     return (
         <>
             <Head>
@@ -74,17 +55,7 @@ export default function Home({ isAndroid, isIOS, locale }) {
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
                 <AppBar title={'el Torneo'} router={router}/>
-
-                {Object.keys(getLangs()).map((l)=>{
-                                return <div key={l} className={styles.item} onClick={() => onSetLang(l)}>
-                                   <span style={{
-                                    color: l == locale ? '#ff2882' : '#8E8E93'
-                                   }}>{getLangs()[l]}</span>
-                                </div>
-                            })}
-
-
-
+                <LangPanel router={router} locale={locale}/>
                 <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
             </main>
         </>

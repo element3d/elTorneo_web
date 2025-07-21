@@ -29,6 +29,9 @@ import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 import DesktopAppBar from '@/js/DesktopAppBar';
 import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import DesktopRightPanel from '@/js/DesktopRightPanel';
+import LoginPanel from '@/js/LoginPanel';
+import RegisterPanel from '@/js/RegisterPanel';
+import LangPanel from '@/js/LangPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -229,6 +232,7 @@ export async function getServerSideProps(context) {
             header,
             settings,
             me,
+            locale,
             isMobile,
             isAndroid,
             isIOS,
@@ -245,7 +249,7 @@ function Chip({ ref, title, selected, onClick }) {
 }
 
 
-export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, predict, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
+export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
 
     console.log(isMobile)
     const { t } = useTranslation()
@@ -254,6 +258,9 @@ export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, p
     const [date, setDate] = useState(today.format('YYYY-MM-DD'))
     const router = useRouter()
     const [teamIndex, setTeamIndex] = useState(0)
+    const [showSignIn, setShowSignIn] = useState(false)
+    const [logOrReg, setLogOrReg] = useState(0)
+    const [showLang, setShowLang] = useState(0)
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
@@ -436,6 +443,48 @@ export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, p
         router.back()
     }
 
+    function onSignIn() {
+        setShowSignIn(true)
+    }
+
+    function onNavRegister() {
+        setLogOrReg(1)
+    }
+
+    function onNavLogin() {
+        setLogOrReg(0)
+    }
+
+    function renderDesktopRightPanel() {
+        if (showSignIn) {
+            return <div className={styles.desktop_right_cont_login}>
+                {logOrReg == 0 ?
+                    <LoginPanel router={router} onNavRegister={onNavRegister} /> :
+                    <RegisterPanel onNavSignin={onNavLogin} />}
+            </div>
+        } else if (showLang) {
+            return <div className={styles.desktop_right_cont_login}>
+                <LangPanel router={router} locale={locale}/>
+            </div>
+        }
+
+        return <div className={styles.desktop_right_cont}>
+            {view2 != 'table' ? <div className={styles.row}>
+                {header.statistics ? <Chip title={t('statistics')} selected={view2 == 'stats'} onClick={onNavStatsDesktop}></Chip> : null}
+                {header.events ? <Chip title={t('events')} selected={view2 == 'events'} onClick={onNavEventsDesktop}></Chip> : null}
+                {header.lineups ? <Chip ref={viewsRef} title={t('lineups')} selected={view2 == 'lineups'} onClick={onNavLineupsDekstop}></Chip> : null}
+            </div> : null}
+            {view2 == 'events' ? <MatchEventsPanel events={events} isMobile={isMobile} /> : null}
+            {view2 == 'stats' ? <MatchStatsPanel stats={stats} isMobile={isMobile} /> : null}
+            {view2 == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
+            {view2 == 'table' ? <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} isMobile={isMobile} /> : null}
+        </div>
+    }
+
+    function onShowLang() {
+        setShowLang(1)
+    }
+
     function renderDesktop() {
         return <>
             <Head>
@@ -446,43 +495,24 @@ export default function Home({ leagues, isMobile, isAndroid, isIOS, me, match, p
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} />
+                <DesktopAppBar router={router} me={me} onSignIn={onSignIn} onShowLang={onShowLang} />
                 <div className={styles.desktop_panels_cont}>
-                    <DesktopMenuPanel leagues={leagues} router={router}/>
+                    <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
-                        <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={isMobile} />
+                        <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={isMobile} onLogin={onSignIn}/>
 
                         <div className={`${styles.row} ${styles.mt20}`}>
                             <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
                             <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
-                            <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip>
+                            { view2 != 'table' ? <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip> : null }
                         </div>
                         {view == '' ? renderPredictsView() : null}
                         {view == 'h2h' ? renderH2HView() : null}
                         {view == 'table' ? renderTableView() : null}
                     </div>
 
-                    <div className={styles.desktop_right_cont}>
-                        {view2 != 'table' ? <div className={styles.row}>
-                            {header.statistics ? <Chip title={t('statistics')} selected={view2 == 'stats'} onClick={onNavStatsDesktop}></Chip> : null}
-                            {header.events ? <Chip title={t('events')} selected={view2 == 'events'} onClick={onNavEventsDesktop}></Chip> : null}
-                            {header.lineups ? <Chip ref={viewsRef} title={t('lineups')} selected={view2 == 'lineups'} onClick={onNavLineupsDekstop}></Chip> : null}
-                        </div> : null}
-                        {view2 == 'events' ? <MatchEventsPanel events={events} isMobile={isMobile} /> : null}
-                        {view2 == 'stats' ? <MatchStatsPanel stats={stats} isMobile={isMobile} /> : null}
-                        {view2 == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
-                        {view2 == 'table' ? <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} isMobile={isMobile} /> : null}
+                    {renderDesktopRightPanel()}
 
-                        {/* {renderTableView()} */}
-                        {/* <MatchStatsPanel stats={stats} />
-                         <MatchEventsPanel events={events} /> */}
-                        {/* <MatchLineupsPanel match={match} lineups={lineups} /> */}
-                    </div>
-
-                    {/* <DesktopCalendarPanel router={router} date={date} matches={matches} /> */}
-                    {/* <DesktopRightPanel /> */}
-                    {/* <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} /> */}
-                    {/* <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} /> */}
                 </div>
             </main>
         </>

@@ -17,13 +17,17 @@ const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
 import InstallPanel from '@/js/InstallPanel';
-import DesktopAppBar from '@/js/DesktopAppBar';
+import DesktopAppBar, { EPAGE_ELTORNEO } from '@/js/DesktopAppBar';
 import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import DesktopRightPanel from '@/js/DesktopRightPanel';
 import DesktopTablePanel from '@/js/DesktopTablePanel';
 import LeagueChip from '@/js/LeagueChip';
 import TableItem from '@/js/TableItem';
 import Chip from '@/js/Chip';
+import LoginPanel from '@/js/LoginPanel';
+import RegisterPanel from '@/js/RegisterPanel';
+import MatchLiveItem from '@/js/MatchLiveItem';
+import LangPanel from '@/js/LangPanel';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -94,13 +98,36 @@ export async function getServerSideProps(context) {
     let settings = null
     {
         settings = await fetch(`${SERVER_BASE_URL}/api/v1/settings`, requestOptions)
-        .then(response => {
-            if (response.status == 200)
-                return response.json()
+            .then(response => {
+                if (response.status == 200)
+                    return response.json()
 
-            return null
-        })
+                return null
+            })
     }
+
+    const url = `${SERVER_BASE_URL}/api/v1/matches/live`
+    let matches = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authentication': token ? token : ''
+        },
+    })
+        .then(response => response.json())
+
+    if (!matches.length) {
+        const url = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+        matches = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token ? token : ''
+            },
+        })
+            .then(response => response.json())
+    }
+
     // settings[0].numLevels = 4
     return {
         props: {
@@ -112,6 +139,8 @@ export async function getServerSideProps(context) {
             isMobile,
             leagues,
             season,
+            locale,
+            matches,
             league: Number.parseInt(league),
             page: Number.parseInt(page),
             ...(await serverSideTranslations(locale)),
@@ -120,9 +149,12 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function Home({ me, isAndroid, isIOS, table, page, league, isMobile, leagues, settings, season }) {
+export default function Home({ locale, me, isAndroid, isIOS, table, page, league, isMobile, leagues, settings, season, matches }) {
     const router = useRouter()
     const { t } = useTranslation()
+    const [showSignIn, setShowSignIn] = useState(true)
+    const [logOrReg, setLogOrReg] = useState(0)
+    const [showLang, setShowLang] = useState(0)
 
     const showPrev = page > 1
     const showNext = table.length >= 20
@@ -177,6 +209,53 @@ export default function Home({ me, isAndroid, isIOS, table, page, league, isMobi
         return true
     }
 
+    function onSignIn() {
+        setShowSignIn(true)
+    }
+
+    function onNavRegister() {
+        setLogOrReg(1)
+    }
+
+    function onNavLogin() {
+        setLogOrReg(0)
+    }
+
+    async function onLogin() {
+        me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions1)
+            .then(response => {
+                if (response.status === 200) return response.json();
+                return null;
+            });
+        setShowSignIn(false)
+    }
+
+    function onShowLang() {
+        setShowLang(1)
+        setShowSignIn(0)
+    }
+
+    function renderDesktopRightPanel() {
+        if (!me && showSignIn) {
+            return <div className={styles.desktop_right_cont_login}>
+                {logOrReg == 0 ?
+                    <LoginPanel router={router} onNavRegister={onNavRegister} onLogin={onLogin} /> :
+                    <RegisterPanel onNavSignin={onNavLogin} />}
+            </div>
+        } else if (showLang) {
+            return <div className={styles.desktop_right_cont_login}>
+                <LangPanel router={router} locale={locale}/>
+            </div>
+        } else {
+            return <div className={styles.desktop_right_cont_live}>
+                {matches.map((m, i) => {
+                    if (i > 5) return
+                    return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
+                })}
+            </div>
+        }
+    }
+
     function renderDesktop() {
         return <>
             <Head>
@@ -187,11 +266,11 @@ export default function Home({ me, isAndroid, isIOS, table, page, league, isMobi
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} />
+                <DesktopAppBar router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_ELTORNEO}/>
                 <div className={styles.desktop_panels_cont}>
-                    <DesktopMenuPanel leagues={leagues} router={router}/>
-                    <DesktopTablePanel league={league} router={router} me={me} table={table} page={page} showNext={showNext} showPrev={showPrev} onNext={onNext} onPrev={onPrev} onNavProfile={onNavProfile}/>
-                    <DesktopRightPanel />
+                    <DesktopMenuPanel leagues={leagues} router={router} />
+                    <DesktopTablePanel settings={settings} season={season} league={league} router={router} me={me} table={table} page={page} showNext={showNext} showPrev={showPrev} onNext={onNext} onPrev={onPrev} onNavProfile={onNavProfile} onNavLeague1={onNavLeague1} onNavLeague2={onNavLeague2} onNavLeague3={onNavLeague3} onNavLeague4={onNavLeague4} />
+                    {renderDesktopRightPanel()}
                 </div>
             </main>
         </>
@@ -233,9 +312,9 @@ export default function Home({ me, isAndroid, isIOS, table, page, league, isMobi
 
                 <div className={styles.leagues_cont}>
                     <LeagueChip selected={league == 1} onClick={onNavLeague1} league={1} isMy={me?.league == 1} />
-                    {settings.numLevels >= 2 || season != settings.season ? <LeagueChip selected={league == 2} onClick={onNavLeague2} league={2} isMy={me?.league == 2} /> : null }
-                    {settings.numLevels >= 3 || season != settings.season ? <LeagueChip selected={league == 3} onClick={onNavLeague3} league={3} isMy={me?.league == 3} /> : null }
-                    {settings.numLevels >= 4 || season != settings.season ? <LeagueChip selected={league == 4} onClick={onNavLeague4} league={4} isMy={me?.league == 4} /> : null }
+                    {settings.numLevels >= 2 || season != settings.season ? <LeagueChip selected={league == 2} onClick={onNavLeague2} league={2} isMy={me?.league == 2} /> : null}
+                    {settings.numLevels >= 3 || season != settings.season ? <LeagueChip selected={league == 3} onClick={onNavLeague3} league={3} isMy={me?.league == 3} /> : null}
+                    {settings.numLevels >= 4 || season != settings.season ? <LeagueChip selected={league == 4} onClick={onNavLeague4} league={4} isMy={me?.league == 4} /> : null}
 
                     <button onClick={onNavInfo} className={styles.info_button}>i</button>
                 </div>

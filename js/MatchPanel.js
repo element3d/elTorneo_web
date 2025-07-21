@@ -16,7 +16,7 @@ function TeamItem({ team, isHome, style }) {
     </div>
 }
 
-export default function MatchPanel({ router, me, match, predict, isMobile}) {
+export default function MatchPanel({ router, me, match, predict, isMobile, onLogin}) {
     console.log(isMobile)
     const {t} = useTranslation()
     const [team1Score, setTeam1Score] = useState('')
@@ -145,6 +145,7 @@ export default function MatchPanel({ router, me, match, predict, isMobile}) {
     // }
 
     function login() {
+        if (!isMobile && onLogin) return onLogin()
         router.push('/login')
     }
 

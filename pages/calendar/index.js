@@ -18,10 +18,14 @@ import { useTranslation } from 'next-i18next';
 import { UAParser } from 'ua-parser-js';
 import InstallPanel from '@/js/InstallPanel';
 import MatchPreviewDialog from '@/js/MatchPreviewDialog';
-import DesktopAppBar from '@/js/DesktopAppBar';
+import DesktopAppBar, { EPAGE_CALENDAR } from '@/js/DesktopAppBar';
 import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import DesktopCalendarPanel from '@/js/DesktopCalendarPanel';
 import DesktopRightPanel from '@/js/DesktopRightPanel';
+import LoginPanel from '@/js/LoginPanel';
+import RegisterPanel from '@/js/RegisterPanel';
+import MatchLiveItem from '@/js/MatchLiveItem';
+import LangPanel from '@/js/LangPanel';
 
 export async function getServerSideProps(context) {
   const { query } = context;
@@ -81,13 +85,37 @@ export async function getServerSideProps(context) {
       });
   }
 
+  const urlLive = `${SERVER_BASE_URL}/api/v1/matches/live`
+  let liveMatches = await fetch(urlLive, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authentication': token ? token : ''
+    },
+  })
+    .then(response => response.json())
+
+  if (!liveMatches.length) {
+    const urlLive = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+    liveMatches = await fetch(urlLive, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authentication': token ? token : ''
+      },
+    })
+      .then(response => response.json())
+  }
+
   return {
     props: {
       matches: matches,
       isAndroid,
       isIOS,
       isMobile,
+      locale,
       me,
+      liveMatches,
       leagues,
       date: moment(timestamp).format('YYYY-MM-DD'),
       ...(await serverSideTranslations(locale)),
@@ -95,12 +123,15 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, leagues }) {
+export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, leagues, liveMatches, locale }) {
   const { t } = useTranslation()
   const router = useRouter()
   let currentLeague = null
   const [showPreview, setShowPreview] = useState(false)
   const [previewMatch, setPreviewMatch] = useState(null)
+  const [showSignIn, setShowSignIn] = useState(true)
+  const [logOrReg, setLogOrReg] = useState(0)
+  const [showLang, setShowLang] = useState(0)
 
   useEffect(() => {
     return () => {
@@ -120,6 +151,44 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
     document.documentElement.style.overflow = '';
   }
 
+  function renderDesktopRightPanel() {
+    if (!me && showSignIn) {
+      return <div className={styles.desktop_right_cont_login}>
+        {logOrReg == 0 ?
+          <LoginPanel router={router} onNavRegister={onNavRegister} /> :
+          <RegisterPanel onNavSignin={onNavLogin} />}
+      </div>
+    } else if (showLang) {
+      return <div className={styles.desktop_right_cont_login}>
+        <LangPanel router={router} locale={locale}/>
+      </div>
+    } else {
+      return <div className={styles.desktop_right_cont_live}>
+        {liveMatches.map((m, i) => {
+          if (i > 5) return
+          return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
+        })}
+      </div>
+    }
+  }
+
+  function onSignIn() {
+    setShowSignIn(true)
+  }
+
+  function onNavRegister() {
+    setLogOrReg(1)
+  }
+
+  function onNavLogin() {
+    setLogOrReg(0)
+  }
+
+  function onShowLang() {
+    setShowLang(1)
+    setShowSignIn(0)
+  }
+
   function renderDesktop() {
     return <>
       <Head>
@@ -130,13 +199,11 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
 
-        <DesktopAppBar router={router} />
+        <DesktopAppBar router={router} onSignIn={onSignIn} me={me} onShowLang={onShowLang } pageEnum={EPAGE_CALENDAR}/>
         <div className={styles.desktop_panels_cont}>
           <DesktopMenuPanel leagues={leagues} router={router} />
-          <DesktopCalendarPanel router={router} date={date} matches={matches}/>
-          <DesktopRightPanel />
-          {/* <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} /> */}
-          {/* <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} /> */}
+          <DesktopCalendarPanel router={router} date={date} matches={matches} />
+          {renderDesktopRightPanel()}
         </div>
       </main>
     </>

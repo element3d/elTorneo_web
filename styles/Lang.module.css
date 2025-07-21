@@ -8,6 +8,10 @@
     padding-bottom: 50px;
 }
 
+.lang_panel {
+    width: 100%;
+}
+
 .item {
     width: 100%;
     display: flex;
@@ -18,6 +22,7 @@
     font-size: 14px;
     font-weight: bold;
     color: #8E8E93;
+    cursor: pointer;
 }
 
 .ava_panel {

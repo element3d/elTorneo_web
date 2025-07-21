@@ -22,6 +22,9 @@ import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import DesktopLeaguesMiddlePanel from '@/js/DesktopLeaguesMiddlePanel';
 import DesktopRightPanel from '@/js/DesktopRightPanel';
 import DesktopAppBar from '@/js/DesktopAppBar';
+import LoginPanel from '@/js/LoginPanel';
+import RegisterPanel from '@/js/RegisterPanel';
+import LangPanel from '@/js/LangPanel';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -170,7 +173,9 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
   const [view, setView] = useState(1)
   const [showPreview, setShowPreview] = useState(false)
   const [previewMatch, setPreviewMatch] = useState(null)
-
+  const [showSignIn, setShowSignIn] = useState(false)
+  const [logOrReg, setLogOrReg] = useState(0)
+  const [showLang, setShowLang] = useState(0)
   // if (!me) Cookies.remove('token')
 
   useEffect(() => {
@@ -216,6 +221,39 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
     window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
   }
 
+  function onSignIn() {
+    setShowSignIn(true)
+  }
+
+  function onNavRegister() {
+    setLogOrReg(1)
+  }
+
+  function onNavLogin() {
+    setLogOrReg(0)
+  }
+
+  function renderDesktopRightPanel() {
+    if (showSignIn) {
+      return <div className={styles.desktop_right_cont_login}>
+        {logOrReg == 0 ?
+          <LoginPanel router={router} onNavRegister={onNavRegister} /> :
+          <RegisterPanel onNavSignin={onNavLogin} />}
+      </div>
+    } else if (showLang) {
+      return <div className={styles.desktop_right_cont_login}>
+        <LangPanel router={router} locale={locale} />
+      </div>
+    }
+
+    return <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />
+  }
+
+  function onShowLang() {
+    setShowLang(1)
+    setShowSignIn(0)
+  }
+
   function renderDesktop() {
     return <>
       <Head>
@@ -226,11 +264,11 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
 
-        <DesktopAppBar router={router} />
+        <DesktopAppBar router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_HOME}/>
         <div className={styles.desktop_panels_cont}>
           <DesktopMenuPanel leagues={leagues} router={router} />
           <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} />
-          <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />
+          {renderDesktopRightPanel()}
         </div>
       </main>
     </>
