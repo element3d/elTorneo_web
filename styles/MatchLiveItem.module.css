@@ -13,6 +13,7 @@
     flex-direction: column;
     font-weight: bold;
     padding-bottom: 20px;
+    cursor: pointer;
 }
 
 .cont:active {

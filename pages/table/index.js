@@ -266,7 +266,7 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_ELTORNEO}/>
+                <DesktopAppBar locale={locale} router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_ELTORNEO} me={me}/>
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <DesktopTablePanel settings={settings} season={season} league={league} router={router} me={me} table={table} page={page} showNext={showNext} showPrev={showPrev} onNext={onNext} onPrev={onPrev} onNavProfile={onNavProfile} onNavLeague1={onNavLeague1} onNavLeague2={onNavLeague2} onNavLeague3={onNavLeague3} onNavLeague4={onNavLeague4} />

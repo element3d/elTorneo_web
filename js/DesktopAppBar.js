@@ -6,7 +6,7 @@ export const EPAGE_HOME = 1
 export const EPAGE_CALENDAR = 2
 export const EPAGE_ELTORNEO = 3
 
-export default function DesktopAppBar({ router, me, onSignIn, isMe, onShowLang, pageEnum }) {
+export default function DesktopAppBar({ locale, router, me, onSignIn, isMe, onShowLang, pageEnum }) {
     const { t } = useTranslation()
 
     function onNavHome() {
@@ -67,7 +67,7 @@ export default function DesktopAppBar({ router, me, onSignIn, isMe, onShowLang, 
             </div>
             <div className={styles.right_item}>
                 <div className={styles.lang_button} onClick={onShowLang}>
-                    <span>EN</span>
+                    <span>{locale?.toUpperCase()}</span>
                 </div>
                 {renderProfileItem()}
             </div>

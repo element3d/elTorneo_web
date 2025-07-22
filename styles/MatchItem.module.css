@@ -10,9 +10,14 @@
     justify-content: center;
     position: relative;
     overflow: hidden;
+    cursor: pointer;
     font-family: 'Roboto';
     /* font-weight: bold; */
     /* font-family: 'Roboto' */
+}
+
+.match_item:hover {
+    background-color: rgb(238, 238, 238);
 }
 
 .match_item:active {

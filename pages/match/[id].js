@@ -495,7 +495,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} me={me} onSignIn={onSignIn} onShowLang={onShowLang} />
+                <DesktopAppBar locale={locale} router={router} me={me} onSignIn={onSignIn} onShowLang={onShowLang} />
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>

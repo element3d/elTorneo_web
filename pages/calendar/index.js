@@ -199,7 +199,7 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
 
-        <DesktopAppBar router={router} onSignIn={onSignIn} me={me} onShowLang={onShowLang } pageEnum={EPAGE_CALENDAR}/>
+        <DesktopAppBar locale={locale} router={router} onSignIn={onSignIn} me={me} onShowLang={onShowLang } pageEnum={EPAGE_CALENDAR}/>
         <div className={styles.desktop_panels_cont}>
           <DesktopMenuPanel leagues={leagues} router={router} />
           <DesktopCalendarPanel router={router} date={date} matches={matches} />

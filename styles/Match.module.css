@@ -98,6 +98,7 @@
     font-size: 12px;
     user-select: none;
     color: white;
+    cursor: pointer;
 }
 
 .chip {
@@ -116,6 +117,7 @@
     font-size: 12px;
     user-select: none;
     color: #8E8E93;
+    cursor: pointer;
 }
 
 .chip:active {

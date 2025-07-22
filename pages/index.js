@@ -264,10 +264,10 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
 
-        <DesktopAppBar router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_HOME}/>
+        <DesktopAppBar locale={locale} router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_HOME} me={me}/>
         <div className={styles.desktop_panels_cont}>
           <DesktopMenuPanel leagues={leagues} router={router} />
-          <DesktopLeaguesMiddlePanel league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} />
+          <DesktopLeaguesMiddlePanel week={week} weeks={weeks} league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} />
           {renderDesktopRightPanel()}
         </div>
       </main>

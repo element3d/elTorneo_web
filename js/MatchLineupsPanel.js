@@ -3,7 +3,7 @@ import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 
 
-export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
+export default function MatchLineupsPanel({ match, lineups, isMobile = true }) {
     const { t } = useTranslation()
 
     function getKitImage(name) {
@@ -16,11 +16,16 @@ export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
     function LineupsHeader() {
         return <div className={styles.header}>
             <div className={styles.team_cont}>
-                <img src={getKitImage(match.team1.name)} style={{
-                    width: match.league != 7 ? 40 : 40,
-                    height: match.league != 7 ? 50 : 40,
-                    objectFit: match.league != 7 ? 'cover' : 'contain'
-                }} />
+                <img src={getKitImage(match.team1.name)}
+                    onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `${SERVER_BASE_URL}/data/teams/150x150/blank.png`;
+                    }}
+                    style={{
+                        width: match.league != 7 ? 40 : 40,
+                        height: match.league != 7 ? 50 : 40,
+                        objectFit: match.league != 7 ? 'cover' : 'contain'
+                    }} />
                 <div className={styles.team_name_cont}>
                     <span>{match.team1.shortName}</span>
                     <span className={styles.formation}>{lineups.team1.formation}</span>
@@ -131,7 +136,7 @@ export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
         return ""
     }
 
-    return <div className={ isMobile ? styles.padding : styles.padding_desktop}>
+    return <div className={isMobile ? styles.padding : styles.padding_desktop}>
         <div className={styles.panel}>
             <LineupsHeader></LineupsHeader>
 
@@ -175,7 +180,7 @@ export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
                         if (!p.start11) return
 
                         return <div key={p.name} className={styles.player_row}>
-                            <span>{p.number}. {p.name}</span> 
+                            <span>{p.number}. {p.name}</span>
                             <span className={styles.player_pos}>{getPlayerPos(p.pos)}</span>
                         </div>
                     })}
@@ -185,8 +190,8 @@ export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
                     {lineups.team2.players.map((p) => {
                         if (!p.start11) return
 
-                        return <div key={p.name} className={styles.player_row} style={{alignItems: 'flex-end', textAlign: 'end'}}>
-                            <span>{p.number}. {p.name}</span> 
+                        return <div key={p.name} className={styles.player_row} style={{ alignItems: 'flex-end', textAlign: 'end' }}>
+                            <span>{p.number}. {p.name}</span>
                             <span className={styles.player_pos}>{getPlayerPos(p.pos)}</span>
                         </div>
                     })}
@@ -197,12 +202,12 @@ export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
                 <span>{t('substitutes')}</span>
             </div>
             <div className={styles.lineups_cont}>
-            <div className={styles.lineups_left}>
+                <div className={styles.lineups_left}>
                     {lineups.team1.players.map((p) => {
                         if (p.start11) return
 
                         return <div key={p.name} className={styles.player_row}>
-                            <span>{p.number}. {p.name}</span> 
+                            <span>{p.number}. {p.name}</span>
                             <span className={styles.player_pos}>{getPlayerPos(p.pos)}</span>
                         </div>
                     })}
@@ -212,8 +217,8 @@ export default function MatchLineupsPanel({ match, lineups, isMobile=true }) {
                     {lineups.team2.players.map((p) => {
                         if (p.start11) return
 
-                        return <div key={p.name} className={styles.player_row} style={{alignItems: 'flex-end', textAlign: 'end'}}>
-                            <span>{p.number}. {p.name}</span> 
+                        return <div key={p.name} className={styles.player_row} style={{ alignItems: 'flex-end', textAlign: 'end' }}>
+                            <span>{p.number}. {p.name}</span>
                             <span className={styles.player_pos}>{getPlayerPos(p.pos)}</span>
                         </div>
                     })}

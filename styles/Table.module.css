@@ -26,6 +26,12 @@
     display: flex;
     align-items: center;
     color: var(--title-color);
+    cursor: pointer;
+    /* background-color: white; */
+}
+
+.table_item:hover {
+    background-color: rgb(238, 238, 238) !important;
 }
 
 .table_number {

@@ -18,15 +18,15 @@
     font-size: 15px;
     font-weight: bold;
     color: black;
-    border-radius: 8px;
-    margin-bottom: 8px;
+    border-radius: 12px;
+    margin-bottom: 10px;
     cursor: pointer;
     user-select: none;
 }
 
 .menu_item:hover {
     background-color: rgb(238, 238, 238);
-  }
+}
 
 .league_icon {
     width: 32px;

@@ -20,6 +20,7 @@ import DesktopRightPanel from '@/js/DesktopRightPanel';
 import LoginPanel from '@/js/LoginPanel';
 import RegisterPanel from '@/js/RegisterPanel';
 import LangPanel from '@/js/LangPanel';
+import MatchLiveItem from '@/js/MatchLiveItem';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -89,6 +90,27 @@ export async function getServerSideProps(context) {
             });
     }
 
+    const url = `${SERVER_BASE_URL}/api/v1/matches/live`
+    let matches = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authentication': token ? token : ''
+        },
+    })
+        .then(response => response.json())
+
+    if (!matches.length) {
+        const url = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+        matches = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token ? token : ''
+            },
+        })
+            .then(response => response.json())
+    }
 
     return {
         props: {
@@ -100,6 +122,7 @@ export async function getServerSideProps(context) {
             isMobile,
             leagues,
             locale,
+            matches,
             me,
             ...(await serverSideTranslations(locale)),
         },
@@ -107,13 +130,13 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function Home({ me, locale, isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues }) {
+export default function Home({ me, locale, isAndroid, isIOS, user, matches, stats, globalPage, initialPredicts, isMobile, leagues }) {
     const router = useRouter();
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
-    const [showSignIn, setShowSignIn] = useState(1)
+    const [showSignIn, setShowSignIn] = useState(!me)
     const [logOrReg, setLogOrReg] = useState(0)
     const [showLang, setShowLang] = useState(0)
 
@@ -179,7 +202,14 @@ export default function Home({ me, locale, isAndroid, isIOS, user, stats, global
             </div>
         } else if (showLang) {
             return <div className={styles.desktop_right_cont}>
-                <LangPanel router={router} locale={locale}/>
+                <LangPanel router={router} locale={locale} />
+            </div>
+        } else {
+            return <div className={styles.desktop_right_cont_live}>
+                {matches.map((m, i) => {
+                    if (i > 5) return
+                    return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
+                })}
             </div>
         }
     }
@@ -194,7 +224,7 @@ export default function Home({ me, locale, isAndroid, isIOS, user, stats, global
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} onShowLang={onShowLang} onSignIn={onShowSignIn} />
+                <DesktopAppBar locale={locale} router={router} me={me} onShowLang={onShowLang} onSignIn={onShowSignIn} />
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>

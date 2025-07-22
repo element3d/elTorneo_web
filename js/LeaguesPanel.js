@@ -18,27 +18,27 @@ function LeagueChip({ onClick, league, selected }) {
     </div>)
 }
 
+export function getWeek(t, week) {
+    if (week.type == 0) {
+        return `${t('matchday')} ${week.week}`
+    } else if (week.type == 1) {
+        return 'KR Play-offs'
+    } else if (week.type == 2) {
+        return 'Quarter final'
+    } else if (week.type == 3) {
+        return 'Semi final'
+    } else if (week.type == 4) {
+        return 'Final'
+    } else if (week.type == 5) {
+        return 'Round of 16'
+    }
+}
+
 function WeekChip({ ref, onClick, selected, week }) {
     const { t } = useTranslation()
 
-    function getWeek(week) {
-        if (week.type == 0) {
-            return `${t('matchday')} ${week.week}`
-        } else if (week.type == 1) {
-            return 'KR Play-offs'
-        } else if (week.type == 2) {
-            return 'Quarter final'
-        } else if (week.type == 3) {
-            return 'Semi final'
-        } else if (week.type == 4) {
-            return 'Final'
-        } else if (week.type == 5) {
-            return 'Round of 16'
-        }
-    }
-
     return (<div ref={ref} onClick={() => { onClick(week) }} className={selected ? styles.week_chip_sel : styles.week_chip}>
-        {/* {t('matchday')} {week.week} */}{getWeek(week)}
+        {/* {t('matchday')} {week.week} */}{getWeek(t, week)}
     </div>)
 }
 

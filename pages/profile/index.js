@@ -18,6 +18,7 @@ import MatchPreviewDialog from '@/js/MatchPreviewDialog';
 import DesktopAppBar from '@/js/DesktopAppBar';
 import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import MatchLiveItem from '@/js/MatchLiveItem';
+import LangPanel from '@/js/LangPanel';
 
 export async function getServerSideProps(context) {
     const { req } = context
@@ -108,6 +109,7 @@ export async function getServerSideProps(context) {
             isAndroid,
             isIOS,
             isMobile,
+            locale,
             leagues,
             matches,
             ...(await serverSideTranslations(locale)),
@@ -116,7 +118,7 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function Home({ isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues, matches }) {
+export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage, initialPredicts, isMobile, leagues, matches }) {
     const router = useRouter();
     const totalPredicts = initialPredicts.totalPredicts
     const [predicts, setPredicts] = useState(initialPredicts.predicts);
@@ -124,6 +126,7 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
+    const [showLang, setShowLang] = useState(0)
 
     useEffect(() => {
         return () => {
@@ -162,6 +165,24 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
         setPredicts(initialPredicts.predicts)
     }, [initialPredicts])
 
+    function onShowLang() {
+        setShowLang(1)
+    }
+
+    function renderDesktopRightPanel() {
+        if (showLang) {
+            return <div className={styles.desktop_right_cont}>
+                <LangPanel router={router} locale={locale} />
+            </div>
+        }
+        return <div className={styles.desktop_right_cont_live}>
+            {matches.map((m, i) => {
+                if (i > 5) return
+                return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
+            })}
+        </div>
+    }
+
     function renderDesktop() {
         return <>
             <Head>
@@ -172,7 +193,7 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar router={router} me={user} isMe={true} />
+                <DesktopAppBar locale={locale} router={router} me={user} isMe={true} onShowLang={onShowLang} />
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
@@ -181,12 +202,7 @@ export default function Home({ isAndroid, isIOS, user, stats, globalPage, initia
                         <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                     </div>
 
-                    <div className={styles.desktop_right_cont_live}>
-                        {matches.map((m, i) => {
-                            if (i > 5) return
-                            return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
-                        })}
-                    </div>
+                    {renderDesktopRightPanel()}
                 </div>
             </main>
         </>

@@ -30,6 +30,8 @@
 .desc {
     color: #8E8E93;
     margin-bottom: 40px;
+    font-size: 13px;
+    font-weight: bold;
     margin-top: 5px;
 }
 
@@ -148,6 +150,7 @@
     font-size: 14px;
     margin-bottom: 10px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .button_compact:active {
@@ -260,6 +263,7 @@
     margin-top: 16px;
     font-size: 16px;
     font-weight: bold;
+    cursor: pointer;
   }
 
   .login_button:active {
@@ -280,6 +284,7 @@
     font-weight: bold;
     font-size: 16px;
     margin-left: 8px;
+    cursor: pointer;
   }
 
   .dont_button:active {

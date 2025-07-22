@@ -132,3 +132,10 @@
     height: fit-content;
     border-radius: 16px;
 }
+
+.desktop_right_cont_live {
+    width: 360px;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+}
