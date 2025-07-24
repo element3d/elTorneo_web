@@ -81,7 +81,7 @@ export default function LeagueTablePanel({ router, table, league, miniLeague, gr
                     <div className={styles.team_row}>
                         <span className={styles.pos}>{currentPos++}</span>
                         <div className={styles.name_row}>
-                            <img className={styles.team_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.team.name}.png`} />
+                            <img className={styles.team_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.team.name.replace(/ö/g, 'o')}.png`} />
                             <span>{team.team.short_name}</span>
                         </div>
                         <span className={styles.points}>{team.matches_played}</span>

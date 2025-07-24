@@ -112,6 +112,7 @@
     font-size: 12px;
     user-select: none;
     color: #8E8E93;
+    cursor: pointer;
 }
 
 .chip_selected {

@@ -20,7 +20,7 @@ export default function TeamBrowseDialog({league, onPick}) {
             <div className={styles.list}>
             {teams.map((team, index) => (
             <div key={index} className={styles.dialog_list_item} onClick={() => onPick(team)}>
-                <img className={styles.list_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name}.png`} />
+                <img className={styles.list_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name.replace(/ö/g, 'o')}.png`} />
                 {team.name}
             </div>
             ))}

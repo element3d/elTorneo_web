@@ -8,7 +8,7 @@ import HomeMatchesPanel from './HomeMatchesPanel';
 import { getWeek } from './LeaguesPanel';
 
 
-export default function DesktopLeaguesMiddlePanel({ router, week, weeks, leagueName, league, matches, matchOfDay }) {
+export default function DesktopLeaguesMiddlePanel({ router, week, weeks, leagueName, league, matches, matchOfDay, onWeekClick }) {
     const {t} = useTranslation()
     let currMatchDate = null
 
@@ -34,7 +34,7 @@ export default function DesktopLeaguesMiddlePanel({ router, week, weeks, leagueN
         <MatchLiveItem match={matchOfDay} router={router} leagueName={leagueName} />
         <div className={styles.title_cont}>
             <h3>{t('matches')}</h3>
-            <button className={styles.week_button}>{getWeekInternal(week)}</button>
+            <button className={styles.week_button} onClick={onWeekClick}>{getWeekInternal(week)}</button>
         </div>
         <HomeMatchesPanel league={league} matches={matches} router={router} onPreview={onPreview} />
     </div>

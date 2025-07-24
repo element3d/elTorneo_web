@@ -25,6 +25,7 @@ import DesktopAppBar from '@/js/DesktopAppBar';
 import LoginPanel from '@/js/LoginPanel';
 import RegisterPanel from '@/js/RegisterPanel';
 import LangPanel from '@/js/LangPanel';
+import { DesktopWeekPanel } from '@/js/DesktopWeekPanel';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -176,6 +177,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
   const [showSignIn, setShowSignIn] = useState(false)
   const [logOrReg, setLogOrReg] = useState(0)
   const [showLang, setShowLang] = useState(0)
+  const [showWeeks, setShowWeeks] = useState(0)
   // if (!me) Cookies.remove('token')
 
   useEffect(() => {
@@ -244,6 +246,10 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       return <div className={styles.desktop_right_cont_login}>
         <LangPanel router={router} locale={locale} />
       </div>
+    } else if (showWeeks) {
+      return <div className={styles.desktop_right_cont_login}>
+        <DesktopWeekPanel router={router} league={league} weeks={weeks} thisWeek={week} />
+      </div>
     }
 
     return <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />
@@ -252,6 +258,12 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
   function onShowLang() {
     setShowLang(1)
     setShowSignIn(0)
+  }
+
+  function onWeekClick() {
+    setShowWeeks(1)
+    setShowSignIn(0)
+    setShowLang(0)
   }
 
   function renderDesktop() {
@@ -264,10 +276,10 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
 
-        <DesktopAppBar locale={locale} router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_HOME} me={me}/>
+        <DesktopAppBar locale={locale} router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_HOME} me={me} />
         <div className={styles.desktop_panels_cont}>
           <DesktopMenuPanel leagues={leagues} router={router} />
-          <DesktopLeaguesMiddlePanel week={week} weeks={weeks} league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} />
+          <DesktopLeaguesMiddlePanel week={week} weeks={weeks} league={league} matches={matches} matchOfDay={matchOfDay} router={router} leagueName={serverLeague.name} onWeekClick={onWeekClick} />
           {renderDesktopRightPanel()}
         </div>
       </main>

@@ -1,0 +1,42 @@
+.cont {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: start;
+}
+
+.item {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    padding-left: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #8E8E93;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.item:hover {
+    color: black;
+}
+
+.item_sel {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 50px;
+    padding-left: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FF2882;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+}

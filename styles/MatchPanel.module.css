@@ -32,6 +32,36 @@
     color: var(--title-color);
 }
 
+.edit_button {
+    width: 24px;
+    height: 24px;
+    background-color: #FF2882;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.edit_button:active {
+    opacity: .8;
+}
+
+.edit_icon {
+    width: 15px;
+    height: 15px;
+    object-fit: contain;
+}
+
+.edit_row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
 .team_item {
    display: flex;
    flex-direction: column;
@@ -151,7 +181,6 @@
     border-radius: 12px;
     padding-left: 20px;
     padding-right: 20px;
-    margin-top: 10px;
 }
 
 .score_input {

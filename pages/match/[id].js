@@ -126,6 +126,7 @@ export async function getServerSideProps(context) {
     let events = []
     let stats = []
     let lineups = []
+    let odds = null
 
     if (v == '') {
         summary = await fetch(`${SERVER_BASE_URL}/api/v1/match/predicts?match_id=${data[0].id}&season=${data[0].season}`, {
@@ -163,6 +164,15 @@ export async function getServerSideProps(context) {
 
         h2hMatches.push(t1Matches)
         h2hMatches.push(t2Matches)
+    } else if (v == 'bet') {
+        odds = await fetch(`${SERVER_BASE_URL}/api/v1/match/odds?match_id=${data[0].id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': token ? token : ''
+        },
+      })
+        .then(response => response.json())
     }
     if (v == 'table' || !isMobile) {
         table = await fetch(`${SERVER_BASE_URL}/api/v1/league/table?league_id=${data[0].league}&league_index=${data[0].team1.league_index}`, {
@@ -232,6 +242,7 @@ export async function getServerSideProps(context) {
             header,
             settings,
             me,
+            odds,
             locale,
             isMobile,
             isAndroid,
@@ -242,14 +253,26 @@ export async function getServerSideProps(context) {
     };
 }
 
-function Chip({ ref, title, selected, onClick }) {
-    return <div ref={ref} className={selected ? styles.chip_sel : styles.chip} onClick={onClick}>
+function Chip({ ref, title, selected, onClick, isBet = false }) {
+    function getStyle() {
+        if (isBet && !selected) {
+            return {
+                backgroundColor: '#37003C',
+                color: 'white'
+            }
+        } 
+
+        return null
+    }
+
+    return <div ref={ref} className={selected ? styles.chip_sel : styles.chip} onClick={onClick} style={getStyle()}>
+        {isBet ? <img className={styles.bbicon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img> : null }
         <span>{title}</span>
     </div>
 }
 
 
-export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
+export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, odds, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
 
     console.log(isMobile)
     const { t } = useTranslation()
@@ -334,6 +357,10 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
         router.push(`/match/${match.id}?view=h2h`)
     }
 
+    function onNavBet() {
+        router.push(`/match/${match.id}?view=bet`)
+    }
+
     function onNavPredicts() {
         router.push(`/match/${match.id}`)
     }
@@ -405,6 +432,30 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
 
     function onTeamSelect(i) {
         setTeamIndex(i - 1)
+    }
+
+    function renderBetView() {
+        function OddView({type, odd, marginRight, marginLeft}) {
+            return <div className={styles.odd_item} style={{marginRight: marginRight, marginLeft: marginLeft}}>
+                <span>{type}</span>
+                <span className={styles.odd_text}>{odd}</span>
+            </div>
+        }
+        
+        return <div className={styles.bet_panel}>
+            <span className={styles.bet_title}>{t('match_winner')}</span>
+            <div className={styles.odd_row}>
+                <OddView type={'W1'} odd={odds.w1.toFixed(2)} marginRight={10}></OddView>
+                <OddView type={'X'} odd={odds.x.toFixed(2)} marginRight={10}></OddView>
+                <OddView type={'W2'} odd={odds.w2.toFixed(2)}></OddView>
+            </div>
+            <span className={styles.bet_title}>{t('double_chance')}</span>
+            <div className={styles.odd_row}>
+                <OddView type={'1X'} odd={odds.x1.toFixed(2)} marginRight={10}></OddView>
+                <OddView type={'12'} odd={odds.x12.toFixed(2)} marginRight={10}></OddView>
+                <OddView type={'2X'} odd={odds.x2.toFixed(2)}></OddView>
+            </div>
+        </div>
     }
 
     function renderH2HView() {
@@ -503,10 +554,12 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
 
                         <div className={`${styles.row} ${styles.mt20}`}>
                             <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
+                            { header.odds ? <Chip title={'Bet'} isBet={true} selected={view == 'bet'} onClick={onNavBet}></Chip> : null }
                             <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
                             { view2 != 'table' ? <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip> : null }
                         </div>
                         {view == '' ? renderPredictsView() : null}
+                        {view == 'bet' ? renderBetView() : null}
                         {view == 'h2h' ? renderH2HView() : null}
                         {view == 'table' ? renderTableView() : null}
                     </div>

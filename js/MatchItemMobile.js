@@ -5,13 +5,13 @@ import { useTranslation } from 'next-i18next';
 function TeamItemLeft({ team, isSpecial }) {
     return (<div className={styles.team_item_left}>
         <span className={isSpecial ? styles.white : null}>{team.shortName}</span>
-        <img className={styles.team_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name}.png`} />
+        <img className={styles.team_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name.replace(/ö/g, 'o')}.png`} />
     </div>)
 }
 
 function TeamItemRight({ team, isSpecial }) {
     return (<div className={styles.team_item_right}>
-        <img className={styles.team_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name}.png`} />
+        <img className={styles.team_icon} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name.replace(/ö/g, 'o')}.png`} />
         <span className={isSpecial ? styles.white : null}>{team.shortName}</span>
     </div>)
 }

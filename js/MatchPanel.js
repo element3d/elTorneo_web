@@ -7,20 +7,24 @@ import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
 function TeamItem({ team, isHome, style }) {
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
     return <div className={styles.team_item} style={style}>
-        <img className={styles.team_img} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name}.png`} />
+        <img className={styles.team_img} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name.replace(/ö/g, 'o')}.png`} />
         <span>{team.shortName}</span>
         <span className={styles.homeaway}>{isHome ? t('home') : t("away")}</span>
     </div>
 }
 
-export default function MatchPanel({ router, me, match, predict, isMobile, onLogin}) {
+export const EMODE_VIEW = 0
+export const EMODE_EDIT = 1
+
+export default function MatchPanel({ router, me, match, predict, isMobile, onLogin }) {
     console.log(isMobile)
-    const {t} = useTranslation()
+    const { t } = useTranslation()
     const [team1Score, setTeam1Score] = useState('')
     const [team2Score, setTeam2Score] = useState('')
+    const [mode, setMode] = useState(EMODE_VIEW)
 
     function getDate() {
         const today = moment().startOf('day');
@@ -78,7 +82,7 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
     }
 
     function showPredictButton() {
-        if (!me || predict) return false
+        if (!me || (predict && mode != EMODE_EDIT)) return false
         if (isFinished() || isLive()) return false
 
         return true
@@ -174,6 +178,41 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
         return formattedTime;
     }
 
+    function onEdit() {
+        const requestOptions = {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': me.token
+            },
+            body: JSON.stringify({
+                predict: predict.id,
+                team1_score: Number.parseInt(team1Score),
+                team2_score: Number.parseInt(team2Score)
+            })
+        };
+
+        fetch(`${SERVER_BASE_URL}/api/v1/predicts`, requestOptions)
+            .then(response => {
+
+                if (response.status == 403) {
+                    // setShowFailPlayDialog(true)
+                    // setProcessing(false)
+                    return
+                }
+
+                router.reload()
+                return null
+            })
+            .then(data => {
+                console.log("====================== SAVE ")
+                // setMode(EMODE_VIEW)
+                // router.reload()
+            })
+            .catch((e) => {
+            });
+    }
+
     function onPredict() {
         const requestOptions = {
             method: 'POST',
@@ -213,12 +252,16 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
         setTeam2Score('')
     }
 
+    function onEditClick() {
+        setMode(EMODE_EDIT)
+    }
+
     function isPstOrInt() {
         if (match.status == "PST" || match.status == "INT") return true
         return false
     }
 
-    return (<div className={ isMobile ? styles.panel : styles.panel_desktop }>
+    return (<div className={isMobile ? styles.panel : styles.panel_desktop}>
         <span>{getDate()}</span>
         <span className={styles.week}>{t('matchday')} {match.week}</span>
         <div className={styles.teams_row}>
@@ -231,7 +274,7 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
                 <span className={styles.score_label}>{match.team2_score}</span>
             </div> : null}
 
-            {isNotStarted() && predict ? <div className={styles.live_panel}>
+            {isNotStarted() && predict && mode == EMODE_VIEW ? <div className={styles.live_panel}>
                 <div className={styles.live_score_panel}>
                     <div className={styles.status}>
                         <span>{getTime(match.date)}</span>
@@ -245,9 +288,9 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
                         <span>{match.status}</span>
                     </div>
                 </div>
-           </div> : null}
+            </div> : null}
 
-            {isNotStarted() && !predict ? <div className={styles.live_panel}>
+            {isNotStarted() && (!predict || mode == EMODE_EDIT) ? <div className={styles.live_panel}>
                 <div className={styles.live_score_panel}>
                     <input type='tel' maxLength={1} className={styles.score_input} value={team1Score} onChange={onScore1Change} />
                     <span className={styles.dots}>:</span>
@@ -262,13 +305,17 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
                     <span className={styles.score_label}>{match.team2_score_live}</span>
                 </div>
                 <div className={styles.status}>
-                    <span>{ match.status == 'HT' ? 'HT' : match.elapsed + " '"}</span>
+                    <span>{match.status == 'HT' ? 'HT' : match.elapsed + " '"}</span>
                 </div>
             </div> : null}
         </div>
-        {predict && predict.status != 4 ? <div className={styles.predict_item} style={{ backgroundColor: getBgColor(predict), color: getBorderColor(predict) }}>
-            <span >{t('prediction')} {predict.team1_score} : {predict.team2_score}</span>
-        </div> : null}
+        {predict && predict.status != 4 && mode != EMODE_EDIT ? <div className={styles.edit_row}><div className={styles.predict_item} style={{ backgroundColor: getBgColor(predict), color: getBorderColor(predict) }}>
+            <span >{t('prediction')} {predict.team1_score} : {predict.team2_score}</span></div>
+            <button className={styles.edit_button} onClick={onEditClick}>
+                <img className={styles.edit_icon} src={`${SERVER_BASE_URL}/data/icons/edit.svg`} />
+            </button>
+        </div>
+            : null}
 
         {showLoginButton() ? <button onClick={login} className={styles.sign_in_btn} >
             <span>{t('sign_in_to_predict')}</span>
@@ -276,7 +323,8 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
                 <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`}/>
             </div> */}
         </button> : null}
-        {showPredictButton() ? <button onClick={onPredict} disabled={team1Score.length == 0 || team2Score.length == 0} className={styles.sign_in_btn} style={{ opacity: team1Score.length && team2Score.length ? 1 : .6 }}>{t('predict')}</button> : null}
+        {showPredictButton() ?
+            <button onClick={mode == EMODE_VIEW ? onPredict : onEdit} disabled={team1Score.length == 0 || team2Score.length == 0} className={styles.sign_in_btn} style={{ opacity: team1Score.length && team2Score.length ? 1 : .6 }}>{mode == EMODE_VIEW ? t('predict') : t('save')}</button> : null}
 
 
     </div>)

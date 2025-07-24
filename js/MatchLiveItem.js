@@ -7,7 +7,7 @@ function TeamItem({ team, isHome, style }) {
   const {t} = useTranslation()
 
   return <div className={styles.team_item} style={style}>
-    <img className={styles.team_logo} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name}.png`} />
+    <img className={styles.team_logo} src={`${SERVER_BASE_URL}/data/teams/150x150/${team.name.replace(/ö/g, 'o')}.png`} />
     <span className={styles.team_name}>{team.shortName}</span>
     <span className={styles.home_away}>{isHome ? t("home") : t("away")}</span>
   </div>

@@ -4,7 +4,9 @@
   font-weight: normal;
   font-style: normal;
 }
-
+* {
+  -webkit-tap-highlight-color: transparent;
+}
 
 :root {
   --title-color: #1C1C1E;

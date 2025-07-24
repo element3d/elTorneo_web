@@ -19,10 +19,10 @@ export default function DesktopMenuPanel({ router, leagues }) {
                 {l.name}
             </div>
         })}
-
+{/* 
         <h5 className={styles.title}>Menu</h5>
         <div className={styles.beat_bet_item} onClick={onNavBeatBet}>
             Beat Bet
-        </div>
+        </div> */}
     </div>
 }

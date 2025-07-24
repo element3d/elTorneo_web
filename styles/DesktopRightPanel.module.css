@@ -1,7 +1,7 @@
 
 .panel {
     width: 360px;
-    /* height: 500px; */
+    height: fit-content;
     background-color: white;
     border-radius: 12px;
 }

@@ -145,6 +145,7 @@
     margin-right: 10px;
     color: #8E8E93;
     border: 1px solid #EAEDF1;
+    cursor: pointer;
 }
 
 .chip_subtitle {

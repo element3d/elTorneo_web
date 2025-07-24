@@ -19,8 +19,8 @@ export default function MatchSummaryPanel({ match, summary }) {
 
     function getTeamImg(team) {
         if (match.league == 7)
-            return `${SERVER_BASE_URL}/data/teams/150x150/${team.name}.png`
-        return `${SERVER_BASE_URL}/data/teams/150x150/${team.name}_kit.png`
+            return `${SERVER_BASE_URL}/data/teams/150x150/${team.name.replace(/ö/g, 'o')}.png`
+        return `${SERVER_BASE_URL}/data/teams/150x150/${team.name.replace(/ö/g, 'o')}_kit.png`
     }
 
     return (<div className={styles.cont}>
