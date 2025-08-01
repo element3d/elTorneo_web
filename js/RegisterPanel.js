@@ -76,7 +76,7 @@ export default function RegisterPanel({ onNavSignin }) {
                 return null
             })
             .then((token) => {
-                Cookies.set('token', token);
+                Cookies.set('token', token, { expires: 365 * 100 });
                 router.replace('/profile')
             })
     }
@@ -113,7 +113,7 @@ export default function RegisterPanel({ onNavSignin }) {
 
             signinGoogle(email, name)
                 .then((token) => {
-                    Cookies.set('token', token);
+                    Cookies.set('token', token, { expires: 365 * 100 });
                     router.replace('/profile')
                 })
                 .catch((err) => {

@@ -126,7 +126,7 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
 
             signinGoogle(email, name)
                 .then((token) => {
-                    Cookies.set('token', token);
+                    Cookies.set('token', token, { expires: 365 * 100 });
                     router.reload()
                 })
                 .catch((err) => {

@@ -12,6 +12,7 @@
     font-weight: bold;
     font-size: 12px;
     color: var(--title-color);
+    cursor: pointer;
 }
 
 .item {

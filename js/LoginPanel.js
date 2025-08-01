@@ -51,7 +51,7 @@ export default function LoginPanel({router, onLogin, onNavRegister}) {
 
             signinGoogle(email, name)
                 .then((token) => {
-                    Cookies.set('token', token);
+                    Cookies.set('token', token, { expires: 365 * 100 });
                     if (onLogin) onLogin()
                     else router.replace('/profile')
                 })
@@ -132,7 +132,7 @@ export default function LoginPanel({router, onLogin, onNavRegister}) {
             .then((token) => {
                 if (!token) return
 
-                Cookies.set('token', token);
+                Cookies.set('token', token, { expires: 365 * 100 });
                 router.replace('/profile')
             })
     }

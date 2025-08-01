@@ -76,7 +76,8 @@ export default function Home({ isAndroid, isIOS }) {
             .then((token) => {
                 if (!token) return
 
-                Cookies.set('token', token)
+                Cookies.set('token', token, { expires: 365 * 100 });
+
                 router.replace('/profile')
                 // router.reload()
             })

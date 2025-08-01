@@ -316,7 +316,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
           <Switch title1={t('matches')} title2={t('table')} selected={view} onSelect={onSelect} />
         </div>
         {view == 1 ? <HomeMatchesPanel league={league} matches={matches} router={router} onPreview={onPreview} isMobile={isMobile} /> :
-          <LeagueTablePanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />}
+          <LeagueTablePanel table={table} isMobile={true} league={serverLeague} miniLeague={miniLeague} router={router} />}
 
         {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
 

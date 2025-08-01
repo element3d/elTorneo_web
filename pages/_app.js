@@ -9,7 +9,7 @@ import { useEffect } from "react";
 
 function App({ Component, pageProps }) {
   const router = useRouter()
-  
+
   useEffect(() => {
     // Cookies.set('token')
 
@@ -22,7 +22,7 @@ function App({ Component, pageProps }) {
     //     console.error('AdSense Error:', err);
     //   }
     // }
-    
+
     if (window.Telegram) {
       const tg = window.Telegram.WebApp;
       if (tg) {
@@ -41,12 +41,12 @@ function App({ Component, pageProps }) {
         tg.lockOrientation?.();
         tg.BackButton.onClick(() => {
           router.back()
-        }) 
+        })
         // tg.requestFullScreen?.()
         // tg.enableClosingConfirmation()
 
         const token = Cookies.get('token')
-        if (token?.length > 20) { 
+        if (token?.length > 20) {
           return
         } else {
           Cookies.remove('token')
@@ -70,7 +70,7 @@ function App({ Component, pageProps }) {
               return null
             })
             .then((token) => {
-              Cookies.set('token', token)
+              Cookies.set('token', token, { expires: 365 * 100 });
               // router.reload()
             })
         } else {
