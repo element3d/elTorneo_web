@@ -140,7 +140,7 @@ export async function getServerSideProps(context) {
         return null;
       });
 
-    if (!me) res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
+    // if (!me) res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
   }
 
   const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
