@@ -155,25 +155,25 @@ export default function CompleteAccountPanel({ onNavSignin, router }) {
         }
     }
 
-    function onCompleteAccountGoogle() {
-        signinGoogle('narekhovhannisyanim3@gmail.com', 'name')
-            .then((token) => {
-                Cookies.set('token', token, { expires: 365 * 100 });
-                router.replace('/profile')
-            })
-            .catch((err) => {
-                console.error(err)
-            })
-    }
+    // function onCompleteAccountGoogle() {
+    //     signinGoogle('narekhovhannisyanim3@gmail.com', 'name')
+    //         .then((token) => {
+    //             Cookies.set('token', token, { expires: 365 * 100 });
+    //             router.replace('/profile')
+    //         })
+    //         .catch((err) => {
+    //             console.error(err)
+    //         })
+    // }
 
-    // const onCompleteAccountGoogle = useGoogleLogin({
-    //     onCompleteAccountGoogleSuccess,
-    //     clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
-    //     isSignedIn: true,
-    //     accessType: 'offline',
-    //     fetchBasicProfile: true,
-    //     scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-    // });
+    const onCompleteAccountGoogle = useGoogleLogin({
+        onCompleteAccountGoogleSuccess,
+        clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
+        isSignedIn: true,
+        accessType: 'offline',
+        fetchBasicProfile: true,
+        scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+    });
 
     return (
         <div className={styles.cont}>

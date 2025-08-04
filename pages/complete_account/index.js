@@ -66,7 +66,7 @@ export default function Home({ isAndroid, isIOS }) {
                     </div>
                 </div>
 
-                <CompleteAccountPanel onNavSignin={onNavSignin}/>
+                <CompleteAccountPanel onNavSignin={onNavSignin} router={router}/>
                 {/* <InstallPanel hasMargin={true} /> */}
                 <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} />
             </main>
