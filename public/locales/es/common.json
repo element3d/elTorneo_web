@@ -170,6 +170,9 @@
     "beginner_msg": "Comienza en abril.",
     "match_winner": "Ganador del partido",
     "double_chance": "Doble oportunidad",
+    "attention": "¡Atención!",
+    "complete_account": "Completar perfil",
+    "link_account_message": "Estás usando una cuenta de invitado. Tus datos se almacenan temporalmente y pueden perderse si desinstalas la aplicación. Para guardar tu progreso y acceder a tu cuenta desde otros dispositivos, completa la creación de tu cuenta.",
     "awards_info_short": "Únete al torneo gratuito de predicciones de fútbol definitivo, abierto a aficionados de todo el mundo. Inicia sesión, haz tus predicciones y sube en la clasificación siguiendo las reglas. ¿Listo para competir? ¡Bienvenido a el Torneo!"
 
 }

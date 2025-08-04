@@ -28,6 +28,8 @@ import LoginPanel from '@/js/LoginPanel';
 import RegisterPanel from '@/js/RegisterPanel';
 import MatchLiveItem from '@/js/MatchLiveItem';
 import LangPanel from '@/js/LangPanel';
+import authManager from '@/js/AuthManager';
+import LinkAccountPanel from '@/js/LinkAccountPanel';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -37,6 +39,10 @@ export async function getServerSideProps(context) {
     let token = null
     if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
+    }
+    let guestUsername = null
+    if (req.cookies?.guest_username) {
+        guestUsername = req.cookies.guest_username;
     }
 
     let isAndroid = false;
@@ -80,21 +86,18 @@ export async function getServerSideProps(context) {
             return null
         })
 
-    if (token) {
-        const requestOptions1 = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authentication': token
-            },
-        };
-
-        me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions1)
-            .then(response => {
-                if (response.status === 200) return response.json();
-                return null;
-            });
+    if (!token && !guestUsername) {
+        token = await authManager.createGuestUser();
     }
+    if (token) {
+        me = await authManager.getMe(token)
+        const guestUser = 'temp_username';
+        context.res.setHeader('Set-Cookie', [
+            `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
+            `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
+        ]);
+    }
+
     let settings = null
     {
         settings = await fetch(`${SERVER_BASE_URL}/api/v1/settings`, requestOptions)
@@ -244,10 +247,11 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
             </div>
         } else if (showLang) {
             return <div className={styles.desktop_right_cont_login}>
-                <LangPanel router={router} locale={locale}/>
+                <LangPanel router={router} locale={locale} />
             </div>
         } else {
             return <div className={styles.desktop_right_cont_live}>
+                {me?.isGuset ? <LinkAccountPanel /> : null}
                 {matches.map((m, i) => {
                     if (i > 5) return
                     return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
@@ -266,7 +270,7 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
             </Head>
             <main className={`${styles.main} ${inter.className}`}>
 
-                <DesktopAppBar locale={locale} router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_ELTORNEO} me={me}/>
+                <DesktopAppBar locale={locale} router={router} onSignIn={onSignIn} onShowLang={onShowLang} pageEnum={EPAGE_ELTORNEO} me={me} />
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <DesktopTablePanel settings={settings} season={season} league={league} router={router} me={me} table={table} page={page} showNext={showNext} showPrev={showPrev} onNext={onNext} onPrev={onPrev} onNavProfile={onNavProfile} onNavLeague1={onNavLeague1} onNavLeague2={onNavLeague2} onNavLeague3={onNavLeague3} onNavLeague4={onNavLeague4} />

@@ -18,6 +18,7 @@ const inter = Inter({ subsets: ['latin'] });
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { UAParser } from 'ua-parser-js';
 import InstallPanel from '@/js/InstallPanel';
+import authManager from '@/js/AuthManager';
 
 export async function getServerSideProps(context) {
   const { query } = context;
@@ -25,6 +26,10 @@ export async function getServerSideProps(context) {
   let token = null
   if (req.cookies && req.cookies.token) {
     token = req.cookies.token;
+  }
+  let guestUsername = null
+  if (req.cookies?.guest_username) {
+    guestUsername = req.cookies.guest_username;
   }
 
   const { locale } = context;
@@ -65,22 +70,17 @@ export async function getServerSideProps(context) {
   }
 
   let me = null
-  if (token) {
-    const requestOptions1 = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authentication': token
-      },
-    };
-
-    me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions1)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        return null;
-      });
+  if (!token && !guestUsername) {
+    token = await authManager.createGuestUser();
   }
-
+  if (token) {
+    me = await authManager.getMe(token)
+    const guestUser = 'temp_username';
+    context.res.setHeader('Set-Cookie', [
+      `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
+      `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
+    ]);
+  }
 
   return {
     props: {

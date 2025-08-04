@@ -19,6 +19,8 @@ import DesktopAppBar from '@/js/DesktopAppBar';
 import DesktopMenuPanel from '@/js/DesktopMenuPanel';
 import MatchLiveItem from '@/js/MatchLiveItem';
 import LangPanel from '@/js/LangPanel';
+import LinkAccountPanel from '@/js/LinkAccountPanel';
+import authManager from '@/js/AuthManager';
 
 export async function getServerSideProps(context) {
     const { req } = context
@@ -50,6 +52,19 @@ export async function getServerSideProps(context) {
     if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
     }
+    let guestUsername = null
+    if (req.cookies?.guest_username) {
+        guestUsername = req.cookies.guest_username;
+    }
+
+    if (!token && !guestUsername) {
+        token = await authManager.createGuestUser();
+    }
+    let user = null;
+    if (token) {
+        user = await authManager.getMe(token)
+        // context.res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Max-Age=${365 * 100 * 24 * 60 * 60}`);
+    }
 
     if (!token) {
         return {
@@ -60,19 +75,19 @@ export async function getServerSideProps(context) {
         };
     }
 
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authentication': token
-        },
-    };
+    // const requestOptions = {
+    //     method: 'GET',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'Authentication': token
+    //     },
+    // };
 
-    const user = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions)
-        .then(response => {
-            if (response.status === 200) return response.json();
-            return null;
-        });
+    // const user = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions)
+    //     .then(response => {
+    //         if (response.status === 200) return response.json();
+    //         return null;
+    //     });
 
     const initialPredicts = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${globalPage}&user_id=${user.id}&league_id=${-1}`, {
         method: 'GET',
@@ -176,6 +191,7 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
             </div>
         }
         return <div className={styles.desktop_right_cont_live}>
+            {user?.isGuest ? <LinkAccountPanel /> : null}
             {matches.map((m, i) => {
                 if (i > 5) return
                 return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />

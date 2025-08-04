@@ -26,6 +26,9 @@ import LoginPanel from '@/js/LoginPanel';
 import RegisterPanel from '@/js/RegisterPanel';
 import LangPanel from '@/js/LangPanel';
 import { DesktopWeekPanel } from '@/js/DesktopWeekPanel';
+import authManager from '@/js/AuthManager';
+import LinkAccountPanel from '@/js/LinkAccountPanel';
+import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -46,6 +49,10 @@ export async function getServerSideProps(context) {
   let token = null
   if (req.cookies && req.cookies.token) {
     token = req.cookies.token;
+  }
+  let guestUsername = null
+  if (req.cookies?.guest_username) {
+    guestUsername = req.cookies.guest_username;
   }
 
   // res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
@@ -125,22 +132,16 @@ export async function getServerSideProps(context) {
   }
 
   let me = null
+  if (!token && !guestUsername) {
+    token = await authManager.createGuestUser();
+  }
   if (token) {
-    const requestOptions1 = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authentication': token
-      },
-    };
-
-    me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, requestOptions1)
-      .then(response => {
-        if (response.status === 200) return response.json();
-        return null;
-      });
-
-    // if (!me) res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
+    me = await authManager.getMe(token)
+    const guestUser = 'temp_username';
+    res.setHeader('Set-Cookie', [
+      `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
+      `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
+    ]);
   }
 
   const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
@@ -178,6 +179,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
   const [logOrReg, setLogOrReg] = useState(0)
   const [showLang, setShowLang] = useState(0)
   const [showWeeks, setShowWeeks] = useState(0)
+  const [showCompleteAccount, setShowCompleteAccount] = useState(0)
   // if (!me) Cookies.remove('token')
 
   useEffect(() => {
@@ -235,6 +237,10 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
     setLogOrReg(0)
   }
 
+  function onCompleteAccountClick() {
+    setShowCompleteAccount(true)
+  }
+
   function renderDesktopRightPanel() {
     if (showSignIn) {
       return <div className={styles.desktop_right_cont_login}>
@@ -250,9 +256,16 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       return <div className={styles.desktop_right_cont_login}>
         <DesktopWeekPanel router={router} league={league} weeks={weeks} thisWeek={week} />
       </div>
+    } else if (showCompleteAccount) {
+      return <div className={styles.desktop_right_cont_login}>
+        <CompleteAccountPanel router={router} />
+      </div>
     }
 
-    return <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />
+    return <div className={styles.w_360}>
+      {me?.isGuest ? <LinkAccountPanel onCompleteAccount={onCompleteAccountClick} /> : null}
+      <DesktopRightPanel table={table} league={serverLeague} miniLeague={miniLeague} router={router} />
+    </div>
   }
 
   function onShowLang() {

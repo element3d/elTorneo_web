@@ -3,9 +3,10 @@ import { SERVER_BASE_URL } from '@/js/Config';
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useGoogleLogin } from '@react-oauth/google';
+import Cookies from 'js-cookie';
 
 
-export default function RegisterPanel({ onNavSignin }) {
+export default function CompleteAccountPanel({ onNavSignin, router }) {
     const { t } = useTranslation()
 
     const [username, setUsername] = useState('')
@@ -32,7 +33,7 @@ export default function RegisterPanel({ onNavSignin }) {
         return true;
     }
 
-    function onRegister() {
+    function onCompleteAccount() {
         if (username.length < 6) {
             setError(t('err_username_len'))
             return
@@ -55,16 +56,20 @@ export default function RegisterPanel({ onNavSignin }) {
             return
         }
 
-
+        const token = Cookies.get('token');
         const requestOptions = {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token ? token : ''
+            },
             body: JSON.stringify({
                 username: username,
                 name: name,
                 password: password
             })
         };
-        return fetch(`${SERVER_BASE_URL}/api/v1/signup`, requestOptions)
+        return fetch(`${SERVER_BASE_URL}/api/v1/link/username`, requestOptions)
             .then(response => {
                 if (response.status == 200)
                     return response.text()
@@ -76,26 +81,10 @@ export default function RegisterPanel({ onNavSignin }) {
                 return null
             })
             .then((token) => {
+                if (!token) return
+
                 Cookies.set('token', token, { expires: 365 * 100 });
-                router.replace('/profile')
-            })
-    }
-
-    function signinGoogle(email, name) {
-        const requestOptions = {
-            method: 'POST',
-            body: JSON.stringify({
-                email: email,
-                name: name
-            })
-        };
-        return fetch(`${SERVER_BASE_URL}/api/v1/signin/googlemail`, requestOptions)
-            .then(response => {
-                if (response.status == 200)
-                    return response.text()
-
-                // setError(t('incorrect_login'))
-                return null
+                router.push('/profile')
             })
     }
 
@@ -111,7 +100,31 @@ export default function RegisterPanel({ onNavSignin }) {
         setPassword(e.target.value)
     }
 
-    const onSuccess = async (tokenResponse) => {
+    function signinGoogle(email, name) {
+        const token = Cookies.get('token');
+
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token ? token : ''
+            },
+            body: JSON.stringify({
+                email: email,
+                name: name
+            })
+        };
+        return fetch(`${SERVER_BASE_URL}/api/v1/link/googlemail`, requestOptions)
+            .then(response => {
+                if (response.status == 200)
+                    return response.text()
+
+                // setError(t('incorrect_login'))
+                return null
+            })
+    }
+
+    const onCompleteAccountGoogleSuccess = async (tokenResponse) => {
         try {
             // Extract the access token from the tokenResponse
             const accessToken = tokenResponse.access_token;
@@ -142,14 +155,25 @@ export default function RegisterPanel({ onNavSignin }) {
         }
     }
 
-    const login = useGoogleLogin({
-        onSuccess,
-        clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
-        isSignedIn: true,
-        accessType: 'offline',
-        fetchBasicProfile: true,
-        scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
-    });
+    function onCompleteAccountGoogle() {
+        signinGoogle('narekhovhannisyanim3@gmail.com', 'name')
+            .then((token) => {
+                Cookies.set('token', token, { expires: 365 * 100 });
+                router.replace('/profile')
+            })
+            .catch((err) => {
+                console.error(err)
+            })
+    }
+
+    // const onCompleteAccountGoogle = useGoogleLogin({
+    //     onCompleteAccountGoogleSuccess,
+    //     clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
+    //     isSignedIn: true,
+    //     accessType: 'offline',
+    //     fetchBasicProfile: true,
+    //     scope: 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+    // });
 
     return (
         <div className={styles.cont}>
@@ -162,9 +186,9 @@ export default function RegisterPanel({ onNavSignin }) {
 
             <div className={styles.login_cont}>
                 <div className={styles.buttons_row} style={{ marginTop: '0px' }}>
-                    <button className={styles.button_compact} onClick={login}>
+                    <button className={styles.button_compact} onClick={onCompleteAccountGoogle}>
                         <img className={styles.gicon} src={`${SERVER_BASE_URL}/data/icons/google.svg`} />
-                        {t('signin_google')}
+                        {t('complete_account')}
                     </button>
                     {/* <button className={styles.button_compact} onClick={navTelegram}>
                             <img className={styles.ticon} src={`${SERVER_BASE_URL}/data/icons/telegram.svg`} />
@@ -198,8 +222,8 @@ export default function RegisterPanel({ onNavSignin }) {
 
                 <span className={styles.error}>{error}</span>
 
-                <button className={styles.login_button} onClick={onRegister}>
-                    {t('register')}
+                <button className={styles.login_button} onClick={onCompleteAccount}>
+                    {t('complete_account')}
                 </button>
 
                 <div className={styles.dont_cont}>

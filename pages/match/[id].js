@@ -32,6 +32,8 @@ import DesktopRightPanel from '@/js/DesktopRightPanel';
 import LoginPanel from '@/js/LoginPanel';
 import RegisterPanel from '@/js/RegisterPanel';
 import LangPanel from '@/js/LangPanel';
+import authManager from '@/js/AuthManager';
+import LinkAccountPanel from '@/js/LinkAccountPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -42,6 +44,10 @@ export async function getServerSideProps(context) {
     let token = null
     if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
+    }
+    let guestUsername = null
+    if (req.cookies?.guest_username) {
+        guestUsername = req.cookies.guest_username;
     }
 
     const { query } = context;
@@ -83,6 +89,9 @@ export async function getServerSideProps(context) {
 
     let predict = null
     let me = null
+    if (!token && !guestUsername) {
+        token = await authManager.createGuestUser();
+    }
     if (token) {
         const prequestOptions = {
             method: 'GET',
@@ -102,14 +111,12 @@ export async function getServerSideProps(context) {
 
         if (!Object.keys(predict).length) predict = null
 
-        me = await fetch(`${SERVER_BASE_URL}/api/v1/me`, prequestOptions)
-            .then(response => {
-                if (response.status !== 200) {
-                    return;
-                }
-                return response.json()
-            })
-
+        me = await authManager.getMe(token)
+        const guestUser = 'temp_username';
+        context.res.setHeader('Set-Cookie', [
+            `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
+            `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
+        ]);
         me.token = token
     }
 
@@ -166,13 +173,13 @@ export async function getServerSideProps(context) {
         h2hMatches.push(t2Matches)
     } else if (v == 'bet') {
         odds = await fetch(`${SERVER_BASE_URL}/api/v1/match/odds?match_id=${data[0].id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authentication': token ? token : ''
-        },
-      })
-        .then(response => response.json())
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authentication': token ? token : ''
+            },
+        })
+            .then(response => response.json())
     }
     if (v == 'table' || !isMobile) {
         table = await fetch(`${SERVER_BASE_URL}/api/v1/league/table?league_id=${data[0].league}&league_index=${data[0].team1.league_index}`, {
@@ -260,13 +267,13 @@ function Chip({ ref, title, selected, onClick, isBet = false }) {
                 backgroundColor: '#37003C',
                 color: 'white'
             }
-        } 
+        }
 
         return null
     }
 
     return <div ref={ref} className={selected ? styles.chip_sel : styles.chip} onClick={onClick} style={getStyle()}>
-        {isBet ? <img className={styles.bbicon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img> : null }
+        {isBet ? <img className={styles.bbicon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img> : null}
         <span>{title}</span>
     </div>
 }
@@ -274,7 +281,6 @@ function Chip({ ref, title, selected, onClick, isBet = false }) {
 
 export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, odds, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
 
-    console.log(isMobile)
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
     const today = moment();
@@ -435,13 +441,13 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
     }
 
     function renderBetView() {
-        function OddView({type, odd, marginRight, marginLeft}) {
-            return <div className={styles.odd_item} style={{marginRight: marginRight, marginLeft: marginLeft}}>
+        function OddView({ type, odd, marginRight, marginLeft }) {
+            return <div className={styles.odd_item} style={{ marginRight: marginRight, marginLeft: marginLeft }}>
                 <span>{type}</span>
                 <span className={styles.odd_text}>{odd}</span>
             </div>
         }
-        
+
         return <div className={styles.bet_panel}>
             <span className={styles.bet_title}>{t('match_winner')}</span>
             <div className={styles.odd_row}>
@@ -515,11 +521,12 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
             </div>
         } else if (showLang) {
             return <div className={styles.desktop_right_cont_login}>
-                <LangPanel router={router} locale={locale}/>
+                <LangPanel router={router} locale={locale} />
             </div>
         }
 
         return <div className={styles.desktop_right_cont}>
+            {me?.isGuest ? <LinkAccountPanel /> : null}
             {view2 != 'table' ? <div className={styles.row}>
                 {header.statistics ? <Chip title={t('statistics')} selected={view2 == 'stats'} onClick={onNavStatsDesktop}></Chip> : null}
                 {header.events ? <Chip title={t('events')} selected={view2 == 'events'} onClick={onNavEventsDesktop}></Chip> : null}
@@ -550,13 +557,13 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
-                        <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={isMobile} onLogin={onSignIn}/>
+                        <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={isMobile} onLogin={onSignIn} />
 
                         <div className={`${styles.row} ${styles.mt20}`}>
                             <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
-                            { header.odds ? <Chip title={'Bet'} isBet={true} selected={view == 'bet'} onClick={onNavBet}></Chip> : null }
+                            {header.odds ? <Chip title={'Bet'} isBet={true} selected={view == 'bet'} onClick={onNavBet}></Chip> : null}
                             <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
-                            { view2 != 'table' ? <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip> : null }
+                            {view2 != 'table' ? <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip> : null}
                         </div>
                         {view == '' ? renderPredictsView() : null}
                         {view == 'bet' ? renderBetView() : null}

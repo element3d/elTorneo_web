@@ -20,7 +20,6 @@ export const EMODE_VIEW = 0
 export const EMODE_EDIT = 1
 
 export default function MatchPanel({ router, me, match, predict, isMobile, onLogin }) {
-    console.log(isMobile)
     const { t } = useTranslation()
     const [team1Score, setTeam1Score] = useState('')
     const [team2Score, setTeam2Score] = useState('')
@@ -205,7 +204,6 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
                 return null
             })
             .then(data => {
-                console.log("====================== SAVE ")
                 // setMode(EMODE_VIEW)
                 // router.reload()
             })

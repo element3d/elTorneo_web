@@ -1,6 +1,7 @@
 import styles from '@/styles/DesktopAppBar.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
+import Cookies from 'js-cookie';
 
 export const EPAGE_HOME = 1
 export const EPAGE_CALENDAR = 2
@@ -25,8 +26,14 @@ export default function DesktopAppBar({ locale, router, me, onSignIn, isMe, onSh
         router.push('/profile')
     }
 
+    async function onSignOut() {
+        Cookies.remove('token');
+        Cookies.set('guest_username', 'temp_username');
+        router.push('/')
+    }
+
     function renderProfileItem() {
-        if (isMe) return <div className={styles.signin_button} onClick={onSignIn}>
+        if (isMe) return <div className={styles.signin_button} onClick={onSignOut}>
             <h4>{t('signout')}</h4>
         </div>
 

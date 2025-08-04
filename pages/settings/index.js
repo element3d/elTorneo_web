@@ -32,8 +32,12 @@ export async function getServerSideProps(context) {
     }
 
     let token = null
+    let guestUername = null
     if (req.cookies && req.cookies.token) {
         token = req.cookies.token;
+    }
+    if (req.cookies?.guest_username) {
+        guestUername = req.cookies.guest_username;
     }
 
     if (!token) {
@@ -83,7 +87,8 @@ export default function Home({ isAndroid, isIOS, me, token, locale }) {
     }
 
     function onLogout() {
-        Cookies.remove('token')
+        Cookies.remove('token');
+        Cookies.set('guest_username', 'temp_username');
         router.push('/')
     }
 
