@@ -14,7 +14,7 @@ export default function UserPanel({ router, user, pos, isMe, isMobile = true }) 
         router.push('/complete_account')
     }
 
-    return (<div className={styles.cont}>
+    return (<div className={isMobile ? styles.cont_mobile : styles.cont}>
         <div className={isMobile ? styles.panel : styles.panel_desktop}>
             <div className={styles.ava_cont}>
                 {user.avatar.length ? <img className={styles.ava} src={`${SERVER_BASE_URL}/${user.avatar}`} />

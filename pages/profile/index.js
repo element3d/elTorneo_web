@@ -21,6 +21,9 @@ import MatchLiveItem from '@/js/MatchLiveItem';
 import LangPanel from '@/js/LangPanel';
 import LinkAccountPanel from '@/js/LinkAccountPanel';
 import authManager from '@/js/AuthManager';
+import CompleteAccountPanel from '@/js/CompleteAccountPanel';
+import LoginPanel from '@/js/LoginPanel';
+import RegisterPanel from '@/js/RegisterPanel';
 
 export async function getServerSideProps(context) {
     const { req } = context
@@ -142,6 +145,9 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
     const [showLang, setShowLang] = useState(0)
+    const [showCompleteAccount, setShowCompleteAccount] = useState(0)
+    const [showSignIn, setShowSignIn] = useState(false)
+    const [logOrReg, setLogOrReg] = useState(0)
 
     useEffect(() => {
         return () => {
@@ -182,16 +188,42 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
 
     function onShowLang() {
         setShowLang(1)
+        setShowSignIn(0)
+        setShowCompleteAccount(0)
+    }
+
+    function onCompleteAccountClick() {
+        setShowCompleteAccount(true)
+    }
+
+    function onNavLogin() {
+        setLogOrReg(0)
+        setShowSignIn(true)
+    }
+
+    function onNavRegister() {
+        setLogOrReg(1)
     }
 
     function renderDesktopRightPanel() {
-        if (showLang) {
+        if (showSignIn) {
+            return <div className={styles.desktop_right_cont_login}>
+                {logOrReg == 0 ?
+                    <LoginPanel router={router} onNavRegister={onNavRegister} /> :
+                    <RegisterPanel onNavSignin={onNavLogin} />}
+            </div>
+        } else if (showLang) {
             return <div className={styles.desktop_right_cont}>
                 <LangPanel router={router} locale={locale} />
             </div>
+        } else if (showCompleteAccount) {
+            return <div className={styles.desktop_right_cont_login}>
+                <CompleteAccountPanel router={router} onNavSignin={onNavLogin} />
+            </div>
         }
+
         return <div className={styles.desktop_right_cont_live}>
-            {user?.isGuest ? <LinkAccountPanel /> : null}
+            {user?.isGuest ? <LinkAccountPanel onCompleteAccount={onCompleteAccountClick} /> : null}
             {matches.map((m, i) => {
                 if (i > 5) return
                 return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
@@ -214,7 +246,7 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
                         <UserPanel user={user} isMobile={false} />
-                        <ProfileStatsPanel stats={initialPredicts} />
+                        <ProfileStatsPanel isMobile={isMobile} stats={initialPredicts} />
                         <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                     </div>
 
@@ -240,7 +272,7 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
                 <AppBar router={router} title="el Torneo" />
                 <UserPanel user={user} isMe={true} router={router} />
                 <div className={styles.padding}>
-                    {initialPredicts.allPredicts > 0 ? <ProfileStatsPanel stats={initialPredicts} /> : null}
+                    {initialPredicts.allPredicts > 0 ? <ProfileStatsPanel isMobile={true} stats={initialPredicts} /> : null}
                     <ProfileMatchesPanel onPreview={onPreview} isMe={true} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
 
                     {!predicts.length ? <span className={styles.no_preds}>{t('no_predicts')}</span> : null}

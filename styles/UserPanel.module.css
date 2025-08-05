@@ -2,7 +2,20 @@
     flex-direction: column;
     padding-left: 20px;
     padding-top: 10px;
-    /* padding-bottom: 10px; */
+    padding-bottom: 20px;
+    padding-right: 20px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    background-color: white;
+    width: 100%;
+    /* margin-bottom: 20px; */
+    border-radius: 12px;
+}
+
+.cont_mobile {
+    flex-direction: column;
+    padding-left: 20px;
+    padding-top: 10px;
     padding-right: 20px;
     background-color: white;
     width: 100%;

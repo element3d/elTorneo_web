@@ -1,11 +1,11 @@
 import styles from '@/styles/Profile.module.css';
 import { useTranslation } from 'next-i18next';
 
-export default function ProfileStatsPanel({ stats }) {
+export default function ProfileStatsPanel({ isMobile, stats }) {
     const {t} = useTranslation()
 
     return (
-        <div className={styles.stats_cont}>
+        <div className={ isMobile ? styles.stats_cont_mobile : styles.stats_cont}>
             <span className={styles.stats_title}>{t('in_all_leagues')}</span>
             <div>
                 <span>{t('total_short')}:</span>

@@ -20,6 +20,22 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
+    padding-top: 0px;
+    background-color: white;
+    border-radius: 12px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+    font-size: 13px;
+    /* font-weight: bold; */
+    color: #8E8E93;
+    font-family: 'Roboto';
+}
+
+.stats_cont_mobile {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
     background-color: white;
     border-radius: 12px;
     font-size: 13px;
@@ -138,4 +154,19 @@
     display: flex;
     flex-direction: column;
     height: fit-content;
+}
+
+.desktop_right_cont_login {
+    width: 360px;
+    /* height: 500px; */
+    border-radius: 16px;
+    background-color: white;
+    /* margin-left: 30px; */
+    /* margin-right: 30px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding: 20px;
 }

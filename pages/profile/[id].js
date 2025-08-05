@@ -229,7 +229,7 @@ export default function Home({ me, locale, isAndroid, isIOS, user, matches, stat
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
                         <UserPanel user={user} isMobile={false} />
-                        <ProfileStatsPanel stats={initialPredicts} />
+                        <ProfileStatsPanel isMobile={isMobile} stats={initialPredicts} />
                         <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                     </div>
 
@@ -255,7 +255,7 @@ export default function Home({ me, locale, isAndroid, isIOS, user, matches, stat
                 <AppBar router={router} title="el Torneo" />
                 <UserPanel user={user} />
                 <div className={styles.padding}>
-                    <ProfileStatsPanel stats={initialPredicts} />
+                    <ProfileStatsPanel isMobile={true} stats={initialPredicts} />
                     <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
                 </div>
                 {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
