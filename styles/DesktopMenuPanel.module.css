@@ -24,6 +24,33 @@
     user-select: none;
 }
 
+.supports {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.gplay {
+    height: 45px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.youtube {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.tiktok {
+    height: 52px;
+}
+
+.telegram {
+    height: 43px;
+    margin-right: 10px;
+}
+
 .menu_item:hover {
     background-color: rgb(238, 238, 238);
 }
