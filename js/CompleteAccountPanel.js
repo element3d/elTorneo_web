@@ -167,7 +167,7 @@ export default function CompleteAccountPanel({ onNavSignin, router }) {
     // }
 
     const onCompleteAccountGoogle = useGoogleLogin({
-        onCompleteAccountGoogleSuccess,
+        onSuccess: onCompleteAccountGoogleSuccess,
         clientId: '854989049861-uc8rajtci5vgrobdd65m4ig8vtbsec5s.apps.googleusercontent.com', // Replace with your Google API client ID
         isSignedIn: true,
         accessType: 'offline',
