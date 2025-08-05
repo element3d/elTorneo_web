@@ -5,9 +5,12 @@ class AuthManager {
 
     }
 
-    createGuestUser() {
+    createGuestUser(userOs) {
         const requestOptions = {
-            method: 'POST'
+            method: 'POST',
+            body: JSON.stringify({
+                userOS: userOs
+            })
         };
 
         return fetch(`${SERVER_BASE_URL}/api/v1/signup/guest`, requestOptions)

@@ -36,14 +36,12 @@ export async function getServerSideProps(context) {
 
   let isAndroid = false;
   let isIOS = false
-  {
-    const userAgent = context.req.headers['user-agent'];
-    const parser = new UAParser(userAgent);
-    const uaResult = parser.getResult();
-    const osName = uaResult.os.name || 'Unknown';
-    isAndroid = osName == 'Android'
-    isIOS = osName == 'iOS'
-  }
+  const userAgent = context.req.headers['user-agent'];
+  const parser = new UAParser(userAgent);
+  const uaResult = parser.getResult();
+  const osName = uaResult.os.name || 'Unknown';
+  isAndroid = osName == 'Android'
+  isIOS = osName == 'iOS'
 
   let isLive = true
   const url = `${SERVER_BASE_URL}/api/v1/matches/live`
@@ -71,7 +69,9 @@ export async function getServerSideProps(context) {
 
   let me = null
   if (!token && !guestUsername) {
-    token = await authManager.createGuestUser();
+    let userOs = 'Web';
+    userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.device.model;
+    token = await authManager.createGuestUser(userOs);
   }
   if (token) {
     me = await authManager.getMe(token)
@@ -121,7 +121,7 @@ export default function Home({ me, isAndroid, isIOS, matches, isLive }) {
           })}
 
         </div>
-        {isAndroid ? <InstallPanel hasBg={false}/> : null }
+        {isAndroid ? <InstallPanel hasBg={false} /> : null}
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
       </main>
     </>
