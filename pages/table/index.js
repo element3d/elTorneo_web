@@ -87,7 +87,10 @@ export async function getServerSideProps(context) {
 
     if (!token && !guestUsername) {
         let userOs = 'Web';
-        userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.device.model;
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const ress = await fetch(`https://ipapi.co/${ip}/json/`);
+        const data = await ress.json();
+        userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + data.country_name + ' - ' + data.city;
         token = await authManager.createGuestUser(userOs);
     }
     if (token) {
