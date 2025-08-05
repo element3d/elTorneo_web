@@ -30,6 +30,7 @@ import MatchLiveItem from '@/js/MatchLiveItem';
 import LangPanel from '@/js/LangPanel';
 import authManager from '@/js/AuthManager';
 import LinkAccountPanel from '@/js/LinkAccountPanel';
+import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 
 export async function getServerSideProps(context) {
     const { query } = context;
@@ -155,9 +156,10 @@ export async function getServerSideProps(context) {
 export default function Home({ locale, me, isAndroid, isIOS, table, page, league, isMobile, leagues, settings, season, matches }) {
     const router = useRouter()
     const { t } = useTranslation()
-    const [showSignIn, setShowSignIn] = useState(true)
+    const [showSignIn, setShowSignIn] = useState(false)
     const [logOrReg, setLogOrReg] = useState(0)
     const [showLang, setShowLang] = useState(0)
+    const [showCompleteAccount, setShowCompleteAccount] = useState(0)
 
     const showPrev = page > 1
     const showNext = table.length >= 20
@@ -222,6 +224,8 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
 
     function onNavLogin() {
         setLogOrReg(0)
+        setShowSignIn(true)
+        setShowCompleteAccount(false)
     }
 
     async function onLogin() {
@@ -238,8 +242,12 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
         setShowSignIn(0)
     }
 
+    function onCompleteAccountClick() {
+        setShowCompleteAccount(true)
+    }
+
     function renderDesktopRightPanel() {
-        if (!me && showSignIn) {
+        if (showSignIn) {
             return <div className={styles.desktop_right_cont_login}>
                 {logOrReg == 0 ?
                     <LoginPanel router={router} onNavRegister={onNavRegister} onLogin={onLogin} /> :
@@ -249,9 +257,13 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
             return <div className={styles.desktop_right_cont_login}>
                 <LangPanel router={router} locale={locale} />
             </div>
+        } else if (showCompleteAccount) {
+            return <div className={styles.desktop_right_cont_login}>
+                <CompleteAccountPanel router={router} onNavSignin={onNavLogin} />
+            </div>
         } else {
             return <div className={styles.desktop_right_cont_live}>
-                {me?.isGuset ? <LinkAccountPanel /> : null}
+                {me?.isGuest ? <LinkAccountPanel onCompleteAccount={onCompleteAccountClick} /> : null}
                 {matches.map((m, i) => {
                     if (i > 5) return
                     return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
@@ -263,7 +275,7 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
     function renderDesktop() {
         return <>
             <Head>
-                <title>el Torneo - Calendar</title>
+                <title>el Torneo</title>
                 <meta name="description" content="Worlds biggest football fan tournament." />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />

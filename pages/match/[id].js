@@ -34,6 +34,7 @@ import RegisterPanel from '@/js/RegisterPanel';
 import LangPanel from '@/js/LangPanel';
 import authManager from '@/js/AuthManager';
 import LinkAccountPanel from '@/js/LinkAccountPanel';
+import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -291,6 +292,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
     const [showSignIn, setShowSignIn] = useState(false)
     const [logOrReg, setLogOrReg] = useState(0)
     const [showLang, setShowLang] = useState(0)
+    const [showCompleteAccount, setShowCompleteAccount] = useState(0)
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
@@ -511,6 +513,11 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
 
     function onNavLogin() {
         setLogOrReg(0)
+        setShowSignIn(true)
+    }
+
+    function onCompleteAccountClick() {
+        setShowCompleteAccount(true)
     }
 
     function renderDesktopRightPanel() {
@@ -524,10 +531,14 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
             return <div className={styles.desktop_right_cont_login}>
                 <LangPanel router={router} locale={locale} />
             </div>
+        } else if (showCompleteAccount) {
+            return <div className={styles.desktop_right_cont_login}>
+                <CompleteAccountPanel router={router} onNavSignin={onNavLogin} />
+            </div>
         }
 
         return <div className={styles.desktop_right_cont}>
-            {me?.isGuest ? <LinkAccountPanel /> : null}
+            {me?.isGuest ? <LinkAccountPanel onCompleteAccount={onCompleteAccountClick} /> : null}
             {view2 != 'table' ? <div className={styles.row}>
                 {header.statistics ? <Chip title={t('statistics')} selected={view2 == 'stats'} onClick={onNavStatsDesktop}></Chip> : null}
                 {header.events ? <Chip title={t('events')} selected={view2 == 'events'} onClick={onNavEventsDesktop}></Chip> : null}

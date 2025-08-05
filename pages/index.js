@@ -235,6 +235,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
 
   function onNavLogin() {
     setLogOrReg(0)
+    setShowSignIn(true)
   }
 
   function onCompleteAccountClick() {
@@ -258,7 +259,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       </div>
     } else if (showCompleteAccount) {
       return <div className={styles.desktop_right_cont_login}>
-        <CompleteAccountPanel router={router} />
+        <CompleteAccountPanel router={router} onNavSignin={onNavLogin}/>
       </div>
     }
 

@@ -39,14 +39,12 @@ export async function getServerSideProps(context) {
 
     let isAndroid = false;
     let isIOS = false
-    {
-        const userAgent = context.req.headers['user-agent'];
-        const parser = new UAParser(userAgent);
-        const uaResult = parser.getResult();
-        const osName = uaResult.os.name || 'Unknown';
-        isAndroid = osName == 'Android'
-        isIOS = osName == 'iOS'
-    }
+    const userAgent = context.req.headers['user-agent'];
+    const parser = new UAParser(userAgent);
+    const uaResult = parser.getResult();
+    const osName = uaResult.os.name || 'Unknown';
+    isAndroid = osName == 'Android'
+    isIOS = osName == 'iOS'
 
     let token = null
     if (req.cookies && req.cookies.token) {
@@ -58,7 +56,9 @@ export async function getServerSideProps(context) {
     }
 
     if (!token && !guestUsername) {
-        token = await authManager.createGuestUser();
+        let userOs = 'Web';
+        userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.device.model;
+        token = await authManager.createGuestUser(userOs);
     }
     let user = null;
     if (token) {
@@ -202,7 +202,7 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
     function renderDesktop() {
         return <>
             <Head>
-                <title>el Torneo - Calendar</title>
+                <title>el Torneo</title>
                 <meta name="description" content="Worlds biggest football fan tournament." />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />

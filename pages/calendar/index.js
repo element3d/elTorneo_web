@@ -29,6 +29,7 @@ import LangPanel from '@/js/LangPanel';
 import authManager from '@/js/AuthManager';
 import Link from 'next/link';
 import LinkAccountPanel from '@/js/LinkAccountPanel';
+import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 
 export async function getServerSideProps(context) {
   const { query } = context;
@@ -133,9 +134,10 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
   let currentLeague = null
   const [showPreview, setShowPreview] = useState(false)
   const [previewMatch, setPreviewMatch] = useState(null)
-  const [showSignIn, setShowSignIn] = useState(true)
+  const [showSignIn, setShowSignIn] = useState(false)
   const [logOrReg, setLogOrReg] = useState(0)
   const [showLang, setShowLang] = useState(0)
+  const [showCompleteAccount, setShowCompleteAccount] = useState(0)
 
   useEffect(() => {
     return () => {
@@ -155,8 +157,12 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
     document.documentElement.style.overflow = '';
   }
 
+  function onCompleteAccountClick() {
+    setShowCompleteAccount(true)
+  }
+
   function renderDesktopRightPanel() {
-    if (!me && showSignIn) {
+    if (showSignIn) {
       return <div className={styles.desktop_right_cont_login}>
         {logOrReg == 0 ?
           <LoginPanel router={router} onNavRegister={onNavRegister} /> :
@@ -166,9 +172,13 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
       return <div className={styles.desktop_right_cont_login}>
         <LangPanel router={router} locale={locale} />
       </div>
+    } else if (showCompleteAccount) {
+      return <div className={styles.desktop_right_cont_login}>
+        <CompleteAccountPanel router={router} onNavSignin={onNavLogin} />
+      </div>
     } else {
       return <div className={styles.desktop_right_cont_live}>
-        {me?.isGuset ? <LinkAccountPanel /> : null}
+        {me?.isGuest ? <LinkAccountPanel onCompleteAccount={onCompleteAccountClick} /> : null}
         {liveMatches.map((m, i) => {
           if (i > 5) return
           return <MatchLiveItem key={`match_${m.id}`} router={router} match={m} leagueName={m.league_name} />
@@ -187,6 +197,8 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
 
   function onNavLogin() {
     setLogOrReg(0)
+    setShowCompleteAccount(false)
+    setShowSignIn(true)
   }
 
   function onShowLang() {
