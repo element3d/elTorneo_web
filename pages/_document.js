@@ -7,6 +7,13 @@ export default function Document() {
       <Head >
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#ffffff" />
+        {/* iOS PWA support */}
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="el Torneo" />
+
+        {/* iOS app icon */}
+        <link rel="apple-touch-icon" href="/icon192.png" />
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;700;900&display=swap"
           rel="stylesheet"
