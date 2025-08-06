@@ -98,7 +98,7 @@ export default function Home({ me, isAndroid, isIOS }) {
             {/* <h3 className={styles.title}>{t('about_us')}</h3>
             <span className={styles.text}>{t('about_us_msg')}</span> */}
 
-            {isAndroid ? <InstallPanel /> : null }
+            {/* {isAndroid ? <InstallPanel /> : null } */}
         </div>
       
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />

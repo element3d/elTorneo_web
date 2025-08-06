@@ -148,7 +148,7 @@ export async function getServerSideProps(context) {
   }
 
   const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
-  
+
   return {
     props: {
       leagues: leagues,
@@ -224,8 +224,47 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
     setView(index)
   }
 
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
+  const [promptEvent, setPromptEvent] = useState(null);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e); // Save the event for later
+      setShowInstallButton(true); // Show your install button
+      window._deferredPrompt = e; // store globally
+      setPromptEvent(e);
+    };
+
+     if (window._deferredPrompt) {
+      setPromptEvent(window._deferredPrompt);
+      setShowInstallButton(true)
+    }
+
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    };
+  }, []);
+
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    setDeferredPrompt(null);
+    setShowInstallButton(false);
+  };
+
   function onInstall() {
-    window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
+    if (isAndroid) {
+      window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
+    } else {
+      handleInstallClick()
+    }
   }
 
   function onSignIn() {
@@ -262,7 +301,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       </div>
     } else if (showCompleteAccount) {
       return <div className={styles.desktop_right_cont_login}>
-        <CompleteAccountPanel router={router} onNavSignin={onNavLogin}/>
+        <CompleteAccountPanel router={router} onNavSignin={onNavLogin} />
       </div>
     }
 
@@ -317,13 +356,13 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar locale={locale} title={serverLeague?.name} showLang router={router} />
-        {/* {isAndroid ? <div className={styles.install_cont}>
-          <img className={styles.gplay_icon} src={`${SERVER_BASE_URL}/data/icons/google-play.svg`} />
+        {showInstallButton ? <div className={styles.install_cont}>
+          <img className={styles.gplay_icon} src={ isIOS ? `${SERVER_BASE_URL}/data/icons/apple.svg` : `${SERVER_BASE_URL}/data/icons/google-play.svg`} />
           <span>{t('available_google_play')}</span>
           <button className={styles.install_button} onClick={onInstall}>
             {t('install_now')}
           </button>
-        </div> : null} */}
+        </div> : null}
 
         {/* {me ? <TelegramCodePanel hasBg={true} me={me} /> : null} */}
 

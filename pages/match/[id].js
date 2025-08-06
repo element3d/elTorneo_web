@@ -638,7 +638,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
                 {view == 'stats' ? <MatchStatsPanel stats={stats} /> : null}
                 {view == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
 
-                {isAndroid ? <InstallPanel hasBg={false} hasMargin={false} /> : null}
+                {/* {isAndroid ? <InstallPanel hasBg={false} hasMargin={false} /> : null} */}
                 {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
 
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />

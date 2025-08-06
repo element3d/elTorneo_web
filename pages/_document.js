@@ -5,20 +5,22 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head >
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#ffffff" />
         <link
           href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;700;900&display=swap"
           rel="stylesheet"
         />
-            {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
+        {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> */}
 
-            {/* <Script
+        {/* <Script
           async
           src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7041403371220271`}
           strategy="lazyOnload"
           crossOrigin="anonymous"
         /> */}
-   {/* Telegram WebApp Script */}
-   <script
+        {/* Telegram WebApp Script */}
+        <script
           src="https://telegram.org/js/telegram-web-app.js?56"
           async
         ></script>
@@ -31,10 +33,10 @@ export default function Document() {
         ></script>
       </Head>
       <body>
-    
+
         <Main />
         <NextScript />
-  
+
       </body>
     </Html>
   );

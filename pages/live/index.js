@@ -124,7 +124,7 @@ export default function Home({ me, isAndroid, isIOS, matches, isLive }) {
           })}
 
         </div>
-        {isAndroid ? <InstallPanel hasBg={false} /> : null}
+        {/* {isAndroid ? <InstallPanel hasBg={false} /> : null} */}
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />
       </main>
     </>

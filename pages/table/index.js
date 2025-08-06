@@ -359,7 +359,7 @@ export default function Home({ locale, me, isAndroid, isIOS, table, page, league
                     {showNext ? <span onClick={onNext} className={`${styles.next} ${showPrev ? null : styles.text_center}`}>{t('next') + ' >'}</span> : null}
                 </div>
 
-                {isAndroid ? <InstallPanel hasBg={false} hasMargin={true} /> : null}
+                {/* {isAndroid ? <InstallPanel hasBg={false} hasMargin={true} /> : null} */}
 
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_TAB} />
             </main>

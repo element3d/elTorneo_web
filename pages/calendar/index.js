@@ -276,7 +276,7 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
 
           {!matches.length ? <span className={styles.no_matches}>{t('no_matches_found')}</span> : null}
 
-          {isAndroid ? <InstallPanel hasBg={false} hasMargin={true} /> : null}
+          {/* {isAndroid ? <InstallPanel hasBg={false} hasMargin={true} /> : null} */}
         </div>
         {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
         <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
