@@ -55,6 +55,15 @@ export async function getServerSideProps(context) {
     guestUsername = req.cookies.guest_username;
   }
 
+  let isAndroid = false;
+  let isIOS = false
+  const userAgent = context.req.headers['user-agent'];
+  const parser = new UAParser(userAgent);
+  const uaResult = parser.getResult();
+  const osName = uaResult.os.name || 'Unknown';
+  isAndroid = osName == 'Android'
+  isIOS = osName == 'iOS'
+
   let me = null
   if (!token && !guestUsername) {
     let userOs = 'Web';
@@ -73,14 +82,6 @@ export async function getServerSideProps(context) {
     ]);
   }
 
-  let isAndroid = false;
-  let isIOS = false
-  const userAgent = context.req.headers['user-agent'];
-  const parser = new UAParser(userAgent);
-  const uaResult = parser.getResult();
-  const osName = uaResult.os.name || 'Unknown';
-  isAndroid = osName == 'Android'
-  isIOS = osName == 'iOS'
 
   const leagues = await fetch(`${SERVER_BASE_URL}/api/v1/leagues`, {
     method: 'GET',
