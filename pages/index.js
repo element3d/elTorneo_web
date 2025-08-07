@@ -55,7 +55,23 @@ export async function getServerSideProps(context) {
     guestUsername = req.cookies.guest_username;
   }
 
-  // res.setHeader('Set-Cookie', 'token=; Path=/; HttpOnly; Max-Age=0');
+  let me = null
+  if (!token && !guestUsername) {
+    let userOs = 'Web';
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    const ress = await fetch(`https://ipapi.co/${ip}/json/`);
+    const data = await ress.json();
+    userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'home';
+    token = await authManager.createGuestUser(userOs);
+  }
+  if (token) {
+    me = await authManager.getMe(token)
+    const guestUser = 'temp_username';
+    res.setHeader('Set-Cookie', [
+      `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
+      `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
+    ]);
+  }
 
   let isAndroid = false;
   let isIOS = false
@@ -127,24 +143,6 @@ export async function getServerSideProps(context) {
     } else {
       weeks = serverLeague.weeks.slice(0, serverLeague.week + NUM_NEXT_WEEKS);
     }
-  }
-
-  let me = null
-  if (!token && !guestUsername) {
-    let userOs = 'Web';
-    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    const ress = await fetch(`https://ipapi.co/${ip}/json/`);
-    const data = await ress.json();
-    userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'home';
-    token = await authManager.createGuestUser(userOs);
-  }
-  if (token) {
-    me = await authManager.getMe(token)
-    const guestUser = 'temp_username';
-    res.setHeader('Set-Cookie', [
-      `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
-      `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
-    ]);
   }
 
   const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
