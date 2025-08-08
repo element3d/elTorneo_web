@@ -614,9 +614,11 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
                     <div className={styles.back} onClick={onBack}>
                         <img className={styles.back_icon} src={`${SERVER_BASE_URL}/data/icons/back_white.svg`} />
                     </div>
+                    <div className={styles.title_cont}>
                     <span>{match.leagueName}</span>
+                        <span className={styles.wwwtitle}>www.eltorneo.app</span>
+                    </div>
                     <div className={styles.back} style={{ opacity: 0 }}>
-
                     </div>
                 </div>
                 <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={true} />

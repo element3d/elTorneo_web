@@ -115,7 +115,14 @@ export default function Home({ me, isAndroid, isIOS, matches, isLive }) {
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar title={'Live'} />
 
-        <h4 className={styles.live_title}> {isLive ? t('live_matches') : t('upcoming_matches')}</h4>
+        <div className={styles.live_title_cont}>
+          {isLive ? <div className={styles.live_icon}>
+            <div className={styles.live_inner}></div>
+          </div> : <div className={styles.upcoming_icon}>
+            <div className={styles.upcoming_inner}></div>
+          </div>}
+          <h4 className={styles.live_title}> {isLive ? t('live_matches') : t('upcoming_matches')}</h4>
+        </div>
         <div className={styles.matches_cont}>
 
           {matches.map((m, i) => {
