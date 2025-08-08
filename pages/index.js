@@ -348,14 +348,14 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
   return (
     <>
       <Head>
-        <title>el Torneo - {serverLeague?.name}</title>
+        <title>el Torneo</title>
         <meta name="description" content="Worlds biggest football fan tournament." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar locale={locale} title={serverLeague?.name} showLang router={router} />
-        {showInstallButton ? <div className={styles.install_cont}>
+        {showInstallButton || isAndroid ? <div className={styles.install_cont}>
           <img className={styles.gplay_icon} src={ isIOS ? `${SERVER_BASE_URL}/data/icons/apple.svg` : `${SERVER_BASE_URL}/data/icons/google-play.svg`} />
           <span>{t('available_google_play')}</span>
           <button className={styles.install_button} onClick={onInstall}>

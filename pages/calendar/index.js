@@ -242,7 +242,7 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
-        <AppBar title={'el Torneo'} />
+        <AppBar title={t('calendar_page')} />
         <div className={styles.calendar_panel}>
           <div className={styles.date_cont}>
             <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />

@@ -38,3 +38,16 @@
     font-size: 18px;
     font-weight: bold;
 }
+
+.title_cont {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.wwwtitle {
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0.6;
+}

@@ -296,4 +296,132 @@
     padding-right: 10px;
     border-radius: 10px;
     font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid transparent;
+}
+
+.odd_item:active {
+    opacity: .8;
+}
+
+.odd_item_sel {
+    border: 1px solid #FF2882;
+}
+
+.bet_button_cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.user_bet_cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    user-select: none;
+}
+
+.user_bet_item {
+    background-color: white;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    padding-left: 10px;
+    padding-right: 15px;
+}
+
+.user_bet_odd {
+    color: #8E8E93;
+    margin-right: 20px;
+}
+
+.user_bet_bet {
+    margin-left: 5px;
+}
+
+.user_bet_delele_button {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #FF4747;
+    margin-left: 10px;
+    border: none;
+    outline: none;
+    color: white;
+    user-select: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.user_bet_delele_button:active {
+    opacity: .8;
+}
+
+.bet_input_cont {
+    height: 40px;
+    background-color: #00000011;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: relative;
+    padding-left: 10px;
+    padding-right: 4px;
+    /* flex: 1; */
+}
+
+.bet_input {
+    background: none;
+    border: none;
+    outline: none;
+    text-align: center;
+    display: flex;
+    width: 60px;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.bet_sign {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    background-color: black;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.bet_button:active {
+    opacity: .8;
+}
+
+.bet_button {
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    cursor: pointer;
+    background-color: #37003C;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+}
+
+.bet_button_dis {
+    opacity: .6;
+}
+
+.bet_icon {
+    width: 24px;
+    height: 24px;
 }
