@@ -1,0 +1,147 @@
+.cont {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0px;
+    background-color: #00000099;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.card {
+    width: 100%;
+    /* height: 400px; */
+    background-color: #37003c;
+    border-radius: 16px;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.bg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+    display: flex;
+    left: 0;
+    /* right: 0; */
+    top: 0;
+}
+
+.title_cont {
+    z-index: 1;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.teams_row {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
+
+.team_icon {
+    width: 70px;
+    height: 70px;
+    margin-bottom: 10px;
+}
+
+.team1_cont {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+}
+
+.middle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 14px;
+}
+
+.time_cont {
+    background-color: #34C75955;
+    height: 26px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 15px;
+    border: 1px solid #34C759;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.time {
+    color: #34C759;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.predict {
+    z-index: 1;
+    justify-self: center;
+    align-self: center;
+    margin-top: 15px;
+    height: 24px;
+    border-radius: 12px;
+    background-color: #FF2882;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.predict:active {
+    opacity: 0.8;
+}
+
+.close {
+    z-index: 1;
+    position: absolute;
+    top: 3px;
+    right: 0px;
+    padding-right: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    /* align-items: end; */
+    justify-content: end;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.close:active {
+    opacity: 0.8;
+}

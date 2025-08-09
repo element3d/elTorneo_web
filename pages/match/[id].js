@@ -94,9 +94,6 @@ export async function getServerSideProps(context) {
     let me = null
     if (!token && !guestUsername) {
         let userOs = 'Web';
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-        const ress = await fetch(`https://ipapi.co/${ip}/json/`);
-        const data = await ress.json();
         userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'match';
         try {
             token = await authManager.createGuestUser(userOs);
@@ -512,7 +509,6 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
         }
 
         function onChangeAmount(e) {
-            console.log(e.target.value)
             setAmount(Number.parseInt(e.target.value))
         }
 

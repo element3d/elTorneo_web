@@ -29,6 +29,8 @@ import { DesktopWeekPanel } from '@/js/DesktopWeekPanel';
 import authManager from '@/js/AuthManager';
 import LinkAccountPanel from '@/js/LinkAccountPanel';
 import CompleteAccountPanel from '@/js/CompleteAccountPanel';
+import SpecialMatchCard from '@/js/SpecialMatchCard';
+import moment from 'moment';
 
 const NUM_NEXT_WEEKS = 3
 
@@ -68,18 +70,13 @@ export async function getServerSideProps(context) {
   if (!token && !guestUsername) {
     let userOs = 'Web';
     userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'home';
-    console.log("======== BEFRE CREAT GUEST")
     try {
       token = await authManager.createGuestUser(userOs);
-          console.log("======== AFTER CREAT GUEST")
-
     }
-    catch(e) {
-      console.log("ERROR ====================")
+    catch (e) {
       console.log(e)
     }
   }
-      console.log("======== BEFORE TOKEN")
 
   if (token) {
     me = await authManager.getMe(token)
@@ -156,6 +153,19 @@ export async function getServerSideProps(context) {
 
   const isMobile = /Mobile|Android|iOS/i.test(req.headers['user-agent']);
 
+  let specialMatch = await fetch(`${SERVER_BASE_URL}/api/v1/matches/special?lang=${locale}`, {
+    method: 'GET',
+    headers: {
+      'Authentication': token ? token : ''
+    }
+
+  })
+    .then(response => {
+      if (response.status == 200)
+        return response.json()
+      return null
+    })
+  if (specialMatch instanceof Array) specialMatch = null
   return {
     props: {
       leagues: leagues,
@@ -171,12 +181,13 @@ export async function getServerSideProps(context) {
       me,
       miniLeague: routerMiniLeague,
       matchOfDay: getRandomMatch(matches),
+      specialMatch,
       ...(await serverSideTranslations(locale)),
     },
   };
 }
 
-export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
+export default function Home({ leagues, specialMatch, isMobile, me, isAndroid, isIOS, locale, miniLeague, serverLeague, weeks, week, matches, table, matchOfDay }) {
   const { t } = useTranslation()
   const [name, setName] = useState('');
   const [specialMatchId, setSpecialMatchId] = useState('')
@@ -190,7 +201,25 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
   const [showLang, setShowLang] = useState(0)
   const [showWeeks, setShowWeeks] = useState(0)
   const [showCompleteAccount, setShowCompleteAccount] = useState(0)
-  // if (!me) Cookies.remove('token')
+  const [showSpecialMatch, setShowSpecialMatch] = useState(false)
+
+  useEffect(() => {
+    if (!specialMatch) return;
+
+    const currentDate = moment();
+    const fiveHours = 2 * 60 * 60 * 1000;
+
+    const specialMatchDate = localStorage.getItem('specialMatchDate')
+
+    if (!specialMatchDate || currentDate.diff(moment(parseInt(specialMatchDate)), 'milliseconds') > fiveHours) {
+      localStorage.setItem('specialMatchDate', currentDate)
+      document.documentElement.style.overflow = 'hidden';
+      return setShowSpecialMatch(true);
+    }
+
+    document.documentElement.style.overflow = ''; // Disable background scroll
+    setShowSpecialMatch(false)
+  }, [specialMatch])
 
   useEffect(() => {
     return () => {
@@ -244,7 +273,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       setPromptEvent(e);
     };
 
-     if (window._deferredPrompt) {
+    if (window._deferredPrompt) {
       setPromptEvent(window._deferredPrompt);
       setShowInstallButton(true)
     }
@@ -357,6 +386,11 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
     window.open("https://web.telegram.org/k/#@elTorneoBot", "_blank");
   }
 
+  function onCloseSpecialMatch() {
+    setShowSpecialMatch(false)
+    document.documentElement.style.overflow = ''; // Disable background scroll
+  }
+
   return (
     <>
       <Head>
@@ -368,7 +402,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
       <main className={`${styles.main} ${inter.className}`}>
         <AppBar locale={locale} title={serverLeague?.name} showLang router={router} />
         {showInstallButton || isAndroid ? <div className={styles.install_cont} onClick={onInstall}>
-          <img className={styles.gplay_icon} src={ isIOS ? `${SERVER_BASE_URL}/data/icons/apple.svg` : `${SERVER_BASE_URL}/data/icons/google-play.svg`} />
+          <img className={styles.gplay_icon} src={isIOS ? `${SERVER_BASE_URL}/data/icons/apple.svg` : `${SERVER_BASE_URL}/data/icons/google-play.svg`} />
           <span>{t('available_google_play')}</span>
           <button className={styles.install_button} >
             {t('play')}
@@ -376,7 +410,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
         </div> : null}
 
         {isIOS ? <div className={styles.install_cont} onClick={onTelegram}>
-          <img className={styles.gplay_icon} src={ isIOS ? `${SERVER_BASE_URL}/data/icons/telegram.svg` : `${SERVER_BASE_URL}/data/icons/google-play.svg`} />
+          <img className={styles.gplay_icon} src={isIOS ? `${SERVER_BASE_URL}/data/icons/telegram.svg` : `${SERVER_BASE_URL}/data/icons/google-play.svg`} />
           <span>{t('available_telegram')}</span>
           <button className={styles.install_button} >
             {t('play')}
@@ -396,6 +430,7 @@ export default function Home({ leagues, isMobile, me, isAndroid, isIOS, locale, 
         {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
 
         <BottomNavBar me={me} isIOS={isIOS} isAndroid={isAndroid} router={router} page={EPAGE_HOME} />
+        {showSpecialMatch ? <SpecialMatchCard match={specialMatch} router={router} onClose={onCloseSpecialMatch} /> : null}
       </main>
     </>
   );
