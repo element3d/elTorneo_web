@@ -123,12 +123,14 @@ export async function getServerSideProps(context) {
         if (!Object.keys(predict).length) predict = null
 
         me = await authManager.getMe(token)
-        const guestUser = 'temp_username';
-        context.res.setHeader('Set-Cookie', [
-            `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
-            `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
-        ]);
-        me.token = token
+        if (me) {
+            const guestUser = 'temp_username';
+            context.res.setHeader('Set-Cookie', [
+                `guest_username=${guestUser}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`,
+                `token=${token}; Path=/; Max-Age=${365 * 100 * 24 * 60 * 60}`
+            ]);
+            me.token = token
+        }
     }
 
     const header = await fetch(`${SERVER_BASE_URL}/api/v1/match/header?match_id=${id}`, {
