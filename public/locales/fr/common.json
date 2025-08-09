@@ -183,6 +183,7 @@
     "winning_bets": "Paris gagnants", 
     "losing_bets": "Paris perdants",
     "play": "Jouer",
+    "bet_msg": "Les paris dans el Torneo sont uniquement pour le plaisir. Votre solde est virtuel, et rien de valeur réelle n'est gagné ou perdu. Il ne peut pas être ajouté ou retiré.",
     "link_account_message": "Vous utilisez un compte invité. Vos données sont stockées temporairement et peuvent être perdues si vous désinstallez l’application. Pour sauvegarder votre progression et accéder à votre compte depuis d’autres appareils, veuillez compléter la création de votre compte.",
     "awards_info_short": "Rejoignez le tournoi gratuit ultime de pronostics football, ouvert aux fans du monde entier. Connectez-vous, faites vos pronostics et grimpez dans le classement en suivant les règles. Prêt à relever le défi ? Bienvenue à el Torneo !"
 }

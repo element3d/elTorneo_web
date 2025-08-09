@@ -183,6 +183,7 @@
     "winning_bets": "Pobjedničke opklade", 
     "losing_bets": "Gubitničke opklade",
     "play": "Igrati",
+    "bet_msg": "Klađenje u el Torneo je samo za zabavu. Vaš saldo je virtualan i ništa stvarne vrijednosti se ne dobiva niti gubi. Ne može se dodati niti povući.",
     "link_account_message": "Trenutno koristite gostujući račun. Vaši se podaci privremeno pohranjuju i mogu se izgubiti ako deinstalirate aplikaciju. Kako biste spremili svoj napredak i pristupili računu s drugih uređaja, dovršite izradu računa.",
     "awards_info_short": "Pridružite se ultimativnom besplatnom turniru u predviđanju nogometnih utakmica, otvorenom za navijače iz cijelog svijeta. Prijavite se, napravite svoje prognoze i penjte se na ljestvici pridržavajući se pravila. Spremni za natjecanje? Dobrodošli u el Torneo!"
 }

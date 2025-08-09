@@ -32,3 +32,16 @@
     font-weight: bold;
     margin-top: 10px;
 }
+
+.panel_bet {
+    width: 100%;
+    border-radius: 12px;
+    padding: 20px;
+    /* padding-bottom: 10px; */
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    background-color: #FF474719;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}

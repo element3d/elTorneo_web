@@ -37,6 +37,7 @@ import LinkAccountPanel from '@/js/LinkAccountPanel';
 import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 import Cookies from 'js-cookie';
 import MatchUtils from '@/js/MatchUtils';
+import BetWarningPanel from '@/js/BetWarningPanel';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -555,27 +556,35 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
             </div>
 
             <div>
-                {!userBet && MatchUtils.isNotStarted(match) ? <div className={styles.bet_button_cont}>
-                    <div className={styles.bet_input_cont}>
-                        <input type='text' onChange={onChangeAmount} className={styles.bet_input} />
-                        <div className={styles.bet_sign}>$</div>
-                    </div>
+                {!userBet && MatchUtils.isNotStarted(match) ? <div className={styles.bet_button_wrap}>
+                    <div className={styles.bet_button_cont}>
+                        <div className={styles.bet_input_cont}>
+                            <input type='text' onChange={onChangeAmount} className={styles.bet_input} />
+                            <div className={styles.bet_sign}>$</div>
+                        </div>
 
-                    <button disabled={isBetDisabled()} className={`${styles.bet_button} ${isBetDisabled() ? styles.bet_button_dis : ''}`} onClick={onBet}>
-                        <img className={styles.bet_icon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img>
-                    </button>
+                        <button disabled={isBetDisabled()} className={`${styles.bet_button} ${isBetDisabled() ? styles.bet_button_dis : ''}`} onClick={onBet}>
+                            <img className={styles.bet_icon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img>
+                        </button>
+                    </div>
+                    <span className={styles.bet_min_max}>Min - 10$, Max - 20$</span>
                 </div> : null}
 
-                {userBet ? <div className={styles.user_bet_cont}>
-                    <div className={styles.user_bet_item}>
-                        <img className={styles.bet_icon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img>
-                        <span className={styles.user_bet_bet}>{MatchUtils.getBetText(userBet.bet)}</span>
-                        <span className={styles.user_bet_odd}>({userBet.odd.toFixed(2)})</span>
-                        <span>{userBet.amount}$</span>
-                    </div>
+                {userBet ? <div className={styles.bet_button_wrap}>
+                    <div className={styles.user_bet_cont}>
+                        <div className={styles.user_bet_item}>
+                            <img className={styles.bet_icon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img>
+                            <span className={styles.user_bet_bet}>{MatchUtils.getBetText(userBet.bet)}</span>
+                            <span className={styles.user_bet_odd}>({userBet.odd.toFixed(2)})</span>
+                            <span>{userBet.amount}$</span>
+                        </div>
 
-                    <button className={styles.user_bet_delele_button} onClick={onDeleteBet}>x</button>
+                        <button className={styles.user_bet_delele_button} onClick={onDeleteBet}>x</button>
+                    </div>
+                    <span className={styles.bet_min_max}>{t('possible_win')} {(userBet.amount * userBet.odd).toFixed(2)}$</span>
                 </div> : null}
+
+                <BetWarningPanel />
             </div>
         </div>
     }

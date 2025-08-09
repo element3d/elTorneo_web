@@ -183,6 +183,7 @@
     "winning_bets": "Winning bets", 
     "losing_bets": "Losing bets",
     "play": "Play",
+    "bet_msg": "Betting in el Torneo is just for fun. Your balance is virtual, and nothing of real value is won or lost. It cannot be added or withdrawn.",
     "link_account_message": "You’re currently using a guest account. Your data is stored temporarily and may be lost if you uninstall the app. To save your progress and access your account from other devices, please complete your account setup.",
     "awards_info_short": "Join the ultimate free football prediction tournament, open to fans from all over the world. Sign in, make your predictions, and climb the leaderboard by following the rules. Ready to compete? Welcome to el Torneo!"
 }
