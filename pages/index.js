@@ -68,8 +68,19 @@ export async function getServerSideProps(context) {
   if (!token && !guestUsername) {
     let userOs = 'Web';
     userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'home';
-    // token = await authManager.createGuestUser(userOs);
+    console.log("======== BEFRE CREAT GUEST")
+    try {
+      token = await authManager.createGuestUser(userOs);
+          console.log("======== AFTER CREAT GUEST")
+
+    }
+    catch(e) {
+      console.log("ERROR ====================")
+      console.log(e)
+    }
   }
+      console.log("======== BEFORE TOKEN")
+
   if (token) {
     me = await authManager.getMe(token)
     const guestUser = 'temp_username';
