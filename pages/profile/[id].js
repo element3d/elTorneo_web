@@ -21,6 +21,8 @@ import LoginPanel from '@/js/LoginPanel';
 import RegisterPanel from '@/js/RegisterPanel';
 import LangPanel from '@/js/LangPanel';
 import MatchLiveItem from '@/js/MatchLiveItem';
+import Switch from '@/js/Switch';
+import { useTranslation } from 'next-i18next';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -29,6 +31,7 @@ export async function getServerSideProps(context) {
     const globalPage = query.page ? Number(query.page) : 1;
     const { locale } = context;
     const { req } = context
+    const { view } = query;
 
     let token = null
     if (req.cookies && req.cookies.token) {
@@ -68,10 +71,21 @@ export async function getServerSideProps(context) {
             return null;
         });
 
-    const initialPredicts = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${((globalPage - 1) * 5) + 1}&user_id=${user.id}&league_id=${-1}`, {
-        method: 'GET',
-        headers: {},
-    }).then(response => response.json());
+    let initialPredicts = null;
+    let initialBets = null;
+    if (view != 'bets') {
+        initialPredicts = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${globalPage}&user_id=${user.id}&league_id=${-1}`, {
+            method: 'GET',
+            headers: {},
+        }).then(response => response.json());
+
+
+    } else {
+        initialBets = await fetch(`${SERVER_BASE_URL}/api/v1/user/bets?page=${globalPage}&user_id=${user.id}&league_id=${-1}`, {
+            method: 'GET',
+            headers: {},
+        }).then(response => response.json());
+    }
 
     let me = null
     if (token) {
@@ -116,7 +130,9 @@ export async function getServerSideProps(context) {
         props: {
             user,
             globalPage,
+            view: view ? view : '',
             initialPredicts,
+            initialBets,
             isAndroid,
             isIOS,
             isMobile,
@@ -130,15 +146,16 @@ export async function getServerSideProps(context) {
 }
 
 
-export default function Home({ me, locale, isAndroid, isIOS, user, matches, stats, globalPage, initialPredicts, isMobile, leagues }) {
+export default function Home({ me, locale, isAndroid, isIOS, user, matches, stats, globalPage, view, initialPredicts, initialBets, isMobile, leagues }) {
     const router = useRouter();
-    const [predicts, setPredicts] = useState(initialPredicts.predicts);
-
+    const [predicts, setPredicts] = useState(initialPredicts ? initialPredicts.predicts : []);
+    const [bets, setBets] = useState(initialBets ? initialBets.bets : [])
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
     const [showSignIn, setShowSignIn] = useState(!me)
     const [logOrReg, setLogOrReg] = useState(0)
     const [showLang, setShowLang] = useState(0)
+    const { t } = useTranslation()
 
     useEffect(() => {
         return () => {
@@ -173,8 +190,14 @@ export default function Home({ me, locale, isAndroid, isIOS, user, matches, stat
     }
 
     useEffect(() => {
-        setPredicts(initialPredicts.predicts)
+        if (view != 'bets')
+            setPredicts(initialPredicts.predicts)
     }, [initialPredicts])
+
+    useEffect(() => {
+        if (view == 'bets')
+            setBets(initialBets.bets)
+    }, [initialBets])
 
     function onNavRegister() {
         setLogOrReg(1)
@@ -191,6 +214,24 @@ export default function Home({ me, locale, isAndroid, isIOS, user, matches, stat
 
     function onShowSignIn() {
         setShowSignIn(1)
+    }
+
+    function onSetTab(t) {
+        let vv = view
+        if (!vv) vv = 'predicts'
+        let tv = 'predicts';
+        if (t == 2) tv = 'bets'
+
+        if (vv == tv
+            || (!vv && tv == 'predicts')
+        ) return;
+
+        if (tv == 'bets') {
+            router.push(`/profile/${user.id}?view=bets`)
+            return
+        }
+
+        router.push(`/profile/${user.id}`)
     }
 
     function renderDesktopRightPanel() {
@@ -214,6 +255,16 @@ export default function Home({ me, locale, isAndroid, isIOS, user, matches, stat
         }
     }
 
+    function renderPredicts(t) {
+        return predicts.length > 0 ? <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
+            : <span className={styles.no_preds}>{t('no_predicts')}</span>
+    }
+
+    function renderBets(t) {
+        return bets.length > 0 ? <ProfileMatchesPanel view={view} onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={bets} setPredicts={setBets} totalPredicts={initialBets.allBets} />
+            : <span className={styles.no_preds}>{t('no_bets')}</span>
+    }
+
     function renderDesktop() {
         return <>
             <Head>
@@ -229,8 +280,10 @@ export default function Home({ me, locale, isAndroid, isIOS, user, matches, stat
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
                         <UserPanel user={user} isMobile={false} />
-                        <ProfileStatsPanel isMobile={isMobile} stats={initialPredicts} />
-                        <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
+                        <ProfileStatsPanel view={view} isMobile={isMobile} stats={view != 'bets' ? initialPredicts : initialBets} />
+                        <Switch title1={t('predictions2')} title2={t('bets')} selected={view == 'bets' ? 2 : 1} onSelect={onSetTab} />
+
+                        {view != 'bets' ? renderPredicts(t) : renderBets(t)}
                     </div>
 
                     {renderDesktopRightPanel()}
@@ -255,8 +308,10 @@ export default function Home({ me, locale, isAndroid, isIOS, user, matches, stat
                 <AppBar router={router} title="el Torneo" />
                 <UserPanel user={user} />
                 <div className={styles.padding}>
-                    <ProfileStatsPanel isMobile={true} stats={initialPredicts} />
-                    <ProfileMatchesPanel onPreview={onPreview} isMe={false} router={router} globalPage={globalPage} user={user} predicts={predicts} setPredicts={setPredicts} totalPredicts={initialPredicts.allPredicts} />
+                    <Switch title1={t('predictions2')} title2={t('bets')} selected={view == 'bets' ? 2 : 1} onSelect={onSetTab} />
+                    <ProfileStatsPanel view={view} isMobile={true} stats={view != 'bets' ? initialPredicts : initialBets} />
+                    <div className={styles.height20}></div>
+                    {view != 'bets' ? renderPredicts(t) : renderBets(t)}
                 </div>
                 {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}
                 <BottomNavBar me={me} isAndroid={isAndroid} isIOS={isIOS} router={router} />

@@ -135,6 +135,7 @@
     "no_players": "Nenhum jogador na Liga",
     "be_first": "Seja o primeiro a entrar na Liga",
     "available_google_play": "Disponível no Google Play",
+    "available_telegram": "Disponível no Telegram",
     "install_now": "Instale agora",
     "signin_google": "Entrar com o Google",
     "signin_telegram": "Entrar com o Telegram",
@@ -173,6 +174,15 @@
     "attention": "Atenção!",
     "complete_account": "Completar perfil",
     "calendar_page": "Calendário",
+    "bets": "Apostas",
+    "no_bets": "Não há apostas.",
+    "bet": "Aposta",
+    "balance": "Saldo",
+    "possible_win": "Ganho possível",
+    "total_bets": "Contagem total de apostas", 
+    "winning_bets": "Apostas vencedoras", 
+    "losing_bets": "Apostas perdedoras",
+    "play": "Jogar",
     "link_account_message": "Você está usando uma conta de convidado. Seus dados são armazenados temporariamente e podem ser perdidos se o aplicativo for desinstalado. Para salvar seu progresso e acessar sua conta em outros dispositivos, conclua a criação da conta.",
     "awards_info_short": "Participe do torneio gratuito de palpites de futebol definitivo, aberto para fãs de todo o mundo. Faça login, envie seus palpites e suba no ranking seguindo as regras. Pronto para competir? Bem-vindo ao el Torneo!"
 }

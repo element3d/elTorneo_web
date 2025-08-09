@@ -5,7 +5,7 @@ import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 import { Oval } from 'react-loader-spinner'
 
-export default function ProfileMatchesPanel({ isMe, onPreview,  router, globalPage, user, predicts, setPredicts, totalPredicts }) {
+export default function ProfileMatchesPanel({ view, isMe, onPreview,  router, globalPage, user, predicts, setPredicts, totalPredicts }) {
     const { t } = useTranslation()
 
     const [loading, setLoading] = useState(false);
@@ -77,7 +77,7 @@ export default function ProfileMatchesPanel({ isMe, onPreview,  router, globalPa
 
     return <div className={styles.predicts_cont}>
         {predicts.map(p => (
-            <MatchItemMobile onPreview={onPreview} router={router} key={`key_${p.id}`} match={p} showLeague={true} />
+            <MatchItemMobile view={view} onPreview={onPreview} router={router} key={`key_${p.id}`} match={p} showLeague={true} />
         ))}
         {loading && <div className={styles.loading}>  <Oval
             visible={true}

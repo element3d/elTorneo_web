@@ -135,6 +135,7 @@
     "no_players": "No hay jugadores en la Liga",
     "be_first": "Sé el primero en unirte a la Liga",
     "available_google_play": "Disponible en Google Play",
+    "available_telegram": "Disponible en Telegram",
     "install_now": "Instalar ahora",
     "signin_google": "Iniciar sesión con Google",
     "signin_telegram": "Iniciar sesión con Telegram",
@@ -173,6 +174,15 @@
     "attention": "¡Atención!",
     "complete_account": "Completar perfil",
     "calendar_page": "Calendario",
+    "bets": "Apuestas",
+    "no_bets": "No hay apuestas.",
+    "bet": "Apuesta",
+    "balance": "Saldo",
+    "possible_win": "Ganancia posible",
+    "total_bets": "Cantidad total de apuestas", 
+    "winning_bets": "Apuestas ganadoras", 
+    "losing_bets": "Apuestas perdedoras",
+    "play": "Jugar",
     "link_account_message": "Estás usando una cuenta de invitado. Tus datos se almacenan temporalmente y pueden perderse si desinstalas la aplicación. Para guardar tu progreso y acceder a tu cuenta desde otros dispositivos, completa la creación de tu cuenta.",
     "awards_info_short": "Únete al torneo gratuito de predicciones de fútbol definitivo, abierto a aficionados de todo el mundo. Inicia sesión, haz tus predicciones y sube en la clasificación siguiendo las reglas. ¿Listo para competir? ¡Bienvenido a el Torneo!"
 

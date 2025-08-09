@@ -135,6 +135,7 @@
     "no_players": "No players in League",
     "be_first": "Be the first to join League",
     "available_google_play": "Available on Google Play",
+    "available_telegram": "Available on Telegram",
     "install_now": "Install now",
     "signin_google": "Sign in with Google",
     "signin_telegram": "Sign in with Telegram",
@@ -173,6 +174,15 @@
     "attention": "Attention!",
     "complete_account": "Complete account",
     "calendar_page": "Calendar",
+    "bets": "Bets",
+    "no_bets": "There are no bets.",
+    "bet": "Bet",
+    "balance": "Balance",
+    "possible_win": "Possible win", 
+    "total_bets": "Total count of bets", 
+    "winning_bets": "Winning bets", 
+    "losing_bets": "Losing bets",
+    "play": "Play",
     "link_account_message": "You’re currently using a guest account. Your data is stored temporarily and may be lost if you uninstall the app. To save your progress and access your account from other devices, please complete your account setup.",
     "awards_info_short": "Join the ultimate free football prediction tournament, open to fans from all over the world. Sign in, make your predictions, and climb the leaderboard by following the rules. Ready to compete? Welcome to el Torneo!"
 }

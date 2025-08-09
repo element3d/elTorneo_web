@@ -136,7 +136,7 @@ export default function MatchLineupsPanel({ match, lineups, isMobile = true }) {
         return ""
     }
 
-    return <div className={isMobile ? styles.padding : styles.padding_desktop}>
+    return <div className={isMobile ? styles.padding_mobile : styles.padding}>
         <div className={styles.panel}>
             <LineupsHeader></LineupsHeader>
 

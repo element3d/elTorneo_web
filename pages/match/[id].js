@@ -35,6 +35,8 @@ import LangPanel from '@/js/LangPanel';
 import authManager from '@/js/AuthManager';
 import LinkAccountPanel from '@/js/LinkAccountPanel';
 import CompleteAccountPanel from '@/js/CompleteAccountPanel';
+import Cookies from 'js-cookie';
+import MatchUtils from '@/js/MatchUtils';
 
 export async function getServerSideProps(context) {
     const { params } = context;
@@ -283,6 +285,12 @@ function Chip({ ref, title, selected, onClick, isBet = false }) {
     </div>
 }
 
+function OddView({ disabled, type, odd, marginRight, marginLeft, onClick, selected }) {
+    return <div onClick={disabled ? null : onClick} className={`${styles.odd_item} ${selected ? styles.odd_item_sel : ''}`} style={{ marginRight: marginRight, marginLeft: marginLeft }}>
+        <span>{type}</span>
+        <span className={styles.odd_text}>{odd}</span>
+    </div>
+}
 
 export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, odds, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
 
@@ -296,6 +304,9 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
     const [logOrReg, setLogOrReg] = useState(0)
     const [showLang, setShowLang] = useState(0)
     const [showCompleteAccount, setShowCompleteAccount] = useState(0)
+    const [userBet, setUserBet] = useState(odds?.bet ? odds.bet : null)
+    const [odd, setOdd] = useState(odds?.bet ? odds.bet.bet : '')
+    const [amount, setAmount] = useState('')
 
     const [showPreview, setShowPreview] = useState(false)
     const [previewMatch, setPreviewMatch] = useState(null)
@@ -315,6 +326,14 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
             document.documentElement.style.overflow = ''; // Disable background scroll
         }
     }, [])
+
+    useEffect(() => {
+        if (!odds) return
+        
+        setUserBet(odds.bet)
+        if (odds.bet)
+            setOdd(odds.bet.bet)
+    }, [odds])
 
     useEffect(() => {
         const handleBackButton = (event) => {
@@ -447,25 +466,110 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
     }
 
     function renderBetView() {
-        function OddView({ type, odd, marginRight, marginLeft }) {
-            return <div className={styles.odd_item} style={{ marginRight: marginRight, marginLeft: marginLeft }}>
-                <span>{type}</span>
-                <span className={styles.odd_text}>{odd}</span>
-            </div>
+
+        function onBet() {
+            const token = Cookies.get('token')
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authentication': token
+                },
+                body: JSON.stringify({
+                    match: match.id,
+                    bet: odd,
+                    amount: Number.parseInt(amount)
+                })
+            };
+
+            fetch(`${SERVER_BASE_URL}/api/v1/bet`, requestOptions)
+                .then(response => {
+                    return response.json()
+                })
+                .then(data => {
+                    setUserBet({
+                        id: data.bet_id,
+                        bet: odd,
+                        odd: odds[odd],
+                        amount: amount
+                    })
+                    return null
+                })
+                .catch((e) => {
+
+                });
         }
 
-        return <div className={styles.bet_panel}>
+        function isBetDisabled() {
+            return !odd || !amount || amount < 10 || amount > 20;
+        }
+
+        function onChangeAmount(e) {
+            console.log(e.target.value)
+            setAmount(Number.parseInt(e.target.value))
+        }
+
+        function onDeleteBet() {
+            const token = Cookies.get('token')
+            const requestOptions = {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authentication': token
+                }
+            };
+
+            fetch(`${SERVER_BASE_URL}/api/v1/bet?bet_id=${userBet.id}`, requestOptions)
+                .then(response => {
+                    if (response.status == 200)
+                        setUserBet(null)
+                    return null
+                })
+                .catch((e) => {
+
+                });
+        }
+
+        function areOddsDisabled() {
+            return !MatchUtils.isNotStarted(match) || !!userBet
+        }
+
+        return <div className={isMobile ? styles.bet_panel_mobile : styles.bet_panel}>
             <span className={styles.bet_title}>{t('match_winner')}</span>
             <div className={styles.odd_row}>
-                <OddView type={'W1'} odd={odds.w1.toFixed(2)} marginRight={10}></OddView>
-                <OddView type={'X'} odd={odds.x.toFixed(2)} marginRight={10}></OddView>
-                <OddView type={'W2'} odd={odds.w2.toFixed(2)}></OddView>
+                <OddView disabled={areOddsDisabled()} selected={odd == 'w1'} type={'W1'} odd={odds.w1.toFixed(2)} marginRight={10} onClick={() => { setOdd('w1') }}></OddView>
+                <OddView disabled={areOddsDisabled()} selected={odd == 'x'} type={'X'} odd={odds.x.toFixed(2)} marginRight={10} onClick={() => { setOdd('x') }}></OddView>
+                <OddView disabled={areOddsDisabled()} selected={odd == 'w2'} type={'W2'} odd={odds.w2.toFixed(2)} onClick={() => { setOdd('w2') }}></OddView>
             </div>
             <span className={styles.bet_title}>{t('double_chance')}</span>
             <div className={styles.odd_row}>
-                <OddView type={'1X'} odd={odds.x1.toFixed(2)} marginRight={10}></OddView>
-                <OddView type={'12'} odd={odds.x12.toFixed(2)} marginRight={10}></OddView>
-                <OddView type={'2X'} odd={odds.x2.toFixed(2)}></OddView>
+                <OddView disabled={areOddsDisabled()} selected={odd == 'x1'} type={'1X'} odd={odds.x1.toFixed(2)} marginRight={10} onClick={() => { setOdd('x1') }}></OddView>
+                <OddView disabled={areOddsDisabled()} selected={odd == 'x12'} type={'12'} odd={odds.x12.toFixed(2)} marginRight={10} onClick={() => { setOdd('x12') }}></OddView>
+                <OddView disabled={areOddsDisabled()} selected={odd == 'x2'} type={'2X'} odd={odds.x2.toFixed(2)} onClick={() => { setOdd('x2') }}></OddView>
+            </div>
+
+            <div>
+                {!userBet && MatchUtils.isNotStarted(match) ? <div className={styles.bet_button_cont}>
+                    <div className={styles.bet_input_cont}>
+                        <input type='text' onChange={onChangeAmount} className={styles.bet_input} />
+                        <div className={styles.bet_sign}>$</div>
+                    </div>
+
+                    <button disabled={isBetDisabled()} className={`${styles.bet_button} ${isBetDisabled() ? styles.bet_button_dis : ''}`} onClick={onBet}>
+                        <img className={styles.bet_icon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img>
+                    </button>
+                </div> : null}
+
+                {userBet ? <div className={styles.user_bet_cont}>
+                    <div className={styles.user_bet_item}>
+                        <img className={styles.bet_icon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img>
+                        <span className={styles.user_bet_bet}>{MatchUtils.getBetText(userBet.bet)}</span>
+                        <span className={styles.user_bet_odd}>({userBet.odd.toFixed(2)})</span>
+                        <span>{userBet.amount}$</span>
+                    </div>
+
+                    <button className={styles.user_bet_delele_button} onClick={onDeleteBet}>x</button>
+                </div> : null}
             </div>
         </div>
     }
@@ -549,7 +653,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
             </div> : null}
             {view2 == 'events' ? <MatchEventsPanel events={events} isMobile={isMobile} /> : null}
             {view2 == 'stats' ? <MatchStatsPanel stats={stats} isMobile={isMobile} /> : null}
-            {view2 == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
+            {view2 == 'lineups' ? <MatchLineupsPanel isMobile={false} match={match} lineups={lineups} /> : null}
             {view2 == 'table' ? <LeagueTablePanel league={match.league} table={table} group={match.team1.group_index} isMobile={isMobile} /> : null}
         </div>
     }
@@ -576,7 +680,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
 
                         <div className={`${styles.row} ${styles.mt20}`}>
                             <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
-                            {header.odds ? <Chip title={'Bet'} isBet={true} selected={view == 'bet'} onClick={onNavBet}></Chip> : null}
+                            {header.odds ? <Chip title={t('bet')} isBet={true} selected={view == 'bet'} onClick={onNavBet}></Chip> : null}
                             <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
                             {view2 != 'table' ? <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip> : null}
                         </div>
@@ -615,7 +719,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
                         <img className={styles.back_icon} src={`${SERVER_BASE_URL}/data/icons/back_white.svg`} />
                     </div>
                     <div className={styles.title_cont}>
-                    <span>{match.leagueName}</span>
+                        <span>{match.leagueName}</span>
                         <span className={styles.wwwtitle}>www.eltorneo.app</span>
                     </div>
                     <div className={styles.back} style={{ opacity: 0 }}>
@@ -625,6 +729,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
 
                 <div ref={containerRef} className={styles.view_row} >
                     <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
+                    {header.odds ? <Chip title={t('bet')} isBet={true} selected={view == 'bet'} onClick={onNavBet}></Chip> : null}
                     <Chip title={'H2H'} selected={view == 'h2h'} onClick={onNavH2H}></Chip>
                     <Chip title={t('table')} selected={view == 'table'} onClick={onNavTable}></Chip>
                     {header.statistics ? <Chip title={t('statistics')} selected={view == 'stats'} onClick={onNavStats}></Chip> : null}
@@ -634,11 +739,12 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
                 </div>
 
                 {view == '' ? renderPredictsView() : null}
+                {view == 'bet' ? renderBetView() : null}
                 {view == 'h2h' ? renderH2HView() : null}
                 {view == 'table' ? renderTableView() : null}
                 {view == 'events' ? <MatchEventsPanel events={events} /> : null}
                 {view == 'stats' ? <MatchStatsPanel stats={stats} /> : null}
-                {view == 'lineups' ? <MatchLineupsPanel match={match} lineups={lineups} /> : null}
+                {view == 'lineups' ? <MatchLineupsPanel isMobile={true} match={match} lineups={lineups} /> : null}
 
                 {/* {isAndroid ? <InstallPanel hasBg={false} hasMargin={false} /> : null} */}
                 {showPreview ? <MatchPreviewDialog match={previewMatch} onClose={onPreviewClose} /> : null}

@@ -135,6 +135,7 @@
     "no_players": "Nessun giocatore nella Lega",
     "be_first": "Sii il primo a unirti alla Lega",
     "available_google_play": "Disponibile su Google Play",
+    "available_telegram": "Disponibile su Telegram",
     "install_now": "Installa ora",
     "signin_google": "Accedi con Google",
     "signin_telegram": "Accedi con Telegram",
@@ -173,6 +174,15 @@
     "attention": "Attenzione!",
     "complete_account": "Completa account",
     "calendar_page": "Calendario",
+    "bets": "Scommesse",
+    "no_bets": "Non ci sono scommesse.",
+    "bet": "Scommessa",
+    "balance": "Saldo",
+    "possible_win": "Vincita possibile",
+    "total_bets": "Numero totale delle scommesse", 
+    "winning_bets": "Scommesse vincenti", 
+    "losing_bets": "Scommesse perdenti",
+    "play": "Giocare",
     "link_account_message": "Stai utilizzando un account ospite. I tuoi dati sono memorizzati temporaneamente e potrebbero andare persi se disinstalli l'app. Per salvare i tuoi progressi e accedere al tuo account da altri dispositivi, completa la creazione dell'account.",
     "awards_info_short": "Unisciti al torneo gratuito di pronostici calcistici definitivo, aperto ai fan di tutto il mondo. Accedi, fai i tuoi pronostici e sali in classifica seguendo le regole. Pronto a competere? Benvenuto a el Torneo!"
 }

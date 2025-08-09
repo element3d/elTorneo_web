@@ -374,3 +374,23 @@
     width: 20px;
     height: 20px;
 }
+
+.bet_panel {
+    height: 20px;
+    background-color: #F7F7F7;
+    display: flex;
+    flex-direction: row;
+    margin-top: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 12px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    align-items: center;
+}
+
+.bet_odd {
+    margin-right: 10px;
+    color: #8E8E93;
+}

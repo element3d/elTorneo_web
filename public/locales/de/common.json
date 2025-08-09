@@ -135,6 +135,7 @@
     "no_players": "Keine Spieler in der Liga",
     "be_first": "Sei der Erste, der beitritt zur Liga",
     "available_google_play": "Verfügbar im Google Play",
+    "available_telegram": "Verfügbar im Telegram",
     "install_now": "Jetzt installieren",
     "signin_google": "Mit Google anmelden",
     "signin_telegram": "Mit Telegram anmelden",
@@ -173,6 +174,15 @@
     "attention": "Achtung!",
     "complete_account": "Profil vervollständigen",
     "calendar_page": "Kalender",
+    "bets": "Wetten",
+    "no_bets": "Es gibt keine Wetten.",
+    "bet": "Wette",
+    "balance": "Guthaben",
+    "possible_win": "Möglicher Gewinn",
+    "total_bets": "Gesamtzahl der Wetten", 
+    "winning_bets": "Gewinnende Wetten", 
+    "losing_bets": "Verlierende Wetten",
+    "play": "Spielen",
     "link_account_message": "Du nutzt derzeit ein Gastkonto. Deine Daten werden nur vorübergehend gespeichert und können verloren gehen, wenn du die App deinstallierst. Um deinen Fortschritt zu speichern und von anderen Geräten auf dein Konto zuzugreifen, schließe die Kontoerstellung ab.",
     "awards_info_short": "Nimm am ultimativen kostenlosen Fußball-Tippspiel-Turnier teil, das für Fans aus der ganzen Welt offen ist. Melde dich an, gib deine Tipps ab und klettere in der Rangliste, indem du die Regeln befolgst. Bereit zum Mitmachen? Willkommen bei el Torneo!"
 }

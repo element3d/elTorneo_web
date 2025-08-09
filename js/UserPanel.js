@@ -24,6 +24,10 @@ export default function UserPanel({ router, user, pos, isMe, isMobile = true }) 
                 <span className={styles.name}>{user.name}</span>
                 {user.position > 0 ? <span className={styles.desc}>{user.league == 1 ? t('place_in_el_torneo') : t('place_in_league2')}:  {user.position}</span> : null}
                 <span className={styles.desc}>{t('points')}:  {user.points}</span>
+                <div className={styles.balance_cont}>
+                    <span className={styles.desc}>{t('balance')}:  </span>
+                    <span className={user.balance >= 0 ? styles.balance_green : styles.balance_red}>{user.balance.toFixed(2)}$</span>
+                </div>
             </div>
 
             {isMe ? <div className={styles.settings} onClick={onNavSettings}>
@@ -32,7 +36,7 @@ export default function UserPanel({ router, user, pos, isMe, isMobile = true }) 
             </div> : null}
 
         </div>
-        { isMe && user.isGuest ? <LinkAccountPanel onCompleteAccount={onNavCompleteAccount}/> : null }
+        {isMe && user.isGuest ? <LinkAccountPanel onCompleteAccount={onNavCompleteAccount} /> : null}
 
     </div>)
 }

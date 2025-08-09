@@ -81,7 +81,7 @@ export default function MatchEventsPanel({ events, isMobile=true }) {
     let t1Score = 0
     let t2Score = 0
 
-    return <div className={isMobile ? '' : styles.padding_desktop}>
+    return <div className={isMobile ? styles.events_panel_mobile : styles.padding_desktop}>
         {events.map((e, i) => {
             if (e.type == "Goal" && e.detail != "Missed Penalty") {
                 if (e.team == 1) t1Score++;

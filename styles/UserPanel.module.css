@@ -84,6 +84,20 @@
     color: #8E8E93;
 }
 
+.balance_red {
+    font-size: 12px;
+    margin-top: 2px;
+    font-weight: bold;
+    color: #FF4747;
+}
+
+.balance_green {
+    font-size: 12px;
+    margin-top: 2px;
+    font-weight: bold;
+    color: #00C566;
+}
+
 .settings {
     width: 50px;
     /* background-color: red; */

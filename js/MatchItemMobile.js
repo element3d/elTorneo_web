@@ -1,6 +1,7 @@
 import styles from '@/styles/MatchItem.module.css';
 import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
+import MatchUtils from './MatchUtils';
 
 function TeamItemLeft({ team, isSpecial }) {
     return (<div className={styles.team_item_left}>
@@ -16,7 +17,59 @@ function TeamItemRight({ team, isSpecial }) {
     </div>)
 }
 
-export default function MatchItemMobile({ currentWeek, router, match, showLeague, onPreview, settings }) {
+function getPredictionColor(p) {
+    if (p.status == 0) return styles.black//'#8E8E93'
+    if (p.status == 1) return styles.winner
+    if (p.status == 2) return match.is_special ? styles.gold : styles.scorep
+    if (p.status == 3 || p.status == 4) return styles.failed
+}
+
+function getBgColor(p) {
+    if (p.status == 0) return styles.gray
+    if (p.status == 1) return styles.winner_bg
+    if (p.status == 2) return styles.score_bg
+    if (p.status == 3 || p.status == 4) return styles.fail_bg
+}
+
+function getPredictTitle(p, t) {
+    if (p.status == 4) return t("missing_prediction")
+    if (p.status == 0) return t("prediction")
+    if (p.status == 1) {
+        if (p.team1_score == p.team2_score) return t("draw_predicted")
+        return t("winner_predicted")
+    }
+    if (p.status == 2) return t("score_predicted")
+    if (p.status == 3) return t("prediction_was_failed")
+}
+
+function getPredictValue(predict) {
+    if (predict.status == 4) return ''
+    return ` ${predict.team1_score} : ${predict.team2_score}`
+}
+
+function PredictPanel({ predict }) {
+    const { t } = useTranslation()
+
+    return <div className={`${styles.predict_panel} ${getBgColor(predict)}`}>
+        <span className={getPredictionColor(predict)}>{getPredictTitle(predict, t)}{getPredictValue(predict)}</span>
+    </div>
+}
+
+function BetPanel({ bet }) {
+    const { t } = useTranslation()
+
+    return <div className={styles.bet_panel}>
+        <div>
+            <span>{t('bet')} { MatchUtils.getBetText(bet.bet)}</span>
+            <span className={styles.bet_odd}>({bet.odd})</span>
+        </div>
+        <div>
+            <span>{bet.amount}$</span>
+        </div>
+    </div>
+}
+
+export default function MatchItemMobile({ view, currentWeek, router, match, showLeague, onPreview, settings }) {
 
     const { t } = useTranslation()
 
@@ -147,15 +200,9 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
                 <img className={styles.league_icon} src={getIcon()} />
                 <span className={isSpecial ? styles.white : null}>{league}</span>
                 <span className={styles.week}>{getWeekTitleShort(week)}</span>
-                {settings && settings.season != match.season ? <span className={styles.week}>{match.season}</span> : null }
+                {settings && settings.season != match.season ? <span className={styles.week}>{match.season}</span> : null}
             </div>
             {/* <span className={styles.week}>Matchday {week}</span> */}
-        </div>
-    }
-
-    function PredictPanel({ predict }) {
-        return <div className={`${styles.predict_panel} ${getBgColor(predict)}`}>
-            <span className={getPredictionColor(predict)}>{getPredictTitle(predict)}{getPredictValue(predict)}</span>
         </div>
     }
 
@@ -183,35 +230,6 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
         </div>
     }
 
-    function getPredictValue(predict) {
-        if (predict.status == 4) return ''
-        return ` ${predict.team1_score} : ${predict.team2_score}`
-    }
-
-    function getPredictTitle(p) {
-        if (p.status == 4) return t("missing_prediction")
-        if (p.status == 0) return t("prediction")
-        if (p.status == 1) {
-            if (p.team1_score == p.team2_score) return t("draw_predicted")
-            return t("winner_predicted")
-        }
-        if (p.status == 2) return t("score_predicted")
-        if (p.status == 3) return t("prediction_was_failed")
-    }
-
-    function getPredictionColor(p) {
-        if (p.status == 0) return styles.black//'#8E8E93'
-        if (p.status == 1) return styles.winner
-        if (p.status == 2) return match.is_special ? styles.gold : styles.scorep
-        if (p.status == 3 || p.status == 4) return styles.failed
-    }
-
-    function getBgColor(p) {
-        if (p.status == 0) return styles.gray
-        if (p.status == 1) return styles.winner_bg
-        if (p.status == 2) return styles.score_bg
-        if (p.status == 3 || p.status == 4) return styles.fail_bg
-    }
 
     function getSpecialPoints() {
         return match.special_match_points.split(':')
@@ -221,13 +239,21 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
         return !isFinished() && match.is_special && match.predict?.status == -1
     }
 
+    function renderUserPredict() {
+        return match.predict?.status != -1 ? <PredictPanel predict={match.predict} /> : null;
+    }
+
+    function renderUserBet() {
+        return <BetPanel bet={match.bet} />
+    }
+
     return (<div onClick={onNavMatch} className={styles.match_item}>
         {showPoints && match.predict.status != 0 ? <PointsPanel /> : null}
 
         {match.predict?.status != -1 && !showLeague && !match.is_special ? <div className={styles.space} /> : null}
 
         {match.is_special ? <img className={styles.banner} src={`${SERVER_BASE_URL}/data/special/${match.special_match_title}.png`} /> : null}
-        {showLeague ? <LeaguePanel league={match.league.name} week={{ week: match.week, type: match.week_type}} isSpecial={match.is_special} /> : null}
+        {showLeague ? <LeaguePanel league={match.league.name} week={{ week: match.week, type: match.week_type }} isSpecial={match.is_special} /> : null}
         {!showLeague && match.is_special ? <span className={styles.sm_title}>{match.special_match_tr_title}</span> : null}
         <div className={styles.content}>
             <TeamItemLeft team={match.team1} isSpecial={match.is_special} />
@@ -237,8 +263,7 @@ export default function MatchItemMobile({ currentWeek, router, match, showLeague
             {match.status == 'PST' ? renderPST() : null}
             <TeamItemRight team={match.team2} isSpecial={match.is_special} />
         </div>
-
-        {match.predict?.status != -1 ? <PredictPanel predict={match.predict} /> : null}
+        {view != 'bets' ? renderUserPredict() : renderUserBet()}
         {match.predict?.status == -1 && (showLeague || (match.is_special && !isShowPoints())) ? <div className={styles.space} /> : null}
 
         {isShowPoints() ? <div className={styles.points_cont}>

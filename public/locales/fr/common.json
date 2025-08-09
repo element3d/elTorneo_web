@@ -135,6 +135,7 @@
     "no_players": "Aucun joueur dans la Ligue",
     "be_first": "Soyez le premier à rejoindre la Ligue",
     "available_google_play": "Disponible sur Google Play",
+    "available_telegram": "Disponible sur Telegram",
     "install_now": "Installer maintenant",
     "signin_google": "Se connecter avec Google",
     "signin_telegram": "Se connecter avec Telegram",
@@ -173,6 +174,15 @@
     "attention": "Attention!",
     "complete_account": "Compléter le profil",
     "calendar_page": "Calendrier",
+    "bets": "Paris",
+    "no_bets": "Il n'y a pas de paris.",
+    "bet": "Pari",
+    "balance": "Solde",
+    "possible_win": "Gain possible",
+    "total_bets": "Nombre total de paris", 
+    "winning_bets": "Paris gagnants", 
+    "losing_bets": "Paris perdants",
+    "play": "Jouer",
     "link_account_message": "Vous utilisez un compte invité. Vos données sont stockées temporairement et peuvent être perdues si vous désinstallez l’application. Pour sauvegarder votre progression et accéder à votre compte depuis d’autres appareils, veuillez compléter la création de votre compte.",
     "awards_info_short": "Rejoignez le tournoi gratuit ultime de pronostics football, ouvert aux fans du monde entier. Connectez-vous, faites vos pronostics et grimpez dans le classement en suivant les règles. Prêt à relever le défi ? Bienvenue à el Torneo !"
 }

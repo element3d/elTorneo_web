@@ -16,7 +16,7 @@ export default function HomeMatchesPanel({ isMobile, league, matches, router, on
         );
     };
 
-    return (<div className={styles.panel} style={{padding: isMobile ? '20px' : '0px'}}>
+    return (<div className={styles.panel} style={{padding: isMobile ? '20px' : '0px', paddingTop: '0px'}}>
         {matches.map((m, i) => {
 
             let renderTime = false;

@@ -250,6 +250,11 @@
     margin-top: 20px;
 }
 
+.bet_panel_mobile {
+    width: 100%;
+    padding: 20px;
+}
+
 .bet_panel {
     margin-top: 20px;
 }
@@ -258,7 +263,8 @@
     color: #8E8E93;
     font-size: 14px;
     font-weight: bold;
-    margin-bottom: 10px;
+    display: block;
+    margin-bottom: 4px;
 }
 
 .odd_row {
