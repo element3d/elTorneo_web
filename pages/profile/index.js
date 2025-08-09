@@ -66,7 +66,11 @@ export async function getServerSideProps(context) {
         const ress = await fetch(`https://ipapi.co/${ip}/json/`);
         const data = await ress.json();
         userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'profile';
-        token = await authManager.createGuestUser(userOs);
+        try {
+            token = await authManager.createGuestUser(userOs);
+        } catch (e) {
+            console.log("Error create user: " + e);
+        }
     }
     let user = null;
     if (token) {
@@ -166,7 +170,7 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
     const [showCompleteAccount, setShowCompleteAccount] = useState(0)
     const [showSignIn, setShowSignIn] = useState(false)
     const [logOrReg, setLogOrReg] = useState(0)
-  
+
     useEffect(() => {
         return () => {
             setShowPreview(false)
@@ -261,7 +265,7 @@ export default function Home({ locale, isAndroid, isIOS, user, stats, globalPage
         if (!vv) vv = 'predicts'
         let tv = 'predicts';
         if (t == 2) tv = 'bets'
-    
+
         if (vv == tv
             || (!vv && tv == 'predicts')
         ) return;

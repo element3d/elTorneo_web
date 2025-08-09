@@ -82,7 +82,11 @@ export async function getServerSideProps(context) {
     const ress = await fetch(`https://ipapi.co/${ip}/json/`);
     const data = await ress.json();
     userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'calendar';
-    token = await authManager.createGuestUser(userOs);
+    try {
+      token = await authManager.createGuestUser(userOs);
+    } catch (e) {
+      console.log("Error create user: " + e);
+    }
   }
   if (token) {
     me = await authManager.getMe(token)
