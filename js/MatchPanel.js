@@ -213,12 +213,12 @@ export default function MatchPanel({browserName, isAndroid, router, me, match, p
     }
 
     function onPredict() {
-        if (browserName == 'Facebook' || browserName == 'Chrome WebView') {
-            if (isAndroid) {
-                window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
-                return;
-            }
-        }
+        // if (browserName == 'Facebook' || browserName == 'Chrome WebView') {
+        //     if (isAndroid) {
+        //         window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
+        //         return;
+        //     }
+        // }
 
         const requestOptions = {
             method: 'POST',
