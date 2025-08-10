@@ -27,6 +27,7 @@
     flex-direction: row;
     margin-bottom: 20px;
     align-items: center;
+    user-select: none;
 }
 
 .panel_desktop {
