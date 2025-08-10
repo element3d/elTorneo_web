@@ -5,6 +5,7 @@ import { useGoogleLogin } from '@react-oauth/google';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import SpecialPointsPanel from './SpecialPointsPanel';
 
 function TeamItem({ team, isHome, style }) {
     const { t } = useTranslation()
@@ -19,7 +20,7 @@ function TeamItem({ team, isHome, style }) {
 export const EMODE_VIEW = 0
 export const EMODE_EDIT = 1
 
-export default function MatchPanel({ router, me, match, predict, isMobile, onLogin }) {
+export default function MatchPanel({browserName, router, me, match, predict, isMobile, onLogin }) {
     const { t } = useTranslation()
     const [team1Score, setTeam1Score] = useState('')
     const [team2Score, setTeam2Score] = useState('')
@@ -212,6 +213,13 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
     }
 
     function onPredict() {
+        if (browserName == 'Facebook') {
+            if (isAndroid) {
+                window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
+                return;
+            } 
+        }
+
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -307,6 +315,7 @@ export default function MatchPanel({ router, me, match, predict, isMobile, onLog
                 </div>
             </div> : null}
         </div>
+        {match.is_special ? <SpecialPointsPanel match={{match: match}}/> : null }
         {predict && predict.status != 4 && mode != EMODE_EDIT ? <div className={styles.edit_row}><div className={styles.predict_item} style={{ backgroundColor: getBgColor(predict), color: getBorderColor(predict) }}>
             <span >{t('prediction')} {predict.team1_score} : {predict.team2_score}</span></div>
             <button className={styles.edit_button} onClick={onEditClick}>

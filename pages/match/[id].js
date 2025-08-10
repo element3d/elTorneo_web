@@ -264,6 +264,7 @@ export async function getServerSideProps(context) {
             locale,
             isMobile,
             isAndroid,
+            browserName: uaResult?.browser?.name,
             isIOS,
             leagues,
             ...(await serverSideTranslations(locale)),
@@ -296,7 +297,7 @@ function OddView({ disabled, type, odd, marginRight, marginLeft, onClick, select
     </div>
 }
 
-export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, odds, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
+export default function Home({browserName, leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, odds, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
 
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
@@ -687,7 +688,7 @@ export default function Home({ leagues, locale, isMobile, isAndroid, isIOS, me, 
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
-                        <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={isMobile} onLogin={onSignIn} />
+                        <MatchPanel browserName={browserName} me={me} router={router} match={match} predict={predict} isMobile={isMobile} onLogin={onSignIn} />
 
                         <div className={`${styles.row} ${styles.mt20}`}>
                             <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
