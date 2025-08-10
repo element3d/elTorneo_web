@@ -297,7 +297,7 @@ function OddView({ disabled, type, odd, marginRight, marginLeft, onClick, select
     </div>
 }
 
-export default function Home({browserName, leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, odds, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
+export default function Home({ browserName, leagues, locale, isMobile, isAndroid, isIOS, me, match, predict, odds, view, view2, top20Predicts, summary, h2hMatches, table, events, stats, lineups, header, settings }) {
 
     const { t } = useTranslation()
     const [matches, setMatches] = useState([])
@@ -737,7 +737,7 @@ export default function Home({browserName, leagues, locale, isMobile, isAndroid,
                     <div className={styles.back} style={{ opacity: 0 }}>
                     </div>
                 </div>
-                <MatchPanel me={me} router={router} match={match} predict={predict} isMobile={true} />
+                <MatchPanel browserName={browserName} me={me} router={router} match={match} predict={predict} isMobile={true} />
 
                 <div ref={containerRef} className={styles.view_row} >
                     <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
