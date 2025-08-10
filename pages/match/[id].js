@@ -688,7 +688,7 @@ export default function Home({ browserName, leagues, locale, isMobile, isAndroid
                 <div className={styles.desktop_panels_cont}>
                     <DesktopMenuPanel leagues={leagues} router={router} />
                     <div className={styles.desktop_middle_cont}>
-                        <MatchPanel browserName={browserName} me={me} router={router} match={match} predict={predict} isMobile={isMobile} onLogin={onSignIn} />
+                        <MatchPanel browserName={browserName} isAndroid={isAndroid} me={me} router={router} match={match} predict={predict} isMobile={isMobile} onLogin={onSignIn} />
 
                         <div className={`${styles.row} ${styles.mt20}`}>
                             <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>
@@ -737,7 +737,7 @@ export default function Home({ browserName, leagues, locale, isMobile, isAndroid
                     <div className={styles.back} style={{ opacity: 0 }}>
                     </div>
                 </div>
-                <MatchPanel browserName={browserName} me={me} router={router} match={match} predict={predict} isMobile={true} />
+                <MatchPanel browserName={browserName} isAndroid={isAndroid} me={me} router={router} match={match} predict={predict} isMobile={true} />
 
                 <div ref={containerRef} className={styles.view_row} >
                     <Chip title={t('predictions2')} selected={view == ''} onClick={onNavPredicts}></Chip>

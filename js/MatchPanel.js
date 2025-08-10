@@ -20,7 +20,7 @@ function TeamItem({ team, isHome, style }) {
 export const EMODE_VIEW = 0
 export const EMODE_EDIT = 1
 
-export default function MatchPanel({browserName, router, me, match, predict, isMobile, onLogin }) {
+export default function MatchPanel({browserName, isAndroid, router, me, match, predict, isMobile, onLogin }) {
     const { t } = useTranslation()
     const [team1Score, setTeam1Score] = useState('')
     const [team2Score, setTeam2Score] = useState('')
