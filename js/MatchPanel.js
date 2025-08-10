@@ -214,10 +214,10 @@ export default function MatchPanel({browserName, router, me, match, predict, isM
 
     function onPredict() {
         if (browserName == 'Facebook') {
-            if (isAndroid) {
+            // if (isAndroid) {
                 window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
                 return;
-            } 
+            // } 
         }
 
         const requestOptions = {
