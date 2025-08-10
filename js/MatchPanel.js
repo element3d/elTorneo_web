@@ -27,7 +27,6 @@ export default function MatchPanel({browserName, router, me, match, predict, isM
     const [mode, setMode] = useState(EMODE_VIEW)
 
     function getDate() {
-        return browserName;
         const today = moment().startOf('day');
         const tomorrow = moment().add(1, 'day').startOf('day');
         const matchDate = moment(match.date); // Ensure it's in milliseconds
@@ -214,11 +213,11 @@ export default function MatchPanel({browserName, router, me, match, predict, isM
     }
 
     function onPredict() {
-        if (browserName == 'Facebook') {
-            // if (isAndroid) {
+        if (browserName == 'Facebook' || browserName == 'Chrome WebView') {
+            if (isAndroid) {
                 window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
                 return;
-            // } 
+            }
         }
 
         const requestOptions = {
