@@ -27,6 +27,7 @@ export default function MatchPanel({browserName, router, me, match, predict, isM
     const [mode, setMode] = useState(EMODE_VIEW)
 
     function getDate() {
+        return browserName;
         const today = moment().startOf('day');
         const tomorrow = moment().add(1, 'day').startOf('day');
         const matchDate = moment(match.date); // Ensure it's in milliseconds
