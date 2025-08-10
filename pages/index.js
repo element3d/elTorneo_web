@@ -207,12 +207,12 @@ export default function Home({ leagues, specialMatch, isMobile, me, isAndroid, i
     if (!specialMatch) return;
 
     const currentDate = moment();
-    const fiveHours = 2 * 60 * 60 * 1000;
+    const twoHours = 2 * 60 * 60 * 1000;
 
-    const specialMatchDate = localStorage.getItem('specialMatchDate')
+    const specialMatchDate = localStorage.getItem('specialMatchDate');
 
-    if (!specialMatchDate || currentDate.diff(moment(parseInt(specialMatchDate)), 'milliseconds') > fiveHours) {
-      localStorage.setItem('specialMatchDate', currentDate)
+    if (!specialMatchDate || currentDate.diff(moment(specialMatchDate, 'ddd MMM DD YYYY HH:mm:ss [GMT]ZZ'), 'milliseconds') > twoHours) {
+      localStorage.setItem('specialMatchDate', currentDate.toString()); // keep same format
       document.documentElement.style.overflow = 'hidden';
       return setShowSpecialMatch(true);
     }
