@@ -5,7 +5,7 @@ import { SERVER_BASE_URL } from './Config';
 import { useTranslation } from 'next-i18next';
 import { Oval } from 'react-loader-spinner'
 
-export default function ProfileMatchesPanel({ view, isMe, onPreview,  router, globalPage, user, predicts, setPredicts, totalPredicts }) {
+export default function ProfileMatchesPanel({ view, isMe, onPreview, router, globalPage, user, predicts, setPredicts, totalPredicts }) {
     const { t } = useTranslation()
 
     const [loading, setLoading] = useState(false);
@@ -54,12 +54,20 @@ export default function ProfileMatchesPanel({ view, isMe, onPreview,  router, gl
 
     const loadMorePredicts = async () => {
         setLoading(true);
-        const response = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${(globalPage - 1) * 5 + page}&user_id=${user.id}&league_id=${-1}`);
-        const newPredicts = await response.json();
-
-        setPredicts(prev => [...prev, ...newPredicts.predicts]);
-        setPage(prev => prev + 1);
-        setLoading(false);
+        let response;
+        if (view != 'bets') {
+            response = await fetch(`${SERVER_BASE_URL}/api/v1/user/predicts?page=${(globalPage - 1) * 5 + page}&user_id=${user.id}&league_id=${-1}`);
+            const newPredicts = await response.json();
+            setPredicts(prev => [...prev, ...newPredicts.predicts]);
+            setPage(prev => prev + 1);
+            setLoading(false);
+        } else {
+            response = await fetch(`${SERVER_BASE_URL}/api/v1/user/bets?page=${(globalPage - 1) * 5 + page}&user_id=${user.id}&league_id=${-1}`);
+            const newPredicts = await response.json();
+            setPredicts(prev => [...prev, ...newPredicts.bets]);
+            setPage(prev => prev + 1);
+            setLoading(false);
+        }
     };
 
     function onPrev() {

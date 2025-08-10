@@ -43,6 +43,7 @@
     /* font-weight: bold; */
     color: #8E8E93;
     font-family: 'Roboto';
+    user-select: none;
 }
 
 .stats_title {
