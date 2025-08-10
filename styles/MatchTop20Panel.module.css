@@ -15,6 +15,7 @@
 
 .cont {
     margin-top: 20px;
+    user-select: none;
 }
 
 .player_item {

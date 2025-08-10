@@ -12,6 +12,7 @@
     overflow: hidden;
     cursor: pointer;
     font-family: 'Roboto';
+    user-select: none;
     /* font-weight: bold; */
     /* font-family: 'Roboto' */
 }
