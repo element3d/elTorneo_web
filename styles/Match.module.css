@@ -66,6 +66,19 @@
     user-select: none;
 }
 
+.color_title {
+    color: black;
+}
+
+.color_success {
+    color: #00C566;
+}
+
+.color_fail {
+    color: #FF4747;
+}
+
+
 @media (max-width: 768px) {
     .view_row {
       overflow-x: scroll;

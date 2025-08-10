@@ -573,12 +573,12 @@ export default function Home({ browserName, leagues, locale, isMobile, isAndroid
                             <img className={styles.bet_icon} src={`${SERVER_BASE_URL}/data/icons/bbicon.svg`}></img>
                             <span className={styles.user_bet_bet}>{MatchUtils.getBetText(userBet.bet)}</span>
                             <span className={styles.user_bet_odd}>({userBet.odd.toFixed(2)})</span>
-                            <span>{userBet.amount}$</span>
+                            <span className={styles[MatchUtils.getBetColorStyle(userBet)]}>{MatchUtils.getBetSign(userBet)}{MatchUtils.getBetAmount(userBet)}$</span>
                         </div>
 
-                        <button className={styles.user_bet_delele_button} onClick={onDeleteBet}>x</button>
+                        { MatchUtils.isNotStarted(match) ? <button className={styles.user_bet_delele_button} onClick={onDeleteBet}>x</button> : null }
                     </div>
-                    <span className={styles.bet_min_max}>{t('possible_win')} {(userBet.amount * userBet.odd).toFixed(2)}$</span>
+                    { userBet.status == 0 ? <span className={styles.bet_min_max}>{t('possible_win')} {(userBet.amount * userBet.odd).toFixed(2)}$</span> : null }
                 </div> : null}
 
                 <BetWarningPanel />

@@ -17,13 +17,6 @@ function TeamItemRight({ team, isSpecial }) {
     </div>)
 }
 
-function getPredictionColor(p) {
-    if (p.status == 0) return styles.black//'#8E8E93'
-    if (p.status == 1) return styles.winner
-    if (p.status == 2) return match.is_special ? styles.gold : styles.scorep
-    if (p.status == 3 || p.status == 4) return styles.failed
-}
-
 function getBgColor(p) {
     if (p.status == 0) return styles.gray
     if (p.status == 1) return styles.winner_bg
@@ -31,27 +24,11 @@ function getBgColor(p) {
     if (p.status == 3 || p.status == 4) return styles.fail_bg
 }
 
-function getPredictTitle(p, t) {
-    if (p.status == 4) return t("missing_prediction")
-    if (p.status == 0) return t("prediction")
-    if (p.status == 1) {
-        if (p.team1_score == p.team2_score) return t("draw_predicted")
-        return t("winner_predicted")
-    }
-    if (p.status == 2) return t("score_predicted")
-    if (p.status == 3) return t("prediction_was_failed")
-}
-
-function getPredictValue(predict) {
-    if (predict.status == 4) return ''
-    return ` ${predict.team1_score} : ${predict.team2_score}`
-}
-
 function PredictPanel({ predict }) {
     const { t } = useTranslation()
 
     return <div className={`${styles.predict_panel} ${getBgColor(predict)}`}>
-        <span className={getPredictionColor(predict)}>{getPredictTitle(predict, t)}{getPredictValue(predict)}</span>
+        <span className={MatchUtils.getPredictionColor(predict)}>{MatchUtils.getPredictTitle(predict, t)}{MatchUtils.getPredictValue(predict)}</span>
     </div>
 }
 
@@ -226,7 +203,7 @@ export default function MatchItemMobile({ view, currentWeek, router, match, show
         const st = getBgColor(match.predict)
 
         return <div className={`${styles.points_panel} ${st}`}>
-            <span className={getPredictionColor(match.predict)}>{t('points')}: {getPoints(match.predict)}</span>
+            <span className={MatchUtils.getPredictionColor(match.predict)}>{t('points')}: {getPoints(match.predict)}</span>
         </div>
     }
 
