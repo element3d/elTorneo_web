@@ -33,7 +33,7 @@ import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 
 export async function getServerSideProps(context) {
   const { query } = context;
-  const timestamp = query.date ? Number(query.date) : moment().valueOf()//new Date(moment().format('YYYY-MM-DD')).getTime();
+  const timestamp = query.date ? Number(query.date) : moment().utc().valueOf()//new Date(moment().format('YYYY-MM-DD')).getTime();
   const { locale } = context;
 
   const { req } = context
