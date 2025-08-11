@@ -22,8 +22,8 @@ export default function UserPanel({ router, user, pos, isMe, isMobile = true }) 
             </div>
             <div className={styles.name_cont}>
                 <span className={styles.name}>{user.name}</span>
-                {user.position > 0 ? <span className={styles.desc}>{user.league == 1 ? t('place_in_el_torneo') : t('place_in_league2')}:  {user.position}</span> : null}
-                <span className={styles.desc}>{t('points')}:  {user.points}</span>
+                {user.position > 0 ? <div className={styles.balance_cont}><span className={styles.desc}>{user.league == 1 ? t('place_in_el_torneo') : t('place_in_league2')}:  {user.position}</span></div> : null}
+                <div className={styles.balance_cont}><span className={styles.desc}>{t('points')}:  {user.points}</span></div>
                 <div className={styles.balance_cont}>
                     <span className={styles.desc}>{t('balance')}:  </span>
                     <span className={user.balance >= 0 ? styles.balance_green : styles.balance_red}>{user.balance.toFixed(2)}$</span>

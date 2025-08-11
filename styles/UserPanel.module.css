@@ -21,6 +21,10 @@
     width: 100%;
 }
 
+.balance_cont {
+    height: 16px;
+}
+
 .panel {
     display: flex;
     width: 100%;

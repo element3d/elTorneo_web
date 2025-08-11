@@ -41,7 +41,7 @@ function BetPanel({ bet }) {
             <span className={styles.bet_odd}>({bet.odd})</span>
         </div>
         <div>
-            <span>{bet.amount}$</span>
+            <span className={styles[MatchUtils.getBetColorStyle(bet)]}>{MatchUtils.getBetSign(bet)}{MatchUtils.getBetAmount(bet)}$</span>
         </div>
     </div>
 }

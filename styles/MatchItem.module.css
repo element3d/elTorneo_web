@@ -161,7 +161,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
     /* background-color: red; */
     /* margin-bottom: 5px; */
@@ -389,6 +389,19 @@
     font-size: 13px;
     font-weight: bold;
     align-items: center;
+    z-index: 1;
+}
+
+.color_title {
+    color: black;
+}
+
+.color_success {
+    color: #00C566;
+}
+
+.color_fail {
+    color: #FF4747;
 }
 
 .bet_odd {
