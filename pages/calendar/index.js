@@ -33,7 +33,7 @@ import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 
 export async function getServerSideProps(context) {
   const { query } = context;
-  const timestamp = query.date ? Number(query.date) : moment().utc().valueOf()//new Date(moment().format('YYYY-MM-DD')).getTime();
+  const timestamp = query.date ? Number(query.date) : new Date(moment().format('YYYY-MM-DD')).getTime();
   const { locale } = context;
 
   const { req } = context
@@ -128,14 +128,17 @@ export async function getServerSideProps(context) {
       locale,
       me,
       liveMatches,
+      queryDate: query.date ? query.date : null,
       leagues,
-      date: moment(timestamp).format('YYYY-MM-DD'),
+      // date: moment(timestamp).format('YYYY-MM-DD'),
       ...(await serverSideTranslations(locale)),
     },
   };
 }
 
-export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, leagues, liveMatches, locale }) {
+export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobile, leagues, liveMatches, locale }) {
+  console.log("QUERY DATE ===========")
+  console.log(queryDate)
   const { t } = useTranslation()
   const router = useRouter()
   let currentLeague = null
@@ -145,13 +148,22 @@ export default function Home({ me, isAndroid, isIOS, matches, date, isMobile, le
   const [logOrReg, setLogOrReg] = useState(0)
   const [showLang, setShowLang] = useState(0)
   const [showCompleteAccount, setShowCompleteAccount] = useState(0)
+  const date = moment(queryDate ? Number.parseInt(queryDate) : undefined).format('YYYY-MM-DD')
+  console.log(date)
+  // useEffect(() => {
+  //   return () => {
+  //     setShowPreview(false)
+  //     document.documentElement.style.overflow = ''; // Disable background scroll
+  //   }
+  // }, [date])
 
   useEffect(() => {
     return () => {
       setShowPreview(false)
       document.documentElement.style.overflow = ''; // Disable background scroll
     }
-  }, [date])
+  }, [])
+
 
   function onPreview(m) {
     setShowPreview(true)
