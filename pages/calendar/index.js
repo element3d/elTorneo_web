@@ -95,17 +95,8 @@ export async function getServerSideProps(context) {
   }
 
   const urlLive = `${SERVER_BASE_URL}/api/v1/matches/live`
-  let liveMatches = await fetch(urlLive, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authentication': token ? token : ''
-    },
-  })
-    .then(response => response.json())
-
-  if (!liveMatches.length) {
-    const urlLive = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+  let liveMatches = null;
+  if (!isMobile) {
     liveMatches = await fetch(urlLive, {
       method: 'GET',
       headers: {
@@ -114,6 +105,18 @@ export async function getServerSideProps(context) {
       },
     })
       .then(response => response.json())
+
+    if (!liveMatches.length) {
+      const urlLive = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+      liveMatches = await fetch(urlLive, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': token ? token : ''
+        },
+      })
+        .then(response => response.json())
+    }
   }
 
   return {

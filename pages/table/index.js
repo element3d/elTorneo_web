@@ -115,17 +115,8 @@ export async function getServerSideProps(context) {
     }
 
     const url = `${SERVER_BASE_URL}/api/v1/matches/live`
-    let matches = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authentication': token ? token : ''
-        },
-    })
-        .then(response => response.json())
-
-    if (!matches.length) {
-        const url = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+    let matches = null;
+    if (!isMobile) {
         matches = await fetch(url, {
             method: 'GET',
             headers: {
@@ -134,6 +125,18 @@ export async function getServerSideProps(context) {
             },
         })
             .then(response => response.json())
+
+        if (!matches.length) {
+            const url = `${SERVER_BASE_URL}/api/v1/matches/upcoming`
+            matches = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authentication': token ? token : ''
+                },
+            })
+                .then(response => response.json())
+        }
     }
 
     // settings[0].numLevels = 4
