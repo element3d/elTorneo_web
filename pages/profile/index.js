@@ -75,7 +75,7 @@ export async function getServerSideProps(context) {
         // context.res.setHeader('Set-Cookie', `token=${token}; Path=/; HttpOnly; Max-Age=${365 * 100 * 24 * 60 * 60}`);
     }
 
-    if (!token) {
+    if (!token || !user) {
         return {
             redirect: {
                 destination: '/login',
