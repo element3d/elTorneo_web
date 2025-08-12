@@ -161,11 +161,11 @@ export default function Home({ me, token, queryDate, isAndroid, isIOS, remoteTim
     setMatches(remoteMatches)
   }, [remoteMatches])
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!remoteTime) {
       const timestamp = new Date(moment().format('YYYY-MM-DD')).getTime();
       const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=${locale}`
-      const matches = await fetch(url, {
+      fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +173,9 @@ export default function Home({ me, token, queryDate, isAndroid, isIOS, remoteTim
         },
       })
         .then(response => response.json())
+        .then((matches) => {
       setMatches(matches)
+        })
     }
 
   }, [])
