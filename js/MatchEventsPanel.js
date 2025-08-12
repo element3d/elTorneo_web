@@ -15,11 +15,15 @@ function Item({ event, index, isLast, score }) {
         return event.type
     }
 
+    function getIconColor() {
+        return '_dark';
+    }
+
     function getIcon() {
         if (event.type == "Goal") {
             if (event.detail == "Penalty") {
                 return <div className={styles.pen_cont}>
-                    <img className={styles.icon_small} src={`${SERVER_BASE_URL}/data/icons/goal.svg`} />
+                    <img className={styles.icon_small} src={`${SERVER_BASE_URL}/data/icons/goal${getIconColor()}.svg`} />
                     <span>PEN</span>
                 </div>
 
@@ -33,13 +37,13 @@ function Item({ event, index, isLast, score }) {
             }
             else if (event.detail == "Own Goal") {
                 return <div className={styles.pen_cont}>
-                    <img className={styles.icon_small} src={`${SERVER_BASE_URL}/data/icons/goal.svg`} />
+                    <img className={styles.icon_small} src={`${SERVER_BASE_URL}/data/icons/goal${getIconColor()}.svg`} />
                     <span>OG</span>
                 </div>
 
             }
 
-            return <img className={styles.icon} src={`${SERVER_BASE_URL}/data/icons/goal.svg`} />
+            return <img className={styles.icon} src={`${SERVER_BASE_URL}/data/icons/goal${getIconColor()}.svg`} />
         }
         if (event.type == "Var" && (event.detail == 'Goal cancelled'
             || event.detail == 'Goal Disallowed - offside'

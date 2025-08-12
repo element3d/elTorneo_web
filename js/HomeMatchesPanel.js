@@ -16,6 +16,10 @@ export default function HomeMatchesPanel({ isMobile, league, matches, router, on
         );
     };
 
+    function getIconName() {
+        return '_white';
+    }
+
     return (<div className={styles.panel} style={{padding: isMobile ? '20px' : '0px', paddingTop: '0px'}}>
         {matches.map((m, i) => {
 
@@ -30,7 +34,7 @@ export default function HomeMatchesPanel({ isMobile, league, matches, router, on
 
             return <div key={`match_${m.id}`}> 
                 { renderTime ? <div className={`${styles.date_cont} ${i === 0 ? styles.mt_0 : ''}`} >
-                    <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`}/>
+                    <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar${getIconName()}.svg`}/>
                     <span className={styles.date}>{moment(currMatchDate).format('DD')} {t(moment(currMatchDate).format('MMM').toLowerCase())} {moment(currMatchDate).format('YYYY')}</span>
                 </div> : null }
                 <MatchItemMobile onPreview={onPreview} currentWeek={league.week} router={router} match={m} />

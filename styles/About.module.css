@@ -4,7 +4,7 @@
     align-items: center;
     /* padding: 6rem; */
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: var(--bg-color);
     padding-bottom: 50px;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .title {
-    color: black;
+    color: var(--title-color);
     font-size: 20px;
     font-weight: bold;
     font-family: 'Open Sans';

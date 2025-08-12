@@ -59,10 +59,14 @@ export default function BottomNavBar({router, me, isIOS, isAndroid, page}) {
         return moment(currentTime).format('HH:mm')
       };
 
+      function getIconColor() {
+        return '_white';
+      }
+
     return (<div className={styles.panel}>
-       <NavBarButton onClick={onNavHome} icon={page == EPAGE_HOME ? 'home_black' : 'home'}/>
+       <NavBarButton onClick={onNavHome} icon={page == EPAGE_HOME ? `home${getIconColor()}` : 'home'}/>
        <div></div>
-       <NavBarButton onClick={onNavCalendar} icon={page == EPAGE_CAL ? 'cal_active' : 'cal'}/>
+       <NavBarButton onClick={onNavCalendar} icon={page == EPAGE_CAL ? `cal${getIconColor()}` : 'cal'}/>
        { isIOS ? <div className={styles.live} onClick={onNavLive}>
             <div className={styles.live_text}>LIVE</div>
             <div className={styles.time}>{renderTime()}</div>
@@ -76,9 +80,9 @@ export default function BottomNavBar({router, me, isIOS, isAndroid, page}) {
             <div className={styles.live_text_and}>LIVE</div>
             <div className={styles.time_and}>{renderTime()}</div>
        </div> : null }
-       <NavBarButton onClick={onNavTable} icon={page == EPAGE_TAB ? 'stats_active' : 'stats'}/>
+       <NavBarButton onClick={onNavTable} icon={page == EPAGE_TAB ? `stats${getIconColor()}` : 'stats'}/>
        <div></div>
-       <NavBarButton onClick={onNavLogin} icon={page == EPAGE_PROF ? 'profile_active' : 'profile'}/>
+       <NavBarButton onClick={onNavLogin} icon={page == EPAGE_PROF ? `profile${getIconColor()}` : 'profile'}/>
 
     </div>)
 }

@@ -11,11 +11,15 @@ export default function DesktopMenuPanel({ router, leagues }) {
         router.push(`/?league=${l.id}`)
     }
 
+    function getIconName() {
+        return '_white';
+    }
+
     return <div className={styles.panel}>
         {/* <span>Leagues</span> */}
         {leagues.map((l) => {
             return <div className={styles.menu_item} onClick={() => onLeagueClick(l)}>
-                <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${l.name}_colored.png`}></img>
+                <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${l.name}${getIconName()}.png`}></img>
                 {l.name}
             </div>
         })}

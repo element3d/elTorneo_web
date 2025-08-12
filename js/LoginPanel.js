@@ -147,6 +147,10 @@ export default function LoginPanel({router, onLogin, onNavRegister}) {
 
     });
 
+    function getIconColor() {
+        return '_white';
+    }
+
     return (
         <div className={styles.cont}>
             <h1 className={styles.title}>el Torneo</h1>
@@ -183,7 +187,7 @@ export default function LoginPanel({router, onLogin, onNavRegister}) {
                     <span className={styles.placeholder}>{t('password')}</span>
                     <input className={styles.login_input} type={!showPass ? 'password' : 'text'} value={password} onChange={onPasswordChange} />
                     <div className={styles.eye} onClick={toggleShowPass}>
-                        <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye.svg`} />
+                        <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye${getIconColor()}.svg`} />
                     </div>
                 </div>
                 <span className={styles.error}>{error}</span>

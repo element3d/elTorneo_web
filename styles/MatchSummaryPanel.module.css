@@ -1,7 +1,7 @@
 .panel {
     width: 100%;
     /* height: 100px; */
-    background-color: white;
+    background-color: var(--panel-color);
     border-radius: 12px;
     display: flex;
     flex-direction: row;
@@ -100,7 +100,7 @@
 .progress_p1 {
     height: 100%;
     min-width: 10px;
-    background-color: #37003C;
+    background-color: var(--progress-p1-color);
 }
 
 .progress_draw {

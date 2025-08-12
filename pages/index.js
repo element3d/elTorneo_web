@@ -229,6 +229,8 @@ export default function Home({ leagues, specialMatch, isMobile, me, isAndroid, i
   }, [serverLeague])
 
   useEffect(() => {
+        document.documentElement.setAttribute('data-theme', 'dark');
+
     // Cookies.remove('token')
     const handleBackButton = (event) => {
       event.preventDefault();
@@ -403,7 +405,7 @@ export default function Home({ leagues, specialMatch, isMobile, me, isAndroid, i
         <AppBar locale={locale} title={serverLeague?.name} showLang router={router} />
         {showInstallButton || isAndroid ? <div className={styles.install_cont} onClick={onInstall}>
           <img className={styles.gplay_icon} src={isIOS ? `${SERVER_BASE_URL}/data/icons/apple.svg` : `${SERVER_BASE_URL}/data/icons/google-play.svg`} />
-          <span>{t('available_google_play')}</span>
+          <span className={styles.gplay_title}>{t('available_google_play')}</span>
           <button className={styles.install_button} >
             {t('play')}
           </button>

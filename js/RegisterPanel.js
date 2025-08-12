@@ -81,6 +81,10 @@ export default function RegisterPanel({ onNavSignin }) {
             })
     }
 
+    function getIconColor() {
+        return '_white';
+    }
+
     function signinGoogle(email, name) {
         const requestOptions = {
             method: 'POST',
@@ -192,7 +196,7 @@ export default function RegisterPanel({ onNavSignin }) {
                     <span className={styles.placeholder}>{t('password')}</span>
                     <input className={styles.login_input} type={!showPass ? 'password' : 'text'} value={password} onChange={onPasswordChange} />
                     <div className={styles.eye} onClick={toggleShowPass}>
-                        <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye.svg`} />
+                        <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye${getIconColor()}.svg`} />
                     </div>
                 </div>
 

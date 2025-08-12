@@ -23,7 +23,7 @@
     width: 100%;
     /* padding: 20px; */
     margin-top: 20px;
-    background-color: white;
+    background-color: var(--panel-color);
     border-radius: 16px;
 }
 
@@ -54,7 +54,7 @@
     flex: 1;
     height: 10px;
     margin-right: 5px;
-    background-color: #EAEDF1;
+    background-color: var(--bg-color);
     border-radius: 10px;
     flex-direction: column;
     align-items: flex-end;
@@ -65,7 +65,7 @@
     flex: 1;
     height: 10px;
     margin-right: 5px;
-    background-color: #EAEDF1;
+    background-color: var(--bg-color);
     border-radius: 10px;
     flex-direction: column;
     align-items: flex-start;

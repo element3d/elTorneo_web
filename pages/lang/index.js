@@ -56,7 +56,7 @@ export default function Home({ isAndroid, isIOS, locale }) {
             <main className={`${styles.main} ${inter.className}`}>
                 <AppBar title={'el Torneo'} router={router}/>
                 <LangPanel router={router} locale={locale}/>
-                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router} page={EPAGE_CAL} />
+                <BottomNavBar isAndroid={isAndroid} isIOS={isIOS} router={router}  />
             </main>
         </>
     );

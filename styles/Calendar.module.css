@@ -4,13 +4,13 @@
     align-items: center;
     /* padding: 6rem; */
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: var(--bg-color);
     padding-bottom: 80px;
 }
 
 .calendar_panel {
     width: 100%;
-    background-color: white;
+    background-color: var(--panel-color);
     padding-bottom: 10px;
     /* height: 220px; */
 }
@@ -156,7 +156,7 @@
     width: 360px;
     /* height: 500px; */
     border-radius: 16px;
-    background-color: white;
+    background-color: var(--panel-color);
     /* margin-left: 30px; */
     /* margin-right: 30px; */
     display: flex;

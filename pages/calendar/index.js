@@ -137,8 +137,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobile, leagues, liveMatches, locale }) {
-  console.log("QUERY DATE ===========")
-  console.log(queryDate)
   const { t } = useTranslation()
   const router = useRouter()
   let currentLeague = null
@@ -149,13 +147,6 @@ export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobil
   const [showLang, setShowLang] = useState(0)
   const [showCompleteAccount, setShowCompleteAccount] = useState(0)
   const date = moment(queryDate ? Number.parseInt(queryDate) : undefined).format('YYYY-MM-DD')
-  console.log(date)
-  // useEffect(() => {
-  //   return () => {
-  //     setShowPreview(false)
-  //     document.documentElement.style.overflow = ''; // Disable background scroll
-  //   }
-  // }, [date])
 
   useEffect(() => {
     return () => {
@@ -163,7 +154,6 @@ export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobil
       document.documentElement.style.overflow = ''; // Disable background scroll
     }
   }, [])
-
 
   function onPreview(m) {
     setShowPreview(true)
@@ -249,6 +239,10 @@ export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobil
     return renderDesktop()
   }
 
+  function getIconColor() {
+    return '_white';
+  }
+
   return (
     <>
       <Head>
@@ -261,7 +255,7 @@ export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobil
         <AppBar title={t('calendar_page')} />
         <div className={styles.calendar_panel}>
           <div className={styles.date_cont}>
-            <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />
+            <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar${getIconColor()}.svg`} />
             <span className={styles.date}>{moment(date).format('DD')} {t(moment(date).format('MMM').toLowerCase())} {moment(date).format('YYYY')}</span>
 
           </div>
@@ -280,7 +274,7 @@ export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobil
 
             return <div key={`match_${m.id}`}>
               {renderLeague ? <div className={`${styles.league_cont} ${i === 0 ? styles.mt_0 : ''}`} >
-                <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${m.league_name}_colored.png`} />
+                <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${m.league_name}${getIconColor()}.png`} />
                 <div className={styles.league_name_cont}>
                   <span className={styles.league_name}>{m.league_name}</span>
                   <span className={styles.league_week}>{t('matchday')} {m.week}</span>

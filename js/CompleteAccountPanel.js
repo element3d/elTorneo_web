@@ -124,6 +124,10 @@ export default function CompleteAccountPanel({ onNavSignin, router }) {
             })
     }
 
+    function getIconColor() {
+        return '_white';
+    }
+
     const onCompleteAccountGoogleSuccess = async (tokenResponse) => {
         try {
             // Extract the access token from the tokenResponse
@@ -216,7 +220,7 @@ export default function CompleteAccountPanel({ onNavSignin, router }) {
                     <span className={styles.placeholder}>{t('password')}</span>
                     <input className={styles.login_input} type={!showPass ? 'password' : 'text'} value={password} onChange={onPasswordChange} />
                     <div className={styles.eye} onClick={toggleShowPass}>
-                        <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye.svg`} />
+                        <img className={styles.eye_icon} src={`${SERVER_BASE_URL}/data/icons/eye${getIconColor()}.svg`} />
                     </div>
                 </div>
 

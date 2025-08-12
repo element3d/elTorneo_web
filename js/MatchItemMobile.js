@@ -32,6 +32,10 @@ function PredictPanel({ predict }) {
     </div>
 }
 
+function getIconColor() {
+    return '_white';
+}
+
 function BetPanel({ bet }) {
     const { t } = useTranslation()
 
@@ -169,7 +173,7 @@ export default function MatchItemMobile({ view, currentWeek, router, match, show
         function getIcon() {
             if (isSpecial) return `${SERVER_BASE_URL}/data/leagues/${league}_white.png`
 
-            return `${SERVER_BASE_URL}/data/leagues/${league}_colored.png`
+            return `${SERVER_BASE_URL}/data/leagues/${league}${getIconColor()}.png`
         }
 
         return <div className={styles.league_panel}>

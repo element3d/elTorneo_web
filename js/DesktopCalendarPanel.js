@@ -13,10 +13,14 @@ export default function DesktopCalendarPanel({ router, date, matches }) {
     
   }
 
+  function getIconName() {
+    return '_white';
+  }
+
   return <div className={styles.panel}>
     <div className={styles.calendar_panel}>
       <div className={styles.date_cont}>
-        <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />
+        <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar${getIconName()}.svg`} />
         <span className={styles.date}>{moment(date).format('DD')} {t(moment(date).format('MMM').toLowerCase())} {moment(date).format('YYYY')}</span>
 
       </div>
@@ -35,7 +39,7 @@ export default function DesktopCalendarPanel({ router, date, matches }) {
 
         return <div key={`match_${m.id}`}>
           {renderLeague ? <div className={`${styles.league_cont} ${i === 0 ? styles.mt_0 : ''}`} >
-            <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${m.league_name}_colored.png`} />
+            <img className={styles.league_icon} src={`${SERVER_BASE_URL}/data/leagues/${m.league_name}${getIconName()}.png`} />
             <div className={styles.league_name_cont}>
               <span className={styles.league_name}>{m.league_name}</span>
               <span className={styles.league_week}>{t('matchday')} {m.week}</span>

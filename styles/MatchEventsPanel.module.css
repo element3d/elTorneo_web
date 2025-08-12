@@ -53,8 +53,8 @@
     align-items: center;
     justify-content: center;
     border-radius: 30px;
-    background-color: white;
-    border: 2px solid #EAEDF1;
+    background-color: var(--panel-color);
+    border: 2px solid var(--border-color);
 }
 
 .team_content {
@@ -69,7 +69,7 @@
 }
 
 .player {
-    color: black;
+    color: var(--title-color);
     font-size: 14px;
     font-weight: bold;
 }
@@ -97,6 +97,7 @@
     font-weight: bold;
     align-items: center;
     justify-content: center;
+    color: var(--title-color);
 }
 
 .icon_small {
@@ -105,7 +106,7 @@
 }
 
 .padding_desktop {
-    background-color: white;
+    background-color: var(--panel-color);
     margin-top: 20px;
     border-radius: 16px;
 }

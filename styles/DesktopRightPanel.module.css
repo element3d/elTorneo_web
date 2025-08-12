@@ -2,13 +2,13 @@
 .panel {
     width: 360px;
     height: fit-content;
-    background-color: white;
+    background-color: var(--panel-color);
     border-radius: 12px;
 }
 
 .padding {
     width: 350px;
-    background-color: white;
+    background-color: var(--panel-color);
     border-radius: 12px;
     padding: 20px;
 }

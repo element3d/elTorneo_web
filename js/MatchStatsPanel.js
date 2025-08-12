@@ -11,21 +11,21 @@ function Item({ title, stat, percent = false }) {
 
     return <div className={styles.item}>
         <div className={styles.uprow}>
-            <span className={styles.value} style={{ color: val1 > val2 ? '#FF2882' : 'black' }}>{intValues[0]}{percent ? '%' : ''}</span>
+            <span className={styles.value} style={{ color: val1 > val2 ? '#FF2882' : 'var(--title-color)' }}>{intValues[0]}{percent ? '%' : ''}</span>
             <span className={styles.title}>{title}</span>
-            <span className={styles.value} style={{ color: val2 > val1 ? '#FF2882' : 'black' }}>{intValues[1]}{percent ? '%' : ''}</span>
+            <span className={styles.value} style={{ color: val2 > val1 ? '#FF2882' : 'var(--title-color)' }}>{intValues[1]}{percent ? '%' : ''}</span>
         </div>
         <div className={styles.middle_row}>
             <div className={styles.line_bg}>
                 <div className={styles.line} style={{
-                    backgroundColor: val1 > val2 ? '#FF2882' : 'black',
+                    backgroundColor: val1 > val2 ? '#FF2882' : 'var(--title-color)',
                     width: `${val1 / total * 100}%`
                 }}></div>
             </div>
 
             <div className={styles.line_bg_right}>
                 <div className={styles.line} style={{
-                    backgroundColor: val2 > val1 ? '#FF2882' : 'black',
+                    backgroundColor: val2 > val1 ? '#FF2882' : 'var(--title-color)',
                     width: `${val2 / total * 100}%`
                 }}></div>
             </div>

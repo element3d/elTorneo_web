@@ -556,7 +556,7 @@ export default function Home({ browserName, leagues, locale, isMobile, isAndroid
                 {!userBet && MatchUtils.isNotStarted(match) ? <div className={styles.bet_button_wrap}>
                     <div className={styles.bet_button_cont}>
                         <div className={styles.bet_input_cont}>
-                            <input type='text' onChange={onChangeAmount} className={styles.bet_input} />
+                            <input type='tel' maxLength={2} onChange={onChangeAmount} className={styles.bet_input} />
                             <div className={styles.bet_sign}>$</div>
                         </div>
 
@@ -586,6 +586,10 @@ export default function Home({ browserName, leagues, locale, isMobile, isAndroid
         </div>
     }
 
+    function getIconColor() {
+        return '_white';
+    }
+
     function renderH2HView() {
         return <div className={isMobile ? styles.padding : styles.padding_desktop}>
             <Switch title1={match.team1.shortName} title2={match.team2.shortName} selected={teamIndex + 1} onSelect={onTeamSelect} />
@@ -602,7 +606,7 @@ export default function Home({ browserName, leagues, locale, isMobile, isAndroid
 
                     return <div key={`match_${m.id}`}>
                         {renderTime ? <div className={`${styles.date_cont} ${i === 0 ? styles.mt_0 : ''}`} >
-                            <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar_black.svg`} />
+                            <img className={styles.cal_icon} src={`${SERVER_BASE_URL}/data/icons/calendar${getIconColor()}.svg`} />
                             <span className={styles.date}>{moment(currMatchDate).format('DD')} {t(moment(currMatchDate).format('MMM').toLowerCase())} {moment(currMatchDate).format('YYYY')}</span>
                         </div> : null}
                         <MatchItemMobile settings={settings} onPreview={onPreview} router={router} match={m} showLeague={true} />
@@ -672,6 +676,8 @@ export default function Home({ browserName, leagues, locale, isMobile, isAndroid
 
     function onShowLang() {
         setShowLang(1)
+        setShowCompleteAccount(0)
+        setShowSignIn(0)
     }
 
     function renderDesktop() {

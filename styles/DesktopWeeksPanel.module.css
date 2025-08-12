@@ -22,7 +22,7 @@
 }
 
 .item:hover {
-    color: black;
+    color: var(--title-color);
 }
 
 .item_sel {

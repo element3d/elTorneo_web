@@ -10,9 +10,13 @@ export default function AppBar({ title, locale, router, showLang = false }) {
           router.back()
      }
 
+     function getIconColor() {
+          return '_white';
+     }
+
      return (<div className={styles.app_bar}>
           <div className={styles.back_button} onClick={onBack}>
-               <img className={styles.back_icon} src={`${SERVER_BASE_URL}/data/icons/back.svg`} />
+               <img className={styles.back_icon} src={`${SERVER_BASE_URL}/data/icons/back${getIconColor()}.svg`} />
           </div>
           <div className={styles.title_cont}>
                <span className={styles.title}>{title}</span>

@@ -18,7 +18,7 @@
 .padding {
     width: 100%;
     padding: 20px;
-    background-color: white;
+    background-color: var(--panel-color);
     margin-top: 20px;
     border-radius: 16px;
 }
@@ -71,7 +71,7 @@
     flex-direction: row;
     width: 100%;
     aspect-ratio: 1.6;
-    background-image: url(https://eltorneo.am/data/icons/pitch.png);
+    background-image: url(https://eltorneo.am/data/icons/pitch_dark.png);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
