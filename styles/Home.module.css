@@ -298,7 +298,7 @@
 }
 
 .leagues_scroll {
-  padding-left: 10px;
+  padding-left: 20px;
   display: flex;
   height: 90px;
   align-items: center;
@@ -321,7 +321,7 @@
 }
 
 .weeks_scroll {
-  padding-left: 10px;
+  padding-left: 20px;
   display: flex;
   flex-direction: row;
   overflow-x: scroll;

@@ -10,7 +10,7 @@ function LeagueChip({ onClick, league, selected }) {
     function getIcon() {
         if (selected) return `${SERVER_BASE_URL}/data/leagues/${league.name}_white.png`
 
-        return `${SERVER_BASE_URL}/data/leagues/${league.name}_colored.png`
+        return `${SERVER_BASE_URL}/data/leagues/${league.name}.png`
     }
 
     return (<div onClick={() => onClick(league)} className={selected ? styles.league_chip_sel : styles.league_chip}>
