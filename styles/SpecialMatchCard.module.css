@@ -126,20 +126,25 @@
 .close {
     z-index: 1;
     position: absolute;
-    top: 3px;
+    top: 0px;
     right: 0px;
     padding-right: 10px;
     font-size: 22px;
     font-weight: bold;
     color: white;
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 35px;
     display: flex;
     /* align-items: end; */
     justify-content: end;
     background: none;
     border: none;
     outline: none;
+}
+
+.close_icon {
+    width: 30px;
+    height: 30px;
 }
 
 .close:active {

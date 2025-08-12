@@ -229,7 +229,7 @@ export default function Home({ leagues, specialMatch, isMobile, me, isAndroid, i
   }, [serverLeague])
 
   useEffect(() => {
-        document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
 
     // Cookies.remove('token')
     const handleBackButton = (event) => {
@@ -299,6 +299,10 @@ export default function Home({ leagues, specialMatch, isMobile, me, isAndroid, i
 
   function onInstall() {
     if (isAndroid) {
+      window.gtag('event', 'button_click', {
+        event_category: 'Button click',
+        event_label: "AndroidInstallClick",
+      });
       window.open('https://play.google.com/store/apps/details?id=com.eltorneo', '_blank');
     } else {
       handleInstallClick()

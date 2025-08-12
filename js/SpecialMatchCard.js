@@ -6,7 +6,7 @@ import SpecialPointsPanel from './SpecialPointsPanel';
 
 
 export default function SpecialMatchCard({ match, router, onClose }) {
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
     function onNavMatch() {
         router.push(`/match/${match.match.id}`)
@@ -23,6 +23,26 @@ export default function SpecialMatchCard({ match, router, onClose }) {
         } else {
             return `${moment(matchDate).format('DD')} ${t(moment(matchDate).format('MMM').toLowerCase())}`;
         }
+    }
+
+    function getIconName() {
+        return '_white';
+    }
+
+    function onCloseInternal() {
+        window.gtag('event', 'button_click', {
+            event_category: 'Button click',
+            event_label: "SpecialMatchClose",
+        });
+        onClose()
+    }
+
+    function onPredict() {
+        window.gtag('event', 'button_click', {
+            event_category: 'Button click',
+            event_label: "SpecialMatchPredict",
+        });
+        onNavMatch()
     }
 
     return <div className={styles.cont}>
@@ -49,11 +69,13 @@ export default function SpecialMatchCard({ match, router, onClose }) {
                     <span>{match.match.team2.shortName}</span>
                 </div>
             </div>
-            <SpecialPointsPanel match={match}/>
-            <button className={styles.predict} onClick={onNavMatch}>
+            <SpecialPointsPanel match={match} />
+            <button className={styles.predict} onClick={onPredict}>
                 {t('predict')}
             </button>
-            <button className={styles.close} onClick={onClose}>x</button>
+            <button className={styles.close} onClick={onCloseInternal}>
+                <img className={styles.close_icon} src={`${SERVER_BASE_URL}/data/icons/close${getIconName()}.svg`} />
+            </button>
         </div>
     </div>
 
