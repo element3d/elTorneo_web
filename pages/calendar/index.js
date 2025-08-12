@@ -33,8 +33,12 @@ import CompleteAccountPanel from '@/js/CompleteAccountPanel';
 
 export async function getServerSideProps(context) {
   const { query } = context;
-  const timestamp = query.date ? Number(query.date) : new Date(moment().format('YYYY-MM-DD')).getTime();
+  const timestamp = query.date ? Number(query.date) : null;//moment().valueOf();//new Date(moment().format('YYYY-MM-DD')).getTime();
   const { locale } = context;
+
+  // console.log('===================')
+  // console.log(moment().valueOf())
+  // console.log(timestamp)
 
   const { req } = context
   let token = null
@@ -64,16 +68,18 @@ export async function getServerSideProps(context) {
   isAndroid = osName == 'Android'
   isIOS = osName == 'iOS'
 
-
-  const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=${locale}`
-  const matches = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authentication': token ? token : ''
-    },
-  })
-    .then(response => response.json())
+  let matches = []
+  if (timestamp) {
+    const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=${locale}`
+    matches = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authentication': token ? token : ''
+      },
+    })
+      .then(response => response.json())
+  }
 
   let me = null
   if (!token && !guestUsername) {
@@ -121,13 +127,15 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      matches: matches,
+      remoteMatches: matches,
       isAndroid,
       isIOS,
       isMobile,
       locale,
       me,
+      token,
       liveMatches,
+      remoteTime: timestamp,
       queryDate: query.date ? query.date : null,
       leagues,
       // date: moment(timestamp).format('YYYY-MM-DD'),
@@ -136,7 +144,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobile, leagues, liveMatches, locale }) {
+export default function Home({ me, token, queryDate, isAndroid, isIOS, remoteTime, remoteMatches, isMobile, leagues, liveMatches, locale }) {
   const { t } = useTranslation()
   const router = useRouter()
   let currentLeague = null
@@ -147,6 +155,28 @@ export default function Home({ me, queryDate, isAndroid, isIOS, matches, isMobil
   const [showLang, setShowLang] = useState(0)
   const [showCompleteAccount, setShowCompleteAccount] = useState(0)
   const date = moment(queryDate ? Number.parseInt(queryDate) : undefined).format('YYYY-MM-DD')
+  const [matches, setMatches] = useState(remoteMatches)
+
+  useEffect(() => {
+    setMatches(remoteMatches)
+  }, [remoteMatches])
+
+  useEffect(async () => {
+    if (!remoteTime) {
+      const timestamp = new Date(moment().format('YYYY-MM-DD')).getTime();
+      const url = `${SERVER_BASE_URL}/api/v1/matches/day?timestamp=${timestamp}&lang=${locale}`
+      const matches = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': token ? token : ''
+        },
+      })
+        .then(response => response.json())
+      setMatches(matches)
+    }
+
+  }, [])
 
   useEffect(() => {
     return () => {
