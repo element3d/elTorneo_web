@@ -318,7 +318,7 @@ export default function MatchPanel({ browserName, isAndroid, router, me, match, 
         </div>
         {match.is_special ? <SpecialPointsPanel match={{ match: match }} /> : null}
         {predict && predict.status != 4 && mode != EMODE_EDIT ? <div className={styles.edit_row}><div className={styles.predict_item} style={{ backgroundColor: getBgColor(predict), color: getBorderColor(predict) }}>
-        <span className={MatchUtils.getPredictionColor(predict)}>{MatchUtils.getPredictTitle(predict, t)}{MatchUtils.getPredictValue(predict)}</span>
+        <span className={MatchUtils.getPredictionColor(predict, match)}>{MatchUtils.getPredictTitle(predict, t)}{MatchUtils.getPredictValue(predict)}</span>
 
             {/* <span >{t('prediction')} {predict.team1_score} : {predict.team2_score}</span> */}
         </div>

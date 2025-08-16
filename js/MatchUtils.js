@@ -41,7 +41,7 @@ export default class MatchUtils {
     static getPredictTitle(p, t) {
         if (p.status == 4) return t("missing_prediction")
         if (p.status == 0) return t("prediction")
-        if (p.status == 1) {
+        if (p.status == 1 || p.status == 5) {
             if (p.team1_score == p.team2_score) return t("draw_predicted")
             return t("winner_predicted")
         }
@@ -49,9 +49,9 @@ export default class MatchUtils {
         if (p.status == 3) return t("prediction_was_failed")
     }
 
-    static getPredictionColor(p) {
+    static getPredictionColor(p, match) {
         if (p.status == 0) return styles.black//'#8E8E93'
-        if (p.status == 1) return styles.winner
+        if (p.status == 1 || p.status == 5) return styles.winner
         if (p.status == 2) return match.is_special ? styles.gold : styles.scorep
         if (p.status == 3 || p.status == 4) return styles.failed
     }

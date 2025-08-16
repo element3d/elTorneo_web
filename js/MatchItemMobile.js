@@ -19,16 +19,16 @@ function TeamItemRight({ team, isSpecial }) {
 
 function getBgColor(p) {
     if (p.status == 0) return styles.gray
-    if (p.status == 1) return styles.winner_bg
+    if (p.status == 1 || p.status == 5) return styles.winner_bg
     if (p.status == 2) return styles.score_bg
     if (p.status == 3 || p.status == 4) return styles.fail_bg
 }
 
-function PredictPanel({ predict }) {
+function PredictPanel({ match, predict }) {
     const { t } = useTranslation()
 
     return <div className={`${styles.predict_panel} ${getBgColor(predict)}`}>
-        <span className={MatchUtils.getPredictionColor(predict)}>{MatchUtils.getPredictTitle(predict, t)}{MatchUtils.getPredictValue(predict)}</span>
+        <span className={MatchUtils.getPredictionColor(predict, match)}>{MatchUtils.getPredictTitle(predict, t)}{MatchUtils.getPredictValue(predict)}</span>
     </div>
 }
 
@@ -207,7 +207,7 @@ export default function MatchItemMobile({ view, currentWeek, router, match, show
         const st = getBgColor(match.predict)
 
         return <div className={`${styles.points_panel} ${st}`}>
-            <span className={MatchUtils.getPredictionColor(match.predict)}>{t('points')}: {getPoints(match.predict)}</span>
+            <span className={MatchUtils.getPredictionColor(match.predict, match)}>{t('points')}: {getPoints(match.predict)}</span>
         </div>
     }
 
@@ -221,7 +221,7 @@ export default function MatchItemMobile({ view, currentWeek, router, match, show
     }
 
     function renderUserPredict() {
-        return match.predict?.status != -1 ? <PredictPanel predict={match.predict} /> : null;
+        return match.predict?.status != -1 ? <PredictPanel match={match} predict={match.predict} /> : null;
     }
 
     function renderUserBet() {

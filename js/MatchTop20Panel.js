@@ -7,16 +7,31 @@ export default function MatchTop20Panel({ router, match, predicts }) {
 
     function getBorderColor(p) {
         if (p.status == 0) return 'black'//'#8E8E93'
-        if (p.status == 1) return '#00C566'
+        if (p.status == 1 || p.status == 5) return '#00C566'
         if (p.status == 2) return '#ff7539'
         if (p.status == 3) return '#FF4747'
     }
 
     function getBgColor(p) {
         if (p.status == 0) return '#F7F7F7'
-        if (p.status == 1) return '#00C56619'
+        if (p.status == 1 || p.status == 5) return '#00C56619'
         if (p.status == 2) return '#FACC1519'
         if (p.status == 3) return '#FF474719'
+    }
+
+    function getSpecialPoints() {
+        return match.special_match_points.split(':')
+    }
+
+    function getPoint(p) {
+        const sp = getSpecialPoints()
+
+        if (p.status == 0) return '0'
+        if (p.status == 1) return match.is_special ? '+' + sp[1] : '+1'
+        if (p.status == 2) return match.is_special ? '+' + sp[0] : '+3'
+        if (p.status == 3) return match.is_special ? sp[2] : '-1'
+        if (p.status == 4) return '-2'
+        if (p.status == 5) return match.is_special ? '+' + sp[1] : '+2'
     }
 
     return (<div className={styles.cont}>
@@ -35,7 +50,7 @@ export default function MatchTop20Panel({ router, match, predicts }) {
                     </div>
 
                     <div className={styles.predict} style={{ backgroundColor: getBgColor(p), color: getBorderColor(p) }}>
-                        <span>{p.team1_score} : {p.team2_score}</span>
+                        <span>{p.team1_score} : {p.team2_score} {p.status == 0 ? '' : `(${getPoint(p)})`}</span>
                     </div>
                 </div>
             })
