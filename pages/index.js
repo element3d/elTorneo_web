@@ -67,16 +67,16 @@ export async function getServerSideProps(context) {
   isIOS = osName == 'iOS'
 
   let me = null
-  if (!token && !guestUsername) {
-    let userOs = 'Web';
-    userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'home';
-    try {
-      token = await authManager.createGuestUser(userOs);
-    }
-    catch (e) {
-      console.log(e)
-    }
-  }
+  // if (!isAndroid && !isIOS && !token && !guestUsername) {
+  //   let userOs = 'Web';
+  //   userOs += " - " + uaResult.os.name + ' - ' + uaResult.device.type + ' - ' + uaResult.browser.name + ' - ' + 'home';
+  //   try {
+  //     token = await authManager.createGuestUser(userOs);
+  //   }
+  //   catch (e) {
+  //     console.log(e)
+  //   }
+  // }
 
   if (token) {
     me = await authManager.getMe(token)
